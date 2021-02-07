@@ -37,3 +37,48 @@ class TestRegistrationView(TestCase):
         client: Client = Client()
         response: HttpResponse = client.get("/user/register")
         assert response.status_code == 200  # Testing redirection
+
+
+class TestLoginView(TestCase):
+    def test_login_success(self) -> None:
+        """Test if the url returns a correct 302 http status code 
+        when a user success to connect.
+        """
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth=1997 - 4 - 10,
+        )
+        client: Client = Client()
+        response: HttpResponse = client.post(
+            "/user/login",
+            {"username": ["matt-fraser@gmail.com"], "password": ["password8chars"],},
+        )
+        assert response.status_code == 302  # Testing redirection
+
+    def test_login_fail(self) -> None:
+        """When a login fails, there is no redirection 
+        so it should returns a 200 http status code. 
+        """
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth=1997 - 4 - 10,
+        )
+        client: Client = Client()
+        response: HttpResponse = client.post(
+            "/user/login",
+            {"username": ["matt-fraser@gmail.com"], "password": ["wrongpassword"],},
+        )
+        assert response.status_code == 200  # Testing redirection
+
+    def test_login_get(self) -> None:
+        """Test if the url returns a correct 200 http status code.
+        """
+        client: Client = Client()
+        response: HttpResponse = client.get("/user/login")
+        assert response.status_code == 200  # Testing redirection
