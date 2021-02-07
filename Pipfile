@@ -7,11 +7,11 @@ verify_ssl = true
 
 [packages]
 django = "*"
-pytest = "*"
 psycopg2 = "*"
 gunicorn = "*"
 pylint = "*"
 black = "*"
+pytest-django = "*"
 
 [requires]
 python_version = "3.8"
