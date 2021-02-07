@@ -49,7 +49,7 @@ class TestLoginView(TestCase):
             password="password8chars",
             first_name="Matt",
             last_name="Fraser",
-            date_of_birth=1997 - 4 - 10,
+            date_of_birth="1997-4-10",
         )
         client: Client = Client()
         response: HttpResponse = client.post(
@@ -67,7 +67,7 @@ class TestLoginView(TestCase):
             password="password8chars",
             first_name="Matt",
             last_name="Fraser",
-            date_of_birth=1997 - 4 - 10,
+            date_of_birth="1997-4-10",
         )
         client: Client = Client()
         response: HttpResponse = client.post(
