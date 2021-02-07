@@ -1,13 +1,10 @@
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import FormView
-from .forms import RegisterForm
+from .forms import ConnectionForm, RegisterForm
 from .models import User
 import datetime
-
-
-# Create your views here.
 
 
 class RegistrationView(FormView):
@@ -33,3 +30,25 @@ class RegistrationView(FormView):
         )
         login(self.request, user)
         return redirect("/")
+
+
+class LoginView(FormView):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(request, "user/connection.html", {"form": ConnectionForm()})
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        """Manages the user connection.
+        """
+        error: bool = False
+
+        form: ConnectionForm = ConnectionForm(request.POST)
+        if form.is_valid():
+            username: str = form.cleaned_data["email"]
+            password: str = form.cleaned_data["password"]
+            user: User = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                return redirect("/")
+            else:
+                error: bool = True
+        return render(request, "user/connection.html", locals())

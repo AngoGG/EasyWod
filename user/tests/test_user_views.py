@@ -54,7 +54,7 @@ class TestLoginView(TestCase):
         client: Client = Client()
         response: HttpResponse = client.post(
             "/user/login",
-            {"username": ["matt-fraser@gmail.com"], "password": ["password8chars"],},
+            {"email": ["matt-fraser@gmail.com"], "password": ["password8chars"],},
         )
         assert response.status_code == 302  # Testing redirection
 
@@ -72,7 +72,7 @@ class TestLoginView(TestCase):
         client: Client = Client()
         response: HttpResponse = client.post(
             "/user/login",
-            {"username": ["matt-fraser@gmail.com"], "password": ["wrongpassword"],},
+            {"email": ["matt-fraser@gmail.com"], "password": ["wrongpassword"],},
         )
         assert response.status_code == 200  # Testing redirection
 

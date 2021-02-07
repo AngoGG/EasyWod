@@ -28,3 +28,8 @@ class RegisterForm(UserCreationForm):
             "password1",
             "password2",
         )
+
+
+class ConnectionForm(forms.Form):
+    email = forms.CharField(label="Adresse email", max_length=255)
+    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
