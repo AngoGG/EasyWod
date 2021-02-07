@@ -1,10 +1,10 @@
-from django.contrib.auth import authenticate, login
+import datetime
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.views.generic import FormView
+from django.views.generic import FormView, View
 from .forms import ConnectionForm, RegisterForm
 from .models import User
-import datetime
 
 
 class RegistrationView(FormView):
@@ -52,3 +52,9 @@ class LoginView(FormView):
             else:
                 error: bool = True
         return render(request, "user/connection.html", locals())
+
+
+class LogoutView(View):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        logout(request)
+        return redirect("/")

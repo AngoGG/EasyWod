@@ -82,3 +82,21 @@ class TestLoginView(TestCase):
         client: Client = Client()
         response: HttpResponse = client.get("/user/login")
         assert response.status_code == 200  # Testing redirection
+
+
+class TestLogoutView(TestCase):
+    def test_logout(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.post(
+            "/user/login",
+            {"username": ["matt-fraser@gmail.com"], "password": ["password8chars"],},
+        )
+        response: HttpResponse = client.get("/user/logout",)
+        assert response.status_code == 302  # Testing redirection
