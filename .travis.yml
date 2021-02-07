@@ -9,7 +9,7 @@ branches:
     only:
         - staging
 env:
-    - DJANGO_SETTINGS_MODULE=easy_wod.settings.travis
+    - DJANGO_SETTINGS_MODULE=config.settings.travis
 services:
     - postgresql
 script:
