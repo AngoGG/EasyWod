@@ -1,5 +1,6 @@
 import datetime
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
@@ -41,6 +42,7 @@ class LoginView(FormView):
         """Manages the user connection.
         """
         error: bool = False
+        print(f"HELLO DATA {request.POST}")
 
         form: ConnectionForm = ConnectionForm(request.POST)
         if form.is_valid():
@@ -64,3 +66,25 @@ class LogoutView(View):
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request: HttpRequest, **kwargs) -> HttpResponse:
         return render(request, "user/profile.html", **kwargs)
+
+
+class UserPasswordChangeView(LoginRequiredMixin, FormView):
+    def get(self, request: HttpRequest) -> HttpResponse:
+        return render(
+            request,
+            "user/change_password.html",
+            {"form": PasswordChangeForm(user=request.user)},
+        )
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        form: PasswordChangeForm = PasswordChangeForm(
+            data=request.POST, user=request.user
+        )
+
+        print(f"HELLO DATA {request.POST}")
+
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return render(request, "user/profile.html")
+        return render(request, "user/change_password.html", locals())

@@ -107,3 +107,51 @@ class TestProfileView(TestCase):
         client: Client = Client()
         response: HttpResponse = client.get("/user/profile",)
         assert response.status_code == 302  # Testing redirection
+
+
+class TestUserPasswordChangeView(TestCase):
+    def test_change_password_ok(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response: HttpResponse = client.post(
+            "/user/change_password",
+            {
+                "old_password": ["password8chars"],
+                "new_password1": ["newpassword8chars"],
+                "new_password2": ["newpassword8chars"],
+                "change_password": [""],
+            },
+        )
+
+        user: QuerySet = User.objects.first()
+        self.assertTrue(user.check_password("newpassword8chars"))
+
+    def test_change_password_ko(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response: HttpResponse = client.post(
+            "/user/change_password",
+            {
+                "old_password": ["password8chars"],
+                "new_password1": ["newpassword8chars"],
+                "new_password2": ["wrongpass"],
+                "change_password": [""],
+            },
+        )
+
+        user: QuerySet = User.objects.first()
+        self.assertFalse(user.check_password("newpassword8chars"))
