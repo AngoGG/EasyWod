@@ -100,3 +100,10 @@ class TestLogoutView(TestCase):
         )
         response: HttpResponse = client.get("/user/logout",)
         assert response.status_code == 302  # Testing redirection
+
+
+class TestProfileView(TestCase):
+    def test_profile_redirection_not_authentificated(self):
+        client: Client = Client()
+        response: HttpResponse = client.get("/user/profile",)
+        assert response.status_code == 302  # Testing redirection

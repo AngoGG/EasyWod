@@ -1,5 +1,6 @@
 import datetime
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views.generic import FormView, View
@@ -58,3 +59,8 @@ class LogoutView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         logout(request)
         return redirect("/")
+
+
+class ProfileView(LoginRequiredMixin, View):
+    def get(self, request: HttpRequest, **kwargs) -> HttpResponse:
+        return render(request, "user/profile.html", **kwargs)

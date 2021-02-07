@@ -1,0 +1,30 @@
+{% if user.is_authenticated %}
+    <table>
+        <tbody>
+            <tr>
+                <td><p>Prénom:</p><p>{{ user.first_name }}</p></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><p>Nom:</p><p>{{ user.last_name }}</p></td>
+                <td ></td>
+            </tr>
+            <tr>
+                <td><p>Email:</p><p>{{ user.email }}</p></td>
+                <td ></td>
+            </tr>
+            <tr>
+                <td><p>Date de Naissance:</p><p>{{ user.date_of_birth }}</p></td>
+                <td ></td>
+            </tr>
+            <tr>
+                <td><p >Mot de Passe:</p><p> *****</p></td>
+                <td><a href="" role="button">Modifier</a></td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}
+
+<p>
+    <a href="{% url "website:home" %}">Revenir à l'Accueil!</a>
+</p>
