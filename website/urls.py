@@ -15,27 +15,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.contrib.auth import views as auth_views  # import this
-from django.conf.urls import include
-from django.urls import path
+from django.urls import include, path
 
+from . import views
+
+app_name: str = "website"
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
-    path(r"", include("website.urls")),
-    path(r"user/", include("user.urls")),
-    path(
-        "reset/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name="website/reset_password_confirm.html",
-        ),
-        name="reset_password_confirm",
-    ),
-    path(
-        "reset/complete/",
-        auth_views.PasswordResetCompleteView.as_view(
-            template_name="website/reset_password_complete.html"
-        ),
-        name="password_reset_complete",
-    ),
+    path(r"", views.HomeView.as_view(), name="home"),
+    path("reset_password", views.PasswordResetView.as_view(), name="reset_password"),
 ]
