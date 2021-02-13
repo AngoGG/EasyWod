@@ -1,6 +1,8 @@
 <h1> {{ article.title }}</h1>
 <small>Auteur: {{ article.title }} - {{ article.author.first_name }} {{ article.author.last_name }}</small>
+- <a href="{% url 'blog:update_article' article.pk %}">Modifier Article</a>
 <hr>
 <p>
 {{ article.body }}
 </p>
+<a href="{% url 'blog:article_list'%}">Retour</a>
