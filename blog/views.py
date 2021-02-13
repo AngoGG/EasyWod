@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import CreateView, DetailView, ListView
 from .models import Article
+from .forms import ArticleForm
 
 # Create your views here.
 
@@ -18,5 +19,4 @@ class ArticleView(DetailView):
 class AddArticleView(CreateView):
     model = Article
     template_name = "blog/add_article.html"
-
-    fields = "__all__"
+    form_class = ArticleForm
