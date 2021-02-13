@@ -1,1 +1,8 @@
-<h1>Hey Blog</h1>
+<h1>Liste des Articles</h1>
+
+<ul>
+{% for article in object_list %}
+    <li><a href="{% url 'blog:article_detail' article.pk %}">{{ article.title }} - {{ article.author.first_name }} {{ article.author.last_name }}</a><br/>
+    </li>
+{% endfor %}
+</ul>
