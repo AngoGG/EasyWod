@@ -3,9 +3,13 @@
 <ul>
 {% for article in object_list %}
     <li>
+        [{{ article.publication_date }}] 
         <a href="{% url 'blog:article_detail' article.pk %}">{{ article.title }}</a> - {{ article.author.first_name }} {{ article.author.last_name }}
         <a href="{% url 'blog:update_article' article.pk %}">Modifier Article</a>
+        <a href="{% url 'blog:delete_article' article.pk %}">Supprimer Article</a>
         <br/>
     </li>
 {% endfor %}
 </ul>
+
+<a href="{% url 'blog:add_article'%}">Créer Article</a>

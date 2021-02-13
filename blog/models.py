@@ -11,7 +11,7 @@ class Article(models.Model):
     title = models.CharField(_("Titre"), max_length=255)
     author = models.ForeignKey(User, verbose_name=_("Auteur"), on_delete=models.CASCADE)
     body = models.TextField(_("Contenu"))
-    pub_date = models.DateTimeField(
+    publication_date = models.DateTimeField(
         verbose_name=_("Date de publication"), auto_now_add=True
     )
 

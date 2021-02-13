@@ -1,5 +1,11 @@
 from django.urls import include, path
-from .views import AddArticleView, ArticleView, BlogView, UpdateArticleView
+from .views import (
+    AddArticleView,
+    ArticleView,
+    DeleteArticleView,
+    BlogView,
+    UpdateArticleView,
+)
 
 app_name: str = "blog"
 
@@ -9,5 +15,8 @@ urlpatterns = [
     path(r"add_article/", AddArticleView.as_view(), name="add_article"),
     path(
         r"update_article/<int:pk>", UpdateArticleView.as_view(), name="update_article"
+    ),
+    path(
+        r"article/<int:pk>/delete", DeleteArticleView.as_view(), name="delete_article"
     ),
 ]

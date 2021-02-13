@@ -13,3 +13,16 @@ class ArticleForm(forms.ModelForm):
                 attrs={"placeholder": "Entrez le contenu de votre Article"}
             ),
         }
+
+
+class EditForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ("title", "body")
+
+        widgets = {
+            "title": forms.TextInput(attrs={"placeholder": "Titre de l'article"}),
+            "body": forms.TextInput(
+                attrs={"placeholder": "Entrez le contenu de votre Article"}
+            ),
+        }

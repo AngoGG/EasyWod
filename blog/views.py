@@ -1,7 +1,15 @@
 from django.shortcuts import render
-from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 from .models import Article
-from .forms import ArticleForm
+from .forms import ArticleForm, EditForm
+
 
 # Create your views here.
 
@@ -9,6 +17,7 @@ from .forms import ArticleForm
 class BlogView(ListView):
     model = Article
     template_name = "blog/article_list.html"
+    ordering = ["-publication_date"]
 
 
 class ArticleView(DetailView):
@@ -25,4 +34,11 @@ class AddArticleView(CreateView):
 class UpdateArticleView(UpdateView):
     model = Article
     template_name = "blog/update_article.html"
-    fields = ["title", "body"]
+    form_class = EditForm
+
+
+class DeleteArticleView(DeleteView):
+    model = Article
+    template_name = "blog/delete_article.html"
+    success_url = reverse_lazy("blog:article_list")
+
