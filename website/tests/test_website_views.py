@@ -18,7 +18,7 @@ class TestPasswordResetView(TestCase):
             {"email": ["matt-fraser@gmail.com"], "change_password": [""],},
         )
 
-        assert response.status_code == 301  # Testing redirection
+        assert response.status_code == 302  # Testing redirection
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
             mail.outbox[0].subject, "Réinitialisation du mot de passe demandée"
