@@ -13,4 +13,4 @@ env:
 services:
     - postgresql
 script:
-    - pipenv run pytest
+    - pipenv run pytest -vv
