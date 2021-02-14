@@ -84,6 +84,37 @@ class TestAddArticleView(TestCase):
         assert response.status_code == 403  # Testing redirection
 
 
+class TestArticleView(TestCase):
+    def test_article_access(self) -> None:
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        user_created: QuerySet = User.objects.first()  # type: ignore
+
+        Article.objects.create(
+            title="title", author=user_created, body="body",
+        )
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.get("/blog/article/1",)
+
+        assert response.status_code == 200  # Testing redirection
+        self.assertTemplateUsed(response, "blog/article_detail.html")
+
+
 class TestUpdateArticleView(TestCase):
     def test_update_article(self) -> None:
         User.objects.create_user(
@@ -109,12 +140,15 @@ class TestUpdateArticleView(TestCase):
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
+        article_created: QuerySet = Article.objects.first()  # type: ignore
+
+        article_created = Article.objects.first()
+        print(article_created.pk)
+
         response: HttpResponse = client.post(
             "/blog/update_article/1",
             {"title": ["modified title"], "body": ["modified body"],},
         )
-
-        article_created: QuerySet = Article.objects.first()  # type: ignore
 
         assert article_created.title == "modified title"
         assert article_created.body == "modified body"
@@ -198,6 +232,9 @@ class TestDeleteArticleView(TestCase):
 
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        article_created = Article.objects.first()
+        print(article_created.pk)
 
         response: HttpResponse = client.post(
             "/blog/article/1/delete", {},

@@ -2,15 +2,18 @@ dist: xenial
 language: python
 python:
     - '3.8.1'
+services:
+  - postgresql
 before_script:
     - pip install pipenv
     - pipenv install
+    - psql -c 'create database easy_wod;' -U postgres
 branches:
     only:
         - staging
 env:
     - DJANGO_SETTINGS_MODULE=config.settings.travis
 script:
-    - python manage.py makemigrations
-    - python manage.py migrate
+    - pipenv run python manage.py makemigrations
+    - pipenv run python manage.py migrate
     - pipenv run pytest -vv
