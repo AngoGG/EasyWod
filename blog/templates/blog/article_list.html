@@ -11,5 +11,6 @@
     </li>
 {% endfor %}
 </ul>
-
-<a href="{% url 'blog:add_article'%}">Créer Article</a>
+{% if user.type == "EMPLOYEE" %}
+    <a href="{% url 'blog:add_article'%}">Créer Article</a>
+{% endif %}
