@@ -22,8 +22,9 @@ from django.urls import path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path(r"", include("website.urls")),
-    path(r"user/", include("user.urls")),
+    path(r"", include("website.urls"), name="website"),
+    path(r"blog/", include("blog.urls"), name="blog"),
+    path(r"user/", include("user.urls"), name="user"),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(

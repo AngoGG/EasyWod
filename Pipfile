@@ -12,6 +12,8 @@ gunicorn = "*"
 pylint = "*"
 black = "*"
 pytest-django = "*"
+pytest-cov = "*"
+coverage = "*"
 
 [requires]
 python_version = "3.8"
