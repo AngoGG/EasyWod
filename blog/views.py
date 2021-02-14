@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -25,19 +26,43 @@ class ArticleView(DetailView):
     template_name = "blog/article_detail.html"
 
 
-class AddArticleView(CreateView):
+class AddArticleView(UserPassesTestMixin, CreateView):
+    def test_func(self):
+        return (
+            True
+            if self.request.user.is_authenticated
+            and self.request.user.type == "EMPLOYEE"
+            else False
+        )
+
     model = Article
     template_name = "blog/add_article.html"
     form_class = ArticleForm
 
 
-class UpdateArticleView(UpdateView):
+class UpdateArticleView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return (
+            True
+            if self.request.user.is_authenticated
+            and self.request.user.type == "EMPLOYEE"
+            else False
+        )
+
     model = Article
     template_name = "blog/update_article.html"
     form_class = EditForm
 
 
-class DeleteArticleView(DeleteView):
+class DeleteArticleView(UserPassesTestMixin, DeleteView):
+    def test_func(self):
+        return (
+            True
+            if self.request.user.is_authenticated
+            and self.request.user.type == "EMPLOYEE"
+            else False
+        )
+
     model = Article
     template_name = "blog/delete_article.html"
     success_url = reverse_lazy("blog:article_list")
