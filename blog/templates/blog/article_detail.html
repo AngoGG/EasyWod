@@ -1,0 +1,13 @@
+<h1> {{ article.title }}</h1>
+<small>
+    Publié par {{ article.title }} - {{ article.author.first_name }} {{ article.author.last_name }}
+    le {{ article.publication_date }}
+    -
+    <a href="{% url 'blog:update_article' article.pk %}">Modifier Article</a>
+    <a href="{% url 'blog:delete_article' article.pk %}">Supprimer Article</a>
+</small>
+<hr>
+<p>
+{{ article.body }}
+</p>
+<a href="{% url 'blog:article_list'%}">Retour</a>

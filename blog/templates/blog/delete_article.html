@@ -1,0 +1,8 @@
+<h1>Supprimer l'article</h1>
+<h3>Supprimer {{ article.title }}</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    <strong> Êtes-vous sûr de vouloir supprimer cet article?<br>
+    <button>Supprimer Article</button>
+</form>
