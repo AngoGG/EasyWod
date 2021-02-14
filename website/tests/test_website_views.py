@@ -14,7 +14,7 @@ class TestPasswordResetView(TestCase):
         )
         client: Client = Client(HTTP_HOST="localhost")
         response = client.post(
-            "/reset_password",
+            "/reset_password/",
             {"email": ["matt-fraser@gmail.com"], "change_password": [""],},
         )
 
@@ -23,4 +23,3 @@ class TestPasswordResetView(TestCase):
         self.assertEqual(
             mail.outbox[0].subject, "Réinitialisation du mot de passe demandée"
         )
-
