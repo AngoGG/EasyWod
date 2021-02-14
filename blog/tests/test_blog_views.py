@@ -174,7 +174,7 @@ class TestUpdateArticleView(TestCase):
         assert response.status_code == 403  # Testing redirection
 
 
-class TestUpdateArticleView(TestCase):
+class TestDeleteArticleView(TestCase):
     def test_delete_article(self) -> None:
         User.objects.create_user(
             email="matt-fraser@gmail.com",
