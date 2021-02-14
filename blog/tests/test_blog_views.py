@@ -105,11 +105,12 @@ class TestArticleView(TestCase):
         Article.objects.create(
             title="title", author=user_created, body="body",
         )
+        article_created: QuerySet = Article.objects.first()  # type: ignore
 
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
-        response: HttpResponse = client.get("/blog/article/1",)
+        response: HttpResponse = client.get(f"/blog/article/{article_created.pk}",)
 
         assert response.status_code == 200  # Testing redirection
         self.assertTemplateUsed(response, "blog/article_detail.html")
@@ -142,21 +143,19 @@ class TestUpdateArticleView(TestCase):
 
         article_created: QuerySet = Article.objects.first()  # type: ignore
 
-        article_created = Article.objects.first()
-        print(article_created.pk)
-
         response: HttpResponse = client.post(
-            "/blog/update_article/1",
+            f"/blog/update_article/{article_created.pk}",
             {"title": ["modified title"], "body": ["modified body"],},
         )
 
+        article_created: QuerySet = Article.objects.first()  # type: ignore
         assert article_created.title == "modified title"
         assert article_created.body == "modified body"
         assert article_created.author == user_created
 
         assert response.status_code == 302  # Testing redirection
 
-    def test_article_creation_access_forbidden(self) -> None:
+    def test_article_update_access_forbidden(self) -> None:
         User.objects.create_user(
             email="matt-fraser@gmail.com",
             password="password8chars",
@@ -169,11 +168,13 @@ class TestUpdateArticleView(TestCase):
         Article.objects.create(
             title="title", author=user_created, body="body",
         )
-
+        article_created: QuerySet = Article.objects.first()  # type: ignore
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
-        response: HttpResponse = client.get("/blog/update_article/1",)
+        response: HttpResponse = client.get(
+            f"/blog/update_article/{article_created.pk}",
+        )
 
         assert response.status_code == 403  # Testing redirection
 
@@ -191,12 +192,12 @@ class TestUpdateArticleView(TestCase):
         Article.objects.create(
             title="title", author=user_created, body="body",
         )
-
+        article_created: QuerySet = Article.objects.first()  # type: ignore
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
         response: HttpResponse = client.post(
-            "/blog/update_article/1",
+            f"/blog/update_article/{article_created.pk}",
             {"title": ["modified title"], "body": ["modified body"],},
         )
 
@@ -229,15 +230,14 @@ class TestDeleteArticleView(TestCase):
         Article.objects.create(
             title="title", author=user_created, body="body",
         )
-
+        article_created: QuerySet = Article.objects.first()  # type: ignore
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
         article_created = Article.objects.first()
-        print(article_created.pk)
 
         response: HttpResponse = client.post(
-            "/blog/article/1/delete", {},
+            f"/blog/article/{article_created.pk}/delete", {},
         )
 
         assert Article.objects.first() is None  # type: ignore
@@ -257,10 +257,14 @@ class TestDeleteArticleView(TestCase):
             title="title", author=user_created, body="body",
         )
 
+        article_created: QuerySet = Article.objects.first()  # type: ignore
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
-        response: HttpResponse = client.get("/blog/article/1/delete",)
+        response: HttpResponse = client.get(
+            f"/blog/article/{article_created.pk}/delete",
+        )
 
         assert response.status_code == 403  # Testing redirection
 
