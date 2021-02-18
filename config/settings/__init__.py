@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     ## Personal Apps
     "blog.apps.BlogConfig",
+    "event.apps.EventConfig",
     "user.apps.UserConfig",
     "website.apps.WebsiteConfig",
 ]

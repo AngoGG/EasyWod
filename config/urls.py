@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(r"", include("website.urls"), name="website"),
     path(r"blog/", include("blog.urls"), name="blog"),
+    path(r"event/", include("event.urls"), name="event"),
     path(r"user/", include("user.urls"), name="user"),
     path(
         "reset/<uidb64>/<token>/",
