@@ -1,5 +1,6 @@
 import datetime
 import json
+
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, View
@@ -13,3 +14,4 @@ class CalendarView(ListView):
             "events": all_events,
         }
         return render(request, "event/event_calendar.html", context)
+

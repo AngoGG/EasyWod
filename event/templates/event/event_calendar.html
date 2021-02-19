@@ -1,31 +1,66 @@
 {% load static %}
 
 <link href='{% static "fullcalendar/main.css" %}' rel='stylesheet' />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+
 <script src='{% static "fullcalendar/main.js" %}'></script>
+<script src='{% static "fullcalendar/locale-all.js" %}'></script>
+
 <script>
 
-    document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            selectable: true,
+    $(document).ready(function () {
+        var calendar = $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
             events: [
-                    {% for event in events %}
-                        {
-                            title: "{{ event.name}}",
-                            start: '{{ event.start|date:"Y-m-d" }}',
-                            end: '{{ event.end|date:"Y-m-d" }}',
-                            id: '{{ event.id }}',
+                {% for event in events %}
+                    { 
+                        title: "{{ event.name}}",
+                        start: '{{ event.start|date:"Y-m-d H:i" }}',
+                        end: '{{ event.end|date:"Y-m-d H:i" }}',
+                        id: '{{ event.id }}',
+                        allDay: false,
+                    },
+                {% endfor %}
+            ],
+            selectable: true,
+            editable: true,
+          
+            select: function (start, end) {
+                var title = prompt("Enter Event Title");
+                if (title) {
+                    var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+                    var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+
+                    $.ajax({
+                        type: "POST",
+                        url: 'add_event',
+                        data: {'title': title, 'start': start, 'end': end, csrfmiddlewaretoken: "{{ csrf_token }}"},
+                        success: function (data) {
+                            calendar.fullCalendar('refetchEvents');
+                            alert("Added Successfully");
                         },
-                    {% endfor %}
-                ],
-
+                        failure: function (data) {
+                            alert('There is a problem!!!');
+                        }
+                    });
+                }
+            },
         });
-        calendar.setOption('locale', 'fr');
-        calendar.render();
     });
-
-    </script>
+</script>
 {% csrf_token %}
 <br/>
 <h2 align="center"><a href="#">Calendrier d'évènement</a></h2>

@@ -4,9 +4,9 @@ from user.models import User
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    start = models.DateTimeField(null=True, blank=True)
-    end = models.DateTimeField(null=True, blank=True)
+    name = models.CharField(max_length=255)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
 
     def __str__(self):
         return self.name
