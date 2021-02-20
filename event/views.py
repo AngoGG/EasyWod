@@ -4,8 +4,10 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, DetailView, ListView, View
-from .models import Event
-from .forms import EventForm
+from django.views.generic.edit import FormMixin
+from .models import Event, EventMember
+from .forms import AddEventMemberForm, EventForm
+from user.models import User
 
 
 class CalendarView(ListView):
@@ -30,6 +32,7 @@ class AddEvent(UserPassesTestMixin, View):
 
         name = request.POST.get("name", None)
         date = request.POST.get("date", None)
+        slot = request.POST.get("slot", None)
         start_time = request.POST.get("start_time", None)
         end_time = request.POST.get("end_time", None)
 
@@ -39,12 +42,28 @@ class AddEvent(UserPassesTestMixin, View):
         start_object = datetime.datetime.strptime(start, "%Y-%m-%d %H:%M")
         end_object = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M")
 
-        event = Event(name=str(name), start=start_object, end=end_object)
+        event = Event(name=str(name), start=start_object, end=end_object, slot=slot)
         event.save()
 
         return redirect("event:event_calendar")
 
 
-class EventView(DetailView):
+class EventView(FormMixin, DetailView):
     model = Event
+    form_class = AddEventMemberForm
     template_name = "event/event_detail.html"
+
+
+class AddEventMember(View):
+    def post(self, request):
+
+        event_id = request.POST.get("event", None)
+        user_id = request.POST.get("user", None)
+
+        event = Event.objects.get(pk=event_id)
+        user = User.objects.get(pk=user_id)
+
+        inscription = EventMember(event=event, user=user)
+        inscription.save()
+        return redirect("event:event_calendar")
+

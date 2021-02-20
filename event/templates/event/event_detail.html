@@ -1,4 +1,14 @@
 <h1> {{ event.name }}</h1>
+<small>
+    Nombres d'inscrits: / {{ event.slot }}<br>
+    ID USER: / {{ user.id }}<br>
+    ID EVEN: / {{ event.pk }}<br>
+    <form method="POST" action="{% url 'event:add_eventmember'%}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>S'inscrire à ce cours</button>
+</form>
+</small>
 <hr>
 <p>
 Début de l'évènement : {{ event.start }}
@@ -6,5 +16,11 @@ Début de l'évènement : {{ event.start }}
 <p>
 Fin de l'évènement : {{ event.end }}
 </p>
-<a href="">S'inscrire à ce cours</a>
 <a href="{% url 'event:event_calendar'%}">Retour</a>
+
+<script>
+    var user_id = "{{ user.id }}"
+    var event_id = "{{ event.pk }}"
+    document.getElementById("id_user").value = user_id
+    document.getElementById("id_event").value = event_id
+</script>
