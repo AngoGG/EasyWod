@@ -20,4 +20,13 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         # datetime-local is a HTML5 input type, format to make date time show on fields
-        fields = ("name",)
+        fields = ("name", "slot")
+
+
+class AddEventMemberForm(forms.Form):
+    user = forms.CharField(
+        widget=forms.TextInput(attrs={"value": "", "type": "hidden"}),
+    )
+    event = forms.CharField(
+        widget=forms.TextInput(attrs={"value": "", "type": "hidden"}),
+    )
