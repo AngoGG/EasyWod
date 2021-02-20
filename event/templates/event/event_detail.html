@@ -1,12 +1,12 @@
 <h1> {{ event.name }}</h1>
 <small>
-    Nombres d'inscrits: / {{ event.slot }}<br>
-    ID USER: / {{ user.id }}<br>
-    ID EVEN: / {{ event.pk }}<br>
+    Nombres d'inscrits: {{ event.eventmember_set.count }}/ {{ event.slot }}<br>
     <form method="POST" action="{% url 'event:add_eventmember'%}">
     {% csrf_token %}
     {{ form.as_p }}
-    <button>S'inscrire à ce cours</button>
+    {% if event.eventmember_set.count < event.slot %}
+        <button>S'inscrire à ce cours</button>
+    {% endif %}
 </form>
 </small>
 <hr>
