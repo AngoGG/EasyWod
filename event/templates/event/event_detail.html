@@ -1,12 +1,17 @@
 <h1> {{ event.name }}</h1>
 <small>
     Nombres d'inscrits: {{ event.eventmember_set.count }}/ {{ event.slot }}<br>
-    <form method="POST" action="{% url 'event:add_eventmember'%}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    {% if event.eventmember_set.count < event.slot %}
-        <button>S'inscrire à ce cours</button>
+    {% if user.email in event.eventmember_set.all%}
+        {% if event.eventmember_set.count < event.slot %}
+            <form method="POST" action="{% url 'event:add_eventmember'%}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>S'inscrire à ce cours</button>
+        {% endif %}
+    {% else %}
+        Vous êtes déjà inscrit à ce cours: Se désinscrire
     {% endif %}
+
 </form>
 </small>
 <hr>
