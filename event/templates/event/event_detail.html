@@ -1,0 +1,10 @@
+<h1> {{ event.name }}</h1>
+<hr>
+<p>
+Début de l'évènement : {{ event.start }}
+</p>
+<p>
+Fin de l'évènement : {{ event.end }}
+</p>
+<a href="">S'inscrire à ce cours</a>
+<a href="{% url 'event:event_calendar'%}">Retour</a>

@@ -3,7 +3,7 @@ import json
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.views.generic import CreateView, ListView, View
+from django.views.generic import CreateView, DetailView, ListView, View
 from .models import Event
 from .forms import EventForm
 
@@ -43,3 +43,8 @@ class AddEvent(UserPassesTestMixin, View):
         event.save()
 
         return redirect("event:event_calendar")
+
+
+class EventView(DetailView):
+    model = Event
+    template_name = "event/event_detail.html"
