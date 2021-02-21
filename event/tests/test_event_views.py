@@ -48,3 +48,29 @@ class TestEventView(TestCase):
         response: HttpResponse = client.get(f"/event/{event_created.pk}",)
 
         assert response.status_code == 200  # Testing redirection
+
+
+class TestAddEvent(TestCase):
+    def test_access_redirection_not_connected(self):
+        client: Client = Client()
+        response: HttpResponse = client.get("/event/add_event")
+        assert response.status_code == 302  # Testing redirection
+
+    def test_add_event_redirection_not_connected(self):
+        client: Client = Client()
+        response: HttpResponse = client.post("/event/add_event")
+        assert response.status_code == 302  # Testing redirection
+
+    def test_add_event_forbidden(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.post("/event/add_event")
+        assert response.status_code == 403  # Testing redirection
