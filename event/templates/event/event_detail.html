@@ -10,7 +10,7 @@
                 <button>S'inscrire à ce cours</button>
             </form>
         {% endif %}
-    {% else %}
+    {% elif has_cancelled is False %}
         Vous êtes déjà inscrit à ce cours: Se désinscrire
         <form method="POST" action="{% url 'event:unsubscribe_event'%}">
             {% csrf_token %}
@@ -21,7 +21,9 @@
     <p>Les gens inscrits:</p>
     <ul>
     {% for user_registered in event.eventmember_set.all %}
-        <li>{{ user_registered.user }} inscrit le {{ user_registered.date_inscription }}</li>
+        {% if user_registered.date_cancellation is None %}
+            <li>{{ user_registered.user }} inscrit le {{ user_registered.date_inscription }}</li>
+        {% endif %}
     {% endfor %}
 
     </ul>

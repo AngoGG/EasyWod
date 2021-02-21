@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import json
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -40,8 +40,8 @@ class AddEvent(UserPassesTestMixin, View):
         start = f"{date} {start_time}"
         end = f"{date} {end_time}"
 
-        start_object = datetime.datetime.strptime(start, "%Y-%m-%d %H:%M")
-        end_object = datetime.datetime.strptime(end, "%Y-%m-%d %H:%M")
+        start_object = datetime.strptime(start, "%Y-%m-%d %H:%M")
+        end_object = datetime.strptime(end, "%Y-%m-%d %H:%M")
 
         event = Event(name=str(name), start=start_object, end=end_object, slot=slot)
         event.save()
@@ -54,6 +54,11 @@ class EventView(View):
         event = Event.objects.get(pk=pk)
 
         is_registered = event.eventmember_set.filter(user_id=request.user.pk).exists()
+        registration = event.eventmember_set.get(
+            user_id=request.user.pk, event_id=event.pk
+        )
+        has_cancelled = False if registration.date_cancellation is None else True
+
         return render(
             request,
             "event/event_detail.html",
@@ -61,6 +66,7 @@ class EventView(View):
                 "form": AddEventMemberForm(),
                 "event": event,
                 "is_registered": is_registered,
+                "has_cancelled": has_cancelled,
             },
         )
 
@@ -94,7 +100,8 @@ class UnsubscribeFromEvent(View):
         user = User.objects.get(pk=user_id)
 
         inscription = EventMember.objects.get(event=event, user=user)
-        inscription.delete()
+        inscription.date_cancellation = datetime.now()
+        inscription.save()
 
         event.reserved_slot -= 1
         event.save()
