@@ -9,6 +9,7 @@ class Event(models.Model):
     start = models.DateTimeField()
     end = models.DateTimeField()
     slot = models.IntegerField(verbose_name=_("Places disponibles"), default=10)
+    reserved_slot = models.IntegerField(verbose_name=_("Places réservées"), default=0)
 
     def __str__(self):
         return self.name

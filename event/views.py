@@ -11,6 +11,7 @@ from user.models import User
 
 
 class CalendarView(ListView):
+
     context_object_name = "events"
     queryset = Event.objects.all()
     template_name = "event/event_calendar.html"
@@ -48,10 +49,20 @@ class AddEvent(UserPassesTestMixin, View):
         return redirect("event:event_calendar")
 
 
-class EventView(FormMixin, DetailView):
-    model = Event
-    form_class = AddEventMemberForm
-    template_name = "event/event_detail.html"
+class EventView(View):
+    def get(self, request, pk):
+        event = Event.objects.get(pk=pk)
+
+        is_registered = event.eventmember_set.filter(user_id=request.user.pk).exists()
+        return render(
+            request,
+            "event/event_detail.html",
+            {
+                "form": AddEventMemberForm(),
+                "event": event,
+                "is_registered": is_registered,
+            },
+        )
 
 
 class AddEventMember(View):
@@ -65,5 +76,9 @@ class AddEventMember(View):
 
         inscription = EventMember(event=event, user=user)
         inscription.save()
+
+        event.reserved_slot += 1
+        event.save()
+
         return redirect("event:event_calendar")
 
