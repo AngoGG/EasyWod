@@ -164,3 +164,40 @@ class TestRegisterForEvent(TestCase):
 
         assert event.eventmember_set.filter(user_id=user.pk).exists()
         assert response.status_code == 302  # Testing redirection
+
+
+class TestUnsubscribeFromEvent(TestCase):
+    def test_unsubscribe(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        user_created: QuerySet = User.objects.first()  # type: ignore
+
+        Event.objects.create(
+            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+        )
+
+        event_created: QuerySet = Event.objects.first()
+
+        EventMember.objects.create(event=event_created, user=user_created)
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.post(
+            "/event/unsubscribe_event",
+            {"user": user_created.pk, "event": event_created.pk,},
+        )
+
+        assert (
+            event_created.eventmember_set.filter(user_id=user_created.pk).exists()
+            is True
+        )
+
+        assert response.status_code == 302  # Testing redirection
+
