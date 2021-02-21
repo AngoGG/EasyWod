@@ -61,7 +61,7 @@ class TestAddEvent(TestCase):
         response: HttpResponse = client.post("/event/add_event")
         assert response.status_code == 302  # Testing redirection
 
-    def test_add_event_forbidden(self):
+    def test_add_event_access_forbidden(self):
         User.objects.create_user(
             email="matt-fraser@gmail.com",
             password="password8chars",
@@ -74,3 +74,60 @@ class TestAddEvent(TestCase):
 
         response: HttpResponse = client.post("/event/add_event")
         assert response.status_code == 403  # Testing redirection
+
+    def test_add_event_access(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can create an Event, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.get("/event/add_event")
+        assert response.status_code == 200  # Testing redirection
+
+    def test_event_creation(self) -> None:
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.post(
+            "/event/add_event",
+            {
+                "name": ["WOD"],
+                "date": ["2021-02-20"],
+                "slot": ["1"],
+                "start_time": ["15:00"],
+                "end_time": ["16:00"],
+            },
+        )
+
+        event_created: QuerySet = Event.objects.first()
+
+        assert event_created.name == "WOD"
+        assert event_created.slot == 1
+
+        assert response.status_code == 302  # Testing redirection
