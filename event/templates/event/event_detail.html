@@ -4,13 +4,19 @@
     Nombres d'inscrits: {{ event.reserved_slot }}/ {{ event.slot }}<br>
     {% if is_registered is False %}
         {% if event.reserved_slot < event.slot %}
-            <form method="POST" action="{% url 'event:add_eventmember'%}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button>S'inscrire à ce cours</button>
+            <form method="POST" action="{% url 'event:register_event'%}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button>S'inscrire à ce cours</button>
+            </form>
         {% endif %}
     {% else %}
         Vous êtes déjà inscrit à ce cours: Se désinscrire
+        <form method="POST" action="{% url 'event:unsubscribe_event'%}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button>Se désinscrire du cours</button>
+        </form>
     {% endif %}
     <p>Les gens inscrits:</p>
     <ul>

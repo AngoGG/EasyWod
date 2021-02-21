@@ -65,7 +65,7 @@ class EventView(View):
         )
 
 
-class AddEventMember(View):
+class RegisterForEvent(View):
     def post(self, request):
 
         event_id = request.POST.get("event", None)
@@ -82,3 +82,21 @@ class AddEventMember(View):
 
         return redirect("event:event_calendar")
 
+
+class UnsubscribeFromEvent(View):
+    def post(self, request):
+
+        event_id = request.POST.get("event", None)
+        user_id = request.POST.get("user", None)
+
+        event = Event.objects.get(pk=event_id)
+
+        user = User.objects.get(pk=user_id)
+
+        inscription = EventMember.objects.get(event=event, user=user)
+        inscription.delete()
+
+        event.reserved_slot -= 1
+        event.save()
+
+        return redirect("event:event_calendar")
