@@ -54,10 +54,13 @@ class EventView(View):
         event = Event.objects.get(pk=pk)
 
         is_registered = event.eventmember_set.filter(user_id=request.user.pk).exists()
-        registration = event.eventmember_set.get(
-            user_id=request.user.pk, event_id=event.pk
-        )
-        has_cancelled = False if registration.date_cancellation is None else True
+        if is_registered:
+            registration = event.eventmember_set.get(
+                user_id=request.user.pk, event_id=event.pk
+            )
+            has_cancelled = False if registration.date_cancellation is None else True
+        else:
+            has_cancelled = False
 
         return render(
             request,
