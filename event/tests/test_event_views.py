@@ -131,3 +131,36 @@ class TestAddEvent(TestCase):
         assert event_created.slot == 1
 
         assert response.status_code == 302  # Testing redirection
+
+
+class TestRegisterForEvent(TestCase):
+    def test_register(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        user_created: QuerySet = User.objects.first()  # type: ignore
+
+        Event.objects.create(
+            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+        )
+
+        event_created: QuerySet = Event.objects.first()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.post(
+            "/event/register_event",
+            {"user": user_created.pk, "event": event_created.pk,},
+        )
+
+        event = Event.objects.first()
+        user = User.objects.first()
+
+        assert event.eventmember_set.filter(user_id=user.pk).exists()
+        assert response.status_code == 302  # Testing redirection
