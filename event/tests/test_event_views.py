@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
@@ -200,4 +201,35 @@ class TestUnsubscribeFromEvent(TestCase):
         )
 
         assert response.status_code == 302  # Testing redirection
+
+
+class TestUserRegistrations(TestCase):
+    def test_get_user_registrations(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        user_created: QuerySet = User.objects.first()  # type: ignore
+
+        Event.objects.create(
+            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+        )
+
+        event_created: QuerySet = Event.objects.first()
+
+        EventMember.objects.create(event=event_created, user=user_created)
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.get("/event/user_registrations",)
+
+        self.assertEqual(
+            json.loads(response.content),
+            {"events": [{"name": "WOD", "id": event_created.pk}]},
+        )
 

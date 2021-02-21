@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.core import serializers
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView, DetailView, ListView, View
@@ -110,3 +111,16 @@ class UnsubscribeFromEvent(View):
         event.save()
 
         return redirect("event:event_calendar")
+
+
+class UserRegistrations(View):
+    def get(self, request):
+        user_registrations = Event.objects.filter(eventmember__user_id=request.user.pk)
+
+        registrations_list = {"events": []}
+
+        for registration in user_registrations:
+            event = {"name": registration.name, "id": registration.id}
+            registrations_list["events"].append(event)
+
+        return JsonResponse(registrations_list)
