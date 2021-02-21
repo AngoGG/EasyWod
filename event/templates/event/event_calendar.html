@@ -1,0 +1,54 @@
+{% load static %}
+
+<link href='{% static "fullcalendar/main.css" %}' rel='stylesheet' />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
+<script src='{% static "fullcalendar/main.js" %}'></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridWeek',
+            selectable: true,
+            firstDay:1, // Lundi premier jour de la semaine
+            buttonText: {
+                today:    'Aujourd\'hui',
+            },
+            events: [
+                {% for event in events %}
+                    {
+                        start: '{{ event.start|date:"Y-m-d H:i" }}',
+                        end: '{{ event.end|date:"Y-m-d H:i" }}',
+                        id: '{{ event.id }}',
+                        allDay: false,
+                        {% if event.eventmember_set.count < event.slot %}
+                            title: "{{ event.name}}",
+                            color: '#3ADF00',
+                        {% else %}
+                            title: "[Complet] {{ event.name}}",
+                            color: '#FF0000',
+                        {% endif %}
+                    },
+                {% endfor %}
+            ],
+            eventRender: function(event, element) {
+                if(event.description == "yes") {
+                    element.css('background-color', '#000');
+                }
+            },
+            eventClick: function(info) {
+                var eventObj = info.event;
+                location.replace(eventObj.id)
+            }
+        });
+        calendar.setOption('locale', 'fr');
+        calendar.render();
+    });
+
+    </script>
+{% csrf_token %}
+<br/>
+<h2 align="center"><a href="#">Calendrier d'évènement</a></h2>
+<br/>
+<div id='calendar'></div>
