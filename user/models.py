@@ -19,8 +19,18 @@ class User(AbstractBaseUser):
         verbose_name=_("Prénom"), max_length=50, blank=True
     )
     last_name: models.EmailField = models.CharField(
-        verbose_name=_("Nom"), max_length=50, blank=True
+        verbose_name=_("Nom"), max_length=50, blank=True,
     )
+    address_info = models.CharField(
+        verbose_name=_("Adresse"), max_length=255, null=True, blank=True
+    )
+    address_additional_info = models.CharField(
+        _("Informations additionnelles adresse"), max_length=255, null=True, blank=True
+    )
+    city = models.CharField(_("Ville"), max_length=50, null=True, blank=True)
+    zip_code = models.IntegerField(_("Code Postal"), null=True, blank=True)
+    country = models.CharField(_("Pays"), max_length=50, null=True, blank=True)
+
     date_joined: models.EmailField = models.DateTimeField(
         verbose_name=_("Date d'inscription"), auto_now_add=True
     )
@@ -81,17 +91,6 @@ class Visitor(User):
         if not self.pk:
             self.type = User.Types.VISITOR
         return super().save(*args, **kwargs)
-
-
-class UserAddress(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    address_info = models.CharField(verbose_name=_("Adresse"), max_length=255)
-    address_additional_info = models.CharField(
-        _("Informations additionnelles adresse"), max_length=255, null=True, blank=True
-    )
-    city = models.CharField(_("Ville"), max_length=50)
-    zip_code = models.IntegerField(_("Code Postal"))
-    country = models.CharField(_("Pays"), max_length=50)
 
 
 class CustomerManager(models.Manager):
