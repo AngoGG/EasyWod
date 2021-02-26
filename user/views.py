@@ -97,7 +97,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "user/user_update.html"
     fields = [
         'email',
-        'date_of_birth',
         'first_name',
         'last_name',
         'address_info',

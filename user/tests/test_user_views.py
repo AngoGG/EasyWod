@@ -155,3 +155,76 @@ class TestUserPasswordChangeView(TestCase):
 
         user: QuerySet = User.objects.first()
         self.assertFalse(user.check_password("newpassword8chars"))
+
+
+class TestUserUpdateView(TestCase):
+    def test_access_page(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        user: QuerySet = User.objects.first()
+
+        response: HttpResponse = client.get(f"/user/update/{user.pk}")
+        assert response.status_code == 200  # Testing redirection
+        self.assertTemplateUsed(response, "user/user_update.html")
+
+    def test_trying_access_other_user_page(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        User.objects.create_user(
+            email="jocelaing@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        user: QuerySet = User.objects.last()
+
+        response: HttpResponse = client.get(f"/user/update/{user.pk}")
+        assert response.status_code == 404  # Testing redirection
+
+    def test_update_info(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        user: QuerySet = User.objects.first()
+
+        assert user.address_info is None
+        response: HttpResponse = client.post(
+            f"/user/update/{user.pk}",
+            {
+                "email": ["matt-fraser@gmail.com"],
+                "first_name": ["Matt"],
+                "last_name": ["Fraser"],
+                "address_info": ["Updated Address"],
+                "address_additional_info": [""],
+                "city": [""],
+                "zip_code": [""],
+                "country": [""],
+            },
+        )
+
+        new_user: QuerySet = User.objects.first()
+        assert new_user.address_info == "Updated Address"
+        assert response.status_code == 302  # Testing redirection
+
