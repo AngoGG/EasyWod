@@ -24,6 +24,7 @@ urlpatterns = [
     path(r"login", views.LoginView.as_view(), name="login"),
     path(r"logout", views.LogoutView.as_view(), name="logout"),
     path(r"profile", views.ProfileView.as_view(), name="profile"),
+    path(r"update/<int:pk>", views.UserUpdateView.as_view(), name="update"),
     path(
         "change_password",
         views.UserPasswordChangeView.as_view(),
