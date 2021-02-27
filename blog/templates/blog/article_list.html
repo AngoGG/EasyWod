@@ -1,3 +1,12 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Blog {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
 <h1>Liste des Articles</h1>
 
 <ul>
@@ -14,3 +23,6 @@
 {% if user.type == "EMPLOYEE" %}
     <a href="{% url 'blog:add_article'%}">Créer Article</a>
 {% endif %}
+
+
+{% endblock %}

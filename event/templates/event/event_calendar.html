@@ -1,4 +1,11 @@
+{% extends "website/base.html" %}
 {% load static %}
+
+{% block title %}
+- Nos Cours {{ block.super }}
+{% endblock %}
+
+{% block content %}
 
 <link href='{% static "fullcalendar/main.css" %}' rel='stylesheet' />
 
@@ -49,6 +56,8 @@
     </script>
 {% csrf_token %}
 <br/>
-<h2 align="center"><a href="#">Calendrier d'évènement</a></h2>
+<h2 align="center">Les cours de la semaine</h2>
 <br/>
 <div id='calendar'></div>
+
+{% endblock %}
