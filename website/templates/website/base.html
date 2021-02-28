@@ -42,6 +42,12 @@
                                 <li><a id="home" class="active" href="{% url "website:home" %}">Home</a></li>
                                 <li><a id="event" href="{% url "event:event_calendar" %}">Cours</a></li>
                                 <li><a id="blog" href="{% url "blog:article_list" %}">Blog</a></li>
+                                {% if not user.is_authenticated %}
+                                <li><a id="connection" href="{% url "user:login" %}">Connexion</a></li>
+                                {% else %}
+                                <li><a id="connection" href="{% url "user:profile" %}">Profile</a></li>
+                                <li><a id="deconnection" href="{% url "user:logout" %}">Deconnexion</a></li>
+                                {% endif %}
                                 <li class="phone-num"><i class="fa fa-phone"></i><span>08 36 65 65 65</span></li>
                             </ul>
                         </nav>
@@ -56,6 +62,22 @@
     {% block content %}
 
     {% endblock %}
+
+    <!-- Call To Section Begin -->
+    <section class="callto-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="callto-text">
+                        <h2>Viens t'entraîner avec nous!</h2>
+                        <p>Saint-cimonaque de cul de verrat de cibolac d'étole de cibole de saintes fesses d'ostie.</p>
+                        <a href="{% url "user:register" %}" class="primary-btn callto-btn">S'inscrire maintenant</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Call To Section End -->
     <div class="map">
         <iframe
             src="https://maps.google.com/maps?q=10%20Quai%20de%20la%20Charente,%2075019%20Paris&t=&z=13&ie=UTF8&iwloc=&output=embed"

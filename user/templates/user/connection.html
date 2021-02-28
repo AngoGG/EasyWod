@@ -1,8 +1,105 @@
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Se connecter</button>
-</form>
-<hr/> 
-<p>Pas encore de compte?</p>
-<a name="login" href="{% url "user:register" %}">Rejoins-nous!</a>
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Connexion {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.active').removeClass('active');
+        $('#connection').addClass('active');
+    });
+</script>
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/aboutus-bg.jpg" %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero-text">
+                    <h1>About us</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero Section End -->
+<div class="container">
+        <form class="form-horizontal" role="form" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <h2>Veuillez vous connecter</h2>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <label class="sr-only" for="email">Adresse Email</label>
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                            <input type="text" name="email" class="form-control" id="email"
+                                   placeholder="you@example.com" required autofocus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="sr-only" for="password">Password</label>
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="password" name="password" class="form-control" id="password"
+                                   placeholder="Password" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 1rem">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 d-flex align-items-center justify-content-center">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-sign-in"></i> Se connecter</button>
+                    <a data-toggle="modal" data-target="#exampleModal" class="btn btn-link" href="{% url "website:reset_password" %}">Mot de passe oublié?</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+
+    <!-- Reset Password Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Réinitialiser votre mot de passe?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="{% url "website:reset_password" %}">
+                {% csrf_token %}
+                <div class="form-group has-danger">
+                    <label class="sr-only" for="email">Adresse Email</label>
+                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                        <input type="text" name="email" class="form-control" id="email"
+                                placeholder="you@example.com" required autofocus>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" name="change_password">Envoyer email</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}

@@ -7,21 +7,191 @@
 
 {% block content %}
 
+<!-- Boxes Section Begin -->
+<div class="boxes-section">
+    <div class="container-fluid">
+        <div class="boxes-img">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="boxes-item">
+                        <div class="boxes-pic">
+                            <img src={% static "img/box-1.jpg" %} alt="">
+                            <div class="boxes-text">
+                                <h1>Crossfit</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="boxes-item">
+                        <div class="boxes-pic">
+                        <img src={% static "img/box-2.jpg" %} alt="">
+                            <div class="boxes-text">
+                                <h1>WOD</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="boxes-item">
+                        <div class="boxes-pic">
+                        <img src={% static "img/box-3.jpg" %} alt="">
+                            <div class="boxes-text">
+                                <h1>Enfants & Ados</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Boxes Section End -->
+<!-- About Counter Section Begin -->
 
-<h1> This is la Homepage</h1>
-{% if not user.is_authenticated %}
-<p>
-    <a href="{% url "user:login" %}">Connecte toi!</a>
-</p>
-{% else %}
-<p>
-    <a href="{% url "user:profile" %}">Voir profile!</a>
-</p>
-<p>
-    <a href="{% url "user:logout" %}">Déconnecte toi!</a>
-</p>
-
-{% endif %}
-
-
+<section class="about-counter set-bg spad" data-setbg="{% static "img/about-counter.jpg" %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="about-counter-text d-flex align-items-center justify-content-center">
+                    <div class="col-lg-9 counter-head">
+                        <h2>Nous sommes ouverts tous les jours</h2>
+                        <p>Colon de purée de géritole de charogne de maudite marde 
+                        de calvinouche de taboire de bout d'ciarge. </p>
+                    </div>
+                    <div class="col-lg-3 counter-btn">
+                        <a href="{% url "user:register" %}" class="primary-btn">S'inscrire maintenant</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 d-flex align-items-center justify-content-center">
+                <div class="about-single-counter">
+                    <div class="counter-icon">
+                        <i class="flaticon-044-fitness-1"></i>
+                    </div>
+                    <div class="counter-text">
+                        <span class="counter-num counter">3</span>
+                        <span>Coachs</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 d-flex align-items-center justify-content-center">
+                <div class="about-single-counter">
+                    <div class="counter-icon">
+                        <i class="flaticon-043-muscles"></i>
+                    </div>
+                    <div class="counter-text">
+                        <span class="counter-num counter">5</span>
+                        <span>Membres</span>
+                    </div>
+                </div>
+            </div>        
+            <div class="col-lg-3 col-sm-12 d-flex align-items-center justify-content-center">
+                <div class="about-single-counter">
+                    <div class="counter-icon">
+                        <i class="flaticon-008-tactics-2"></i>
+                    </div>
+                    <div class="counter-text">
+                        <span class="counter-num counter">125</span>
+                        <span>Cours cette semaine</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About Counter Section End -->
+<!-- About Team Section Begin -->
+<section class="about-team spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1 text-center">
+                <div class="section-title">
+                    <h2>Rencontre nos Coachs</h2>
+                    <p>Patente à gosse de saint-ciboire de sacristi de mosus de saint-cimonaque d'étole de cul 
+                    de torrieux de bâtard d'enfant d'chienne de câlisse de sainte-viarge de maudite marde de sacrament 
+                    de crucifix de viarge. </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="single-team-member">
+                    <div class="team-member-pic">
+                        <img src="{% static "img/team/coach-tutur.png" %}" alt="">
+                    </div>
+                    <div class="team-member-desc">
+                        <h3>Tutur</h3>
+                        <p>Ciboire de cibolac de bout d'ciarge de viande à chien de mosus de cibouleau 
+                        de torrieux de boswell de sacristi de crucifix de marde de crime de saint-cimonaque 
+                        d'étole de torvisse de colon.</p>
+                    </div>
+                    <div class="team-member-certification">
+                        <h5>Certifications</h5>
+                        <ul>
+                            <li>CrossFit Level 1</li>
+                            <li>CrossFit Level 2</li>
+                            <li>CF Barbell</li>
+                            <li>CF Olympic Weightlifting</li>
+                            <li>CF Gymnastics</li>
+                            <li>CF Movement & Mobility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="single-team-member">
+                    <div class="team-member-pic">
+                        <img src="{% static "img/team/coach-tiven.png" %}" alt="">
+                    </div>
+                    <div class="team-member-desc">
+                        <h3>Tiven</h3>
+                        <p>P'tit Jésus de sacristi de charrue de ciboire de gériboire de taboire 
+                        de verrat de viande à chien de marde de purée de torrieux de doux Jésus 
+                        de maudit de saint-ciarge de saint-ciboire de saint-cimonaque.</p>
+                    </div>
+                    <div class="team-member-certification">
+                        <h5>Certifications</h5>
+                        <ul>
+                            <li>CrossFit Level 1</li>
+                            <li>CrossFit Level 2</li>
+                            <li>CF Barbell</li>
+                            <li>CF Olympic Weightlifting</li>
+                            <li>CF Gymnastics</li>
+                            <li>CF Movement & Mobility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="single-team-member">
+                    <div class="team-member-pic">
+                        <img src="{% static "img/team/coach-kamiye.png" %}" alt="">
+                    </div>
+                    <div class="team-member-desc">
+                        <h3>Kamiye</h3>
+                        <p>Jésus de plâtre de patente à gosse de bout d'ciarge d'esprit de 
+                        mautadine de Jésus Marie Joseph de calvinouche de p'tit Jésus de mautadit 
+                        de charogne d'étole de saint-cimonaque de boswell de cochonnerie de maudit de 
+                        cossin.</p>
+                    </div>
+                    <div class="team-member-certification">
+                        <h5>Certifications</h5>
+                        <ul>
+                            <li>CrossFit Level 1</li>
+                            <li>CrossFit Level 2</li>
+                            <li>CF Barbell</li>
+                            <li>CF Olympic Weightlifting</li>
+                            <li>CF Gymnastics</li>
+                            <li>CF Movement & Mobility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About Team Section End -->
 {% endblock %}
