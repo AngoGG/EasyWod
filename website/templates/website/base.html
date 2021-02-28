@@ -8,7 +8,7 @@
     <meta name="keywords" content="Yoga, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>CrossFit | Template</title>
+    <title>Easy wod {% block title %} {% endblock %}</title>
 
     <!-- Css Styles -->
     <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}" type="text/css">
@@ -30,18 +30,18 @@
     <header class="header-section">
         <div class="container-fluid">
             <div class="inner-header">
-                <div class="row">
+                <div class="row"> 
                     <div class="col-lg-2 col-md-2">
                         <div class="logo">
-                            <a href="./index.html"><img src="{% static "img/logo.png" %}" alt=""></a>
+                            <a href="{% url "website:home" %}"><img src="{% static "img/logo.png" %}" alt=""></a>
                         </div>
                     </div>
                     <div class="col-lg-10 col-md-10">
-                        <nav class="main-menu mobile-menu">
+                        <nav class="nav-bar main-menu mobile-menu">
                             <ul>
-                                <li><a class="active" href="{% url "website:home" %}">Home</a></li>
-                                <li><a href="{% url "event:event_calendar" %}">Cours</a></li>
-                                <li><a href="{% url "blog:article_list" %}">Blog</a></li>
+                                <li><a id="home" class="active" href="{% url "website:home" %}">Home</a></li>
+                                <li><a id="event" href="{% url "event:event_calendar" %}">Cours</a></li>
+                                <li><a id="blog" href="{% url "blog:article_list" %}">Blog</a></li>
                                 <li class="phone-num"><i class="fa fa-phone"></i><span>08 36 65 65 65</span></li>
                             </ul>
                         </nav>
@@ -56,7 +56,19 @@
     {% block content %}
 
     {% endblock %}
-
+    <div class="map">
+        <iframe
+            src="https://maps.google.com/maps?q=10%20Quai%20de%20la%20Charente,%2075019%20Paris&t=&z=13&ie=UTF8&iwloc=&output=embed"
+            height="585" style="border:0" allowfullscreen></iframe>
+        <div class="map-address">
+            <div class="map-address-text">
+                <ul>
+                    <li>EasyWod, <br />10 Quai de la Charente, 75019 Paris</li>
+                    <li>08 36 65 65 65 <br />contact@easywod.com</li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <!-- Footer Section Begin -->
     <footer class="footer-section">
         <div class="container-fluid">
