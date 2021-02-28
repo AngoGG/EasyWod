@@ -10,12 +10,48 @@ class RegisterForm(UserCreationForm):
     email: forms.EmailField = forms.EmailField(
         max_length=255,
         required=True,
-        help_text="Obligatoire. Renseignez une addresse mail valide.",
+        widget=forms.EmailInput(
+            attrs={
+                'class': f'form-control',
+                'placeholder': 'Entrez votre adresse Email',
+            },
+        ),
     )
-    first_name: forms.CharField = forms.CharField(label="Prénom", max_length=50)
-    last_name: forms.CharField = forms.CharField(label="Nom", max_length=50)
+    first_name: forms.CharField = forms.CharField(
+        label="Prénom",
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={'class': f'form-control', 'placeholder': 'Entrez votre Prénom',},
+        ),
+    )
+    last_name: forms.CharField = forms.CharField(
+        label="Nom",
+        max_length=50,
+        widget=forms.TextInput(
+            attrs={'class': f'form-control', 'placeholder': 'Entrez votre Nom',},
+        ),
+    )
     date_of_birth = forms.DateField(
-        label="What is your birth date?", widget=forms.SelectDateWidget(years=YEARS)
+        label="Quelle est votre date de naissance?",
+        widget=forms.SelectDateWidget(years=YEARS, attrs={'class': f'form-select'},),
+    )
+    password1 = forms.CharField(
+        label="Entrez votre mot de passe",
+        widget=forms.PasswordInput(
+            attrs={
+                'class': f'form-control',
+                'placeholder': 'Entrez votre mot de passe',
+            },
+        ),
+    )
+    password2 = forms.CharField(
+        label="Entrez votre mot de passe",
+        widget=forms.PasswordInput(
+            attrs={
+                'class': f'form-control',
+                'placeholder': 'Confirmez votre mot de passe',
+            },
+        ),
     )
 
     class Meta:

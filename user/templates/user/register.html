@@ -1,18 +1,55 @@
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-    <div>
-        {{ field.label_tag }}<br />
-        {{ field }}
-        {% if field.help_text %}
-        <div class="form-text text-muted">
-            <small>{{ field.help_text }}</small>
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Création Compte {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.active').removeClass('active');
+    });
+</script>
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/aboutus-bg.jpg" %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="hero-text">
+                    <h1>About us</h1>
+                </div>
+            </div>
         </div>
-        {% endif %}
-        {% for error in field.errors %}
-        <p style="color: red">{{ error }}</p>
-        {% endfor %}
     </div>
-    {% endfor %}
-    <button type="submit">Créer Compte</button>
-</form>
+</div>
+<!-- Hero Section End -->
+<div class="container" style="margin-top:30px">
+    <div class="col-md-10 col-md-offset-1 d-flex align-items-center justify-content-center">
+        <div class="panel panel-default">
+            <div class="panel-heading d-flex align-items-center justify-content-center">
+                <h3 class="panel-title"><strong>Créez votre compte</strong></h3>
+            </div>
+            <hr style="margin-top:10px;margin-bottom:10px;" >
+            <div class="panel-body ">
+                <form role="form" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="form-group">
+                        {% if field.name == "date_of_birth" %}
+                        <p>{{ field.label }} <i class="fa fa-calendar"> {{ field }}</i></p>
+                        {% else %}
+                        {{ field }}
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="controls d-flex align-items-center justify-content-center">
+                        <button type="submit"  class="btn btn-success">Créer Compte</button>
+                    </div>
+                    <hr style="margin-top:10px;margin-bottom:10px;" >
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
