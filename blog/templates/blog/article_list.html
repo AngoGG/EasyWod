@@ -6,7 +6,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="hero-section set-bg" data-setbg="{% static "img/blog-bg.jpg" %}">
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.active').removeClass('active');
+        $('#blog').addClass('active');
+    });
+</script>
+<div class="" data-setbg="{% static "img/blog-bg.jpg" %}">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -30,7 +36,7 @@
                     </div>
                     <div class="blog-text">
                         <span class="blog-time">{{ article.publication_date }}</span>
-                        <h2>{{ article.title }}</h2>
+                        <h3>{{ article.title }}</h3>
                         <p>{{ article.body }}</p><br>
                         {% if user.type == "EMPLOYEE" %}
                         <div class="blog-widget">
@@ -60,8 +66,9 @@
                 {% endif %}
                 </div>
             </div>
-            
         </div>
     </div>
 </section>
+
 {% endblock %}
+
