@@ -4,7 +4,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.views.generic import FormView, View
+from django.urls import reverse_lazy, reverse
+from django.views.generic import FormView, View, UpdateView
 from .forms import ConnectionForm, RegisterForm
 from .models import User
 
@@ -88,3 +89,27 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
             update_session_auth_hash(request, form.user)
             return render(request, "user/profile.html")
         return render(request, "user/change_password.html", locals())
+
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    queryset = User.objects.all()
+    model = User
+    template_name = "user/user_update.html"
+    fields = [
+        'email',
+        'first_name',
+        'last_name',
+        'address_info',
+        'address_additional_info',
+        'city',
+        'zip_code',
+        'country',
+    ]
+
+    def get_queryset(self):
+        queryset = super(UserUpdateView, self).get_queryset()
+        return queryset.filter(pk=self.request.user.pk)
+
+    def get_success_url(self):
+        return reverse('user:profile')
+

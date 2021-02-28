@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from user.models import User, UserAddress
+from user.models import User
 
 
 class UserCreationForm(forms.ModelForm):
@@ -57,15 +57,10 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-class UserAddressInline(admin.StackedInline):
-    model = UserAddress
-
-
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm
     add_form = UserCreationForm
-    inlines = [UserAddressInline]
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin

@@ -1,3 +1,9 @@
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.active').removeClass('active');
+        $('#event').addClass('active');
+    });
+</script>
 <h1> {{ event.name }}</h1>
 <small>
     Hello {{ user.email }}<br>
