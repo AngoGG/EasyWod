@@ -72,17 +72,92 @@
         </div>
     </section>
     {% endif %}
-    <!-- Call To Section End -->
-    <div class="map">
-        <iframe
-            src="https://maps.google.com/maps?q=10%20Quai%20de%20la%20Charente,%2075019%20Paris&t=&z=13&ie=UTF8&iwloc=&output=embed"
-             style="border:0"></iframe>
-        <div class="map-address">
-            <div class="map-address-text">
-                <ul>
-                    <li>EasyWod, <br />10 Quai de la Charente, 75019 Paris</li>
-                    <li>08 36 65 65 65 <br />contact@easywod.com</li>
-                </ul>
+    <section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 text-center mb-5">
+
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-12">
+					<div class="wrapper">
+						<div class="row no-gutters mb-5">
+                            <div class="col-md-5">
+								<div class="map">
+                                    <iframe
+                                        src="https://maps.google.com/maps?q=10%20Quai%20de%20la%20Charente,%2075019%20Paris&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                        style="border:0"></iframe>
+                                </div>
+							</div>
+							<div class="col-md-7">
+								<div class="contact-wrap w-100 p-md-5 p-4">
+									<h3 class="mb-4">Contactez-nous</h3>
+									<div id="form-message-warning" class="mb-4"></div> 
+                                    <div id="form-message-success" class="mb-4"></div>
+									<form method="POST" id="contactForm" name="contactForm" class="contactForm">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="label" for="name">Nom</label>
+													<input type="text" class="form-control" name="name" id="name" placeholder="Nom">
+												</div>
+											</div>
+											<div class="col-md-6"> 
+												<div class="form-group">
+													<label class="label" for="email">Adresse mail</label>
+													<input type="email" class="form-control" name="email" id="email" placeholder="Adresse mail">
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="label" for="subject">Sujet</label>
+													<input type="text" class="form-control" name="subject" id="subject" placeholder="Sujet">
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="label" for="#">Message</label>
+													<textarea name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message"></textarea>
+												</div>
+											</div>
+											<div class="col-md-12">
+												<div class="form-group text-center">
+													<button type="button" class="btn btn-success">Envoyer</button>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>		
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+     <!-- Get In Touch Section Begin -->
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>EasyWod, <br />10 Quai de la Charente, 75019 Paris</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <p>108 36 65 65 65 </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>contact@easywod.com/<p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -108,17 +183,7 @@
         </div>
     </footer>
     <!-- Footer Section End -->
-    <!-- Search model -->
-	<div class="search-model">
-		<div class="h-100 d-flex align-items-center justify-content-center">
-			<div class="search-close-switch">+</div>
-			<form class="search-model-form">
-				<input type="text" id="search-input" placeholder="Search here.....">
-			</form>
-		</div>
-	</div>
-    <!-- Search model end -->
-    
+
     <!-- Js Plugins -->
     <script src="{% static "js/jquery-3.3.1.min.js" %}"></script>
     <script src="{% static "js/bootstrap.min.js" %}"></script>

@@ -701,12 +701,12 @@ ol {
 -----------------------*/
 
 .map {
-	height: 585px;
+	height: 100%;
 	position: relative;
 }
 
 .map iframe {
-	width: 50%;
+	width: 100%;
 	height: 100%;
 }
 
@@ -2152,4 +2152,28 @@ ol {
 
 .bh-text ul li:last-child:after {
 	display: none;
+}
+
+.contact-wrap {
+	background: #e8edf0;
+}
+
+.contactForm .label {
+	color: #000;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.contactForm .form-control {
+	border: none;
+}
+
+#contactForm .error {
+	color: red;
+	font-size: 12px;
+}
+
+#contactForm .form-control {
+	font-size: 16px;
 }
