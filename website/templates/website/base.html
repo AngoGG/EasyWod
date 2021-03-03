@@ -56,6 +56,7 @@
     {% endblock %}
 
     <!-- Call To Section Begin -->
+    {% if user.is_authenticated is False %}
     <section class="callto-section">
         <div class="container">
             <div class="row">
@@ -64,11 +65,13 @@
                         <h2>Viens t'entraîner avec nous!</h2>
                         <p>Saint-cimonaque de cul de verrat de cibolac d'étole de cibole de saintes fesses d'ostie.</p>
                         <a href="{% url "user:register" %}" class="primary-btn callto-btn">S'inscrire maintenant</a>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    {% endif %}
     <!-- Call To Section End -->
     <div class="map">
         <iframe
