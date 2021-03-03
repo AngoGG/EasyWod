@@ -706,7 +706,8 @@ ol {
 }
 
 .map iframe {
-	width: 100%;
+	width: 50%;
+	height: 100%;
 }
 
 .map .map-address {
