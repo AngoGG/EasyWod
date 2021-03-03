@@ -16,6 +16,12 @@ class CalendarView(ListView):
     context_object_name = "events"
     queryset = Event.objects.all()
     template_name = "event/event_calendar.html"
+    extra_context = {}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['time'] = datetime.now()
+        return context
 
 
 class AddEvent(UserPassesTestMixin, View):
@@ -63,6 +69,8 @@ class EventView(View):
         else:
             has_cancelled = False
 
+        time = datetime.now()
+
         return render(
             request,
             "event/event_detail.html",
@@ -71,6 +79,7 @@ class EventView(View):
                 "event": event,
                 "is_registered": is_registered,
                 "has_cancelled": has_cancelled,
+                "time": time,
             },
         )
 
