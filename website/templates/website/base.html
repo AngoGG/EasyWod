@@ -50,7 +50,7 @@
             </div>
         </div>
     </header>
-
+     {% include 'website/messages.html' %}
 
     {% block content %}
 
@@ -96,8 +96,9 @@
 									<h3 class="mb-4">Contactez-nous</h3>
 									<div id="form-message-warning" class="mb-4"></div> 
                                     <div id="form-message-success" class="mb-4"></div>
-									<form method="POST" id="contactForm" name="contactForm" class="contactForm">
-										<div class="row">
+									<form method="POST" id="contactForm" name="contactForm" class="contactForm" action="{% url "website:contact" %}">
+										{% csrf_token %}
+                                        <div class="row">
 											<div class="col-md-6">
 												<div class="form-group">
 													<label class="label" for="name">Nom</label>
@@ -124,7 +125,7 @@
 											</div>
 											<div class="col-md-12">
 												<div class="form-group text-center">
-													<button type="button" class="btn btn-success">Envoyer</button>
+													<button type="submit" class="btn btn-success">Envoyer</button>
 												</div>
 											</div>
 										</div>
