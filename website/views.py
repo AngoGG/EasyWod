@@ -9,9 +9,10 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.views.generic import View
+from django.views.generic import FormView, View
 
 import config.settings as Settings
+from .models import ContactMessage
 from user.models import User
 
 # Create your views here.
@@ -65,3 +66,17 @@ class PasswordResetView(View):
             )
             return redirect("/")
 
+
+class ContactView(View):
+    def post(self, request):
+        ContactMessage.objects.create(
+            name=request.POST.get('name'),
+            email=request.POST.get('email'),
+            subject=request.POST.get('subject'),
+            message=request.POST.get('message'),
+        )
+        messages.success(
+            request,
+            "Votre demande a bien été envoyée, nous la traiterons dans les meilleurs délais",
+        )
+        return redirect("/")
