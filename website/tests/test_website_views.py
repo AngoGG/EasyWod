@@ -1,6 +1,7 @@
 from django.core import mail
 from django.test import Client, TestCase
 from user.models import User
+from website.models import ContactMessage
 
 
 class TestPasswordResetView(TestCase):
@@ -23,3 +24,21 @@ class TestPasswordResetView(TestCase):
         self.assertEqual(
             mail.outbox[0].subject, "Réinitialisation du mot de passe demandée"
         )
+
+
+class TestContactView(TestCase):
+    def test_contact_view(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        response = client.post(
+            "/contact/",
+            {
+                'name': ['User'],
+                'email': ['user@gmail.com'],
+                'subject': ['Sujet important'],
+                'message': ['Test'],
+            },
+        )
+        message = ContactMessage.objects.first()
+        assert response.status_code == 302  # Testing redirection
+        assert message.name == "User"
+        assert message.email == "user@gmail.com"

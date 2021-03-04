@@ -1,11 +1,13 @@
 {% extends "website/base.html" %}
 {% load static %}
+{% load tz %}
 
 {% block title %}
 - Nos Cours {{ block.super }}
 {% endblock %}
 
 {% block content %}
+
 
 <link href='{% static "fullcalendar/main.css" %}' rel='stylesheet' />
 
@@ -15,11 +17,13 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         
-
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridWeek',
             selectable: true,
+            validRange: function(nowDate){
+                return {start: nowDate} //to prevent anterior dates
+            },
             firstDay:1, // Lundi premier jour de la semaine
             buttonText: {
                 today:    'Aujourd\'hui',
@@ -31,21 +35,18 @@
                         end: '{{ event.end|date:"Y-m-d H:i" }}',
                         id: '{{ event.id }}',
                         allDay: false,
+                       
                         {% if event.eventmember_set.count < event.slot %}
-                            title: "{{ event.name}}",
+                            title: "{{ event.name }}",
                             color: '#3ADF00',
                         {% else %}
-                            title: "[Complet] {{ event.name}}",
+                            title: "[Complet] {{ event.name }}",
                             color: '#FF0000',
                         {% endif %}
                     },
                 {% endfor %}
             ],
-            eventRender: function(event, element) {
-                if(event.description == "yes") {
-                    element.css('background-color', '#000');
-                }
-            },
+
             eventClick: function(info) {
                 var eventObj = info.event;
                 location.replace(eventObj.id)
