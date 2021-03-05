@@ -14,7 +14,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css"/>
 <script src='{% static "fullcalendar/main.js" %}'></script>
 <script>
-
     document.addEventListener('DOMContentLoaded', function() {
         
         var calendarEl = document.getElementById('calendar');
@@ -60,9 +59,25 @@
     });
     </script>
 {% csrf_token %}
-<br/>
-<h2 align="center">Les cours de la semaine</h2>
-<br/>
-<div id='calendar'></div>
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/classes-bg.jpg" %}">
+    <div class="container text-center">
+        <div class="row">
+            <div class="hero-text col-lg-12">
+                <h1>Les cours</h1>
+            </div>
+            {% if user.type == "EMPLOYEE" %}
+            <div class="hero-text col-lg-12">
+                <a href="{% url "event:add_event" %}" class="primary-btn">Ajouter un cours</a>
+            </div>
+            {% endif %}
+        </div>      
+    </div>
+</div>
+<!-- Hero Section End -->
+
+<div id='calendar'>
+
+</div>
 
 {% endblock %}
