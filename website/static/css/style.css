@@ -403,22 +403,19 @@ ol {
 	color: #ffffff;
 	font-weight: 700;
 	position: relative;
-	opacity: 0;
-	top: 50px;
+	top: 25px;
 }
 
 .hero-text p {
 	color: #ffffff;
 	margin-bottom: 30px;
 	position: relative;
-	opacity: 0;
 	top: 50px;
 }
 
 .hero-text .primary-btn {
 	position: relative;
-	opacity: 0;
-	top: 50px;
+	top: 30px;
 }
 
 .hero-items .owl-nav button[type=button] {
@@ -472,17 +469,19 @@ ol {
 -----------------------*/
 
 .hero-section {
-	height: 239px;
+	height: 250px;
 }
 
-.hero-section .hero-text {
-	padding-top: 174px;
-}
 
 .hero-section .hero-text h1 {
 	font-size: 72px;
 	line-height: 93%;
 	font-weight: 700;
+	margin-bottom: 25px;
+}
+
+.hero-section .hero-text a {
+	margin-bottom: 25px;
 }
 
 /*---------------------
@@ -1305,7 +1304,8 @@ ol {
 -----------------------*/
 
 .contact-section {
-	padding-top: 145px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .contact-text .section-title {
@@ -1391,6 +1391,32 @@ ol {
 	font-size: 14px;
 	letter-spacing: 0.5px;
 }
+
+.contact-wrap {
+	background: #e8edf0;
+}
+
+.contactForm .label {
+	color: #000;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.contactForm .form-control {
+	border: none;
+}
+
+#contactForm .error {
+	color: red;
+	font-size: 12px;
+}
+
+#contactForm .form-control {
+	font-size: 16px;
+}
+
+
 
 /*---------------------
   Contact Section
@@ -2009,6 +2035,7 @@ ol {
 @media only screen and (min-width: 320px) and (max-width: 479px) {
 	.hero-text h1 {
 		font-size: 40px;
+		margin-bottom: 30px;
 	}
 
 	.booking-heading {
@@ -2092,33 +2119,4 @@ ol {
 
 .bh-text ul li:last-child:after {
 	display: none;
-}
-
-.contact-wrap {
-	background: #e8edf0;
-}
-
-.contactForm .label {
-	color: #000;
-	text-transform: uppercase;
-	font-size: 12px;
-	font-weight: 600;
-}
-
-.contactForm .form-control {
-	border: none;
-}
-
-#contactForm .error {
-	color: red;
-	font-size: 12px;
-}
-
-#contactForm .form-control {
-	font-size: 16px;
-}
-
-.contact-section {
-	margin-top: 45px;
-	margin-bottom: 45px;
 }
