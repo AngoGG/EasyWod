@@ -702,65 +702,13 @@ ol {
 
 .map {
 	height: 100%;
+	min-height: 350px;
 	position: relative;
 }
 
 .map iframe {
 	width: 100%;
 	height: 100%;
-}
-
-.map .map-address {
-	position: absolute;
-	left: 106px;
-	top: 91px;
-}
-
-.map .map-address .map-address-text {
-	background: #081624;
-	height: 385px;
-	width: 364px;
-	padding-left: 83px;
-	padding-top: 135px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	opacity: 0.75;
-	position: relative;
-}
-
-.map .map-address .map-address-text:after {
-	position: absolute;
-	left: 0;
-	bottom: -20px;
-	border-left: 30px solid #081624;
-	border-top: 20px solid transparent;
-	border-bottom: 20px solid transparent;
-	content: "";
-}
-
-.map .map-address .map-address-text ul li {
-	list-style: none;
-	font-size: 16px;
-	font-family: "Oswald", sans-serif;
-	font-weight: 500;
-	color: #ffffff;
-	line-height: 27px;
-	margin-bottom: 30px;
-	position: relative;
-}
-
-.map .map-address .map-address-text ul li:last-child:after {
-	display: none;
-}
-
-.map .map-address .map-address-text ul li:after {
-	position: absolute;
-	left: -4px;
-	top: -32px;
-	height: 7px;
-	width: 52px;
-	background: #82D026;
-	content: "";
 }
 
 /*---------------------
@@ -2067,10 +2015,6 @@ ol {
 		padding: 75px 0 59px 50px;
 	}
 
-	.map .map-address {
-		left: 25px;
-	}
-
 	.client-text h4 {
 		line-height: 35px;
 	}
@@ -2094,11 +2038,6 @@ ol {
 	.single-blog-item.blog-item .blog-text p {
 		line-height: 22px;
 		font-size: 13px;
-	}
-
-	.map .map-address .map-address-text {
-		width: 260px;
-		padding-left: 45px;
 	}
 
 	.footer-section .social-links a {
@@ -2177,4 +2116,9 @@ ol {
 
 #contactForm .form-control {
 	font-size: 16px;
+}
+
+.contact-section {
+	margin-top: 45px;
+	margin-bottom: 45px;
 }
