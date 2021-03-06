@@ -14,11 +14,11 @@ def get_all_week_events():
     interval_start = 0 - day
     interval_end = 6 - day
 
-    date_start_week = today + timedelta(days=interval_start)
-    date_end_week = today + timedelta(days=interval_end)
+    query_date_start_week = today + timedelta(days=interval_start)
+    query_date_end_week = today + timedelta(days=interval_end + 1)
 
     week_events = Event.objects.filter(
-        start__range=[date_start_week, date_end_week]
+        start__range=[query_date_start_week, query_date_end_week]
     ).count()
 
     return week_events
