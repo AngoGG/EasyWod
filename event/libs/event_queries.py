@@ -15,7 +15,7 @@ def get_all_week_events():
     interval_end = 6 - day
 
     query_date_start_week = today + timedelta(days=interval_start)
-    query_date_end_week = today + timedelta(days=interval_end)
+    query_date_end_week = today + timedelta(days=interval_end + 1)
 
     week_events = Event.objects.filter(
         start__gte=query_date_start_week, start__lte=query_date_end_week,
