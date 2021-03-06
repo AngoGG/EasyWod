@@ -72,7 +72,7 @@
         </div>
     </section>
     {% endif %}
-    {% if user.is_authenticated and user.type != "EMPLOYEE" %}
+    {% if user.type != "EMPLOYEE" %}
     <section class="contact-section">
 		<div class="container">
 			<div class="row col-lg-12 justify-content-center">
