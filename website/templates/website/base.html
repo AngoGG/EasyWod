@@ -72,6 +72,7 @@
         </div>
     </section>
     {% endif %}
+    {% if user.is_authenticated and user.type != "EMPLOYEE" %}
     <section class="contact-section">
 		<div class="container">
 			<div class="row col-lg-12 justify-content-center">
@@ -124,6 +125,7 @@
 			</div>
 		</div>
 	</section>
+    {% endif %}
      <!-- Get In Touch Section Begin -->
     <div class="gettouch-section">
         <div class="container">
