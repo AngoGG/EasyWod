@@ -72,8 +72,8 @@
                         <i class="flaticon-044-fitness-1"></i>
                     </div>
                     <div class="counter-text">
-                        <span class="counter-num counter">3</span>
-                        <span>Coachs</span>
+                        <span class="counter-num counter"> {{ coaches }}</span>
+                        <span>{% if coaches == 1 or coaches == 0 %} Coach {% else %} Coachs{% endif %}</span>
                     </div>
                 </div>
             </div>
@@ -83,8 +83,8 @@
                         <i class="flaticon-043-muscles"></i>
                     </div>
                     <div class="counter-text">
-                        <span class="counter-num counter">5</span>
-                        <span>Membres</span>
+                        <span class="counter-num counter"> {{ customers }}</span>
+                        <span>{% if customers == 1 or customers == 0 %} Membre {% else %} Membres{% endif %}</span>
                     </div>
                 </div>
             </div>        
@@ -94,7 +94,7 @@
                         <i class="flaticon-008-tactics-2"></i>
                     </div>
                     <div class="counter-text">
-                        <span class="counter-num counter">125</span>
+                        <span class="counter-num counter">{{ all_week_events }}</span>
                         <span>Cours cette semaine</span>
                     </div>
                 </div>

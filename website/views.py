@@ -14,13 +14,25 @@ from django.views.generic import FormView, View
 import config.settings as Settings
 from .models import ContactMessage
 from user.models import User
+from event.libs import event_queries
 
 # Create your views here.
 
 
 class HomeView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
-        return render(request, "website/home.html")
+        coaches = User.objects.filter(type="EMPLOYEE").count()
+        customers = User.objects.filter(type="CUSTOMER").count()
+        all_week_events = event_queries.get_all_week_events()
+        return render(
+            request,
+            "website/home.html",
+            {
+                "coaches": coaches,
+                "customers": customers,
+                "all_week_events": all_week_events,
+            },
+        )
 
 
 class PasswordResetView(View):
