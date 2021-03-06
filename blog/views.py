@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -8,6 +8,7 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from user.models import User
 from .models import Article
 from .forms import ArticleForm, EditForm
 
@@ -38,6 +39,25 @@ class AddArticleView(UserPassesTestMixin, CreateView):
     model = Article
     template_name = "blog/add_article.html"
     form_class = ArticleForm
+
+    def post(self, request):
+        error: bool = False
+
+        form: ArticleForm = ArticleForm(request.POST)
+
+        if form.is_valid():
+            title: str = request.POST.get('title')
+            author: User = User.objects.get(pk=request.POST.get('author'))
+            body: str = request.POST.get('body')
+
+            article: Article = Article.objects.create(
+                title=title, author=author, body=body,
+            )
+            if article:
+                return redirect('blog:article_list')
+            else:
+                error: bool = True
+        return render(request, "blog/add_article.html", locals())
 
 
 class UpdateArticleView(UserPassesTestMixin, UpdateView):

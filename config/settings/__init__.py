@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "event.apps.EventConfig",
     "user.apps.UserConfig",
     "website.apps.WebsiteConfig",
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

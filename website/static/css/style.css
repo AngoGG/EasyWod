@@ -403,22 +403,19 @@ ol {
 	color: #ffffff;
 	font-weight: 700;
 	position: relative;
-	opacity: 0;
-	top: 50px;
+	top: 25px;
 }
 
 .hero-text p {
 	color: #ffffff;
 	margin-bottom: 30px;
 	position: relative;
-	opacity: 0;
 	top: 50px;
 }
 
 .hero-text .primary-btn {
 	position: relative;
-	opacity: 0;
-	top: 50px;
+	top: 30px;
 }
 
 .hero-items .owl-nav button[type=button] {
@@ -472,17 +469,19 @@ ol {
 -----------------------*/
 
 .hero-section {
-	height: 239px;
+	height: 250px;
 }
 
-.hero-section .hero-text {
-	padding-top: 174px;
-}
 
 .hero-section .hero-text h1 {
 	font-size: 72px;
 	line-height: 93%;
 	font-weight: 700;
+	margin-bottom: 25px;
+}
+
+.hero-section .hero-text a {
+	margin-bottom: 25px;
 }
 
 /*---------------------
@@ -702,65 +701,13 @@ ol {
 
 .map {
 	height: 100%;
+	min-height: 350px;
 	position: relative;
 }
 
 .map iframe {
 	width: 100%;
 	height: 100%;
-}
-
-.map .map-address {
-	position: absolute;
-	left: 106px;
-	top: 91px;
-}
-
-.map .map-address .map-address-text {
-	background: #081624;
-	height: 385px;
-	width: 364px;
-	padding-left: 83px;
-	padding-top: 135px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	opacity: 0.75;
-	position: relative;
-}
-
-.map .map-address .map-address-text:after {
-	position: absolute;
-	left: 0;
-	bottom: -20px;
-	border-left: 30px solid #081624;
-	border-top: 20px solid transparent;
-	border-bottom: 20px solid transparent;
-	content: "";
-}
-
-.map .map-address .map-address-text ul li {
-	list-style: none;
-	font-size: 16px;
-	font-family: "Oswald", sans-serif;
-	font-weight: 500;
-	color: #ffffff;
-	line-height: 27px;
-	margin-bottom: 30px;
-	position: relative;
-}
-
-.map .map-address .map-address-text ul li:last-child:after {
-	display: none;
-}
-
-.map .map-address .map-address-text ul li:after {
-	position: absolute;
-	left: -4px;
-	top: -32px;
-	height: 7px;
-	width: 52px;
-	background: #82D026;
-	content: "";
 }
 
 /*---------------------
@@ -1357,7 +1304,8 @@ ol {
 -----------------------*/
 
 .contact-section {
-	padding-top: 145px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .contact-text .section-title {
@@ -1443,6 +1391,32 @@ ol {
 	font-size: 14px;
 	letter-spacing: 0.5px;
 }
+
+.contact-wrap {
+	background: #e8edf0;
+}
+
+.contactForm .label {
+	color: #000;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.contactForm .form-control {
+	border: none;
+}
+
+#contactForm .error {
+	color: red;
+	font-size: 12px;
+}
+
+#contactForm .form-control {
+	font-size: 16px;
+}
+
+
 
 /*---------------------
   Contact Section
@@ -2061,14 +2035,11 @@ ol {
 @media only screen and (min-width: 320px) and (max-width: 479px) {
 	.hero-text h1 {
 		font-size: 40px;
+		margin-bottom: 30px;
 	}
 
 	.booking-heading {
 		padding: 75px 0 59px 50px;
-	}
-
-	.map .map-address {
-		left: 25px;
 	}
 
 	.client-text h4 {
@@ -2094,11 +2065,6 @@ ol {
 	.single-blog-item.blog-item .blog-text p {
 		line-height: 22px;
 		font-size: 13px;
-	}
-
-	.map .map-address .map-address-text {
-		width: 260px;
-		padding-left: 45px;
 	}
 
 	.footer-section .social-links a {
@@ -2153,28 +2119,4 @@ ol {
 
 .bh-text ul li:last-child:after {
 	display: none;
-}
-
-.contact-wrap {
-	background: #e8edf0;
-}
-
-.contactForm .label {
-	color: #000;
-	text-transform: uppercase;
-	font-size: 12px;
-	font-weight: 600;
-}
-
-.contactForm .form-control {
-	border: none;
-}
-
-#contactForm .error {
-	color: red;
-	font-size: 12px;
-}
-
-#contactForm .form-control {
-	font-size: 16px;
 }

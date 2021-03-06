@@ -1,13 +1,60 @@
-<h1>Ajouter un Article</h1>
 
-<form method="POST">
-    {% csrf_token %}
 
-    {{ form.as_p }}
-    <button>Créer Article</button>
-</form>
 
+{% extends "website/base.html" %}
+{% load static %}
+{% load tz %}
+
+{% block title %}
+- Nos Cours {{ block.super }}
+{% endblock %}
+
+{% block content %}
 <script>
-    var user_id = "{{ user.id }}"
-    document.getElementById("id_author").value = user_id
+    document.addEventListener('DOMContentLoaded', function() {
+        $('.active').removeClass('active');
+        $('#event').addClass('active');
+    });
 </script>
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/classes-bg.jpg" %}">
+    <div class="container text-center">
+        <div class="row">
+            <div class="hero-text col-lg-12">
+                <h1>Ajouter un article</h1>
+            </div>
+        </div>      
+    </div>
+</div>
+<!-- Hero Section End -->
+<div class="col-lg-12 d-flex justify-content-center">
+    <div class="contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+        <form method="POST" id="contactForm" name="contactForm" class="contactForm" action="{% url "blog:add_article" %}">
+            {% csrf_token %}
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+                    <div class="form-group">
+                        <label class="label" for="name">Titre de l'article</label>
+                        <input type="text" class="form-control" name="title" id="name" placeholder="Titre de l'article" required>
+                        <input type="hidden" name="author" value="{{ user.id }}" id="id_author">
+                    </div>
+                </div>
+                <div class="col-lg-8"> 
+                    <div class="form-group">   
+                        <p class="label">{{ form }}</p>
+                        {{ form.media }}
+                    </div>
+                </div>
+                <div class="col-lg-6" style="margin-bottom:25px;">
+                    <div class="text-center">
+                        <button type="submit" class="submit-btn contact-btn" style="height:50px;">Ajouter l'article</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>	
+
+
+{% endblock %}
+

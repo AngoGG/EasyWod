@@ -30,34 +30,30 @@
 </section>
 <!-- Blog Details Hero Section End -->
 <!-- Blog Details Section Begin -->
-    <section class="blog-details-section spad">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-8 p-0 m-auto">
-                    <div class="blog-details-text">
-                        <div class="blog-details-title">
-                            {{ article.body }}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12 text-center">
-                <br><br><br>
-                    <div class="row d-flex justify-content-center">
-                    
-                    {% if user.type == "EMPLOYEE" %}
-                        <div class="blog-btn">'
-                            <a href="{% url 'blog:update_article' article.pk %}" class="primary-btn">Modifier</a>
-                        </div>
-                    {% endif %}
-                        <div class="blog-btn">'
-                            <a href="{% url 'blog:article_list'%}" class="primary-btn">Retour</a>
-                        </div>
-                    </div>
+<div class="col-lg-12 d-flex justify-content-center">
+    <div class=" row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+        <div class="col-lg-8 p-0 m-auto" >
+            <div class="blog-details-text" style="margin-top:25px;margin-bottom:25px;">
+                <div class="blog-details-title">
+                    {{ article.body|safe }}
                 </div>
             </div>
         </div>
-    </section>
-    <!-- Blog Details Section End -->
+        <div class="col-lg-12 text-center">
+            <div class="row d-flex justify-content-center" style="margin-top:25px;margin-bottom:25px;">
+                        {% if user.type == "EMPLOYEE" %}
+                <div class="blog-btn">'
+                    <a href="{% url 'blog:update_article' article.pk %}" class="primary-btn">Modifier</a>
+                </div>
+            {% endif %}
+                <div class="blog-btn">'
+                    <a href="{% url 'blog:article_list'%}" class="primary-btn">Retour</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Blog Details Section End -->
     
 
 

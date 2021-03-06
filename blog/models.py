@@ -2,6 +2,7 @@ from django.db import models
 from user.models import User
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -10,7 +11,7 @@ from django.urls import reverse
 class Article(models.Model):
     title = models.CharField(_("Titre"), max_length=255)
     author = models.ForeignKey(User, verbose_name=_("Auteur"), on_delete=models.CASCADE)
-    body = models.TextField(_("Contenu"))
+    body = RichTextField(_("Contenu"))
     publication_date = models.DateTimeField(
         verbose_name=_("Date de publication"), auto_now_add=True
     )
