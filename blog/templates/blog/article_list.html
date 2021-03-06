@@ -42,7 +42,7 @@
                     <div class="blog-text">
                         <span class="blog-time">{{ article.publication_date }}</span>
                         <h3>{{ article.title }}</h3>
-                        <p>{{ article.body }}</p><br>
+                        <p>{{ article.body|safe }}</p><br>
                         {% if user.type == "EMPLOYEE" %}
                         <div class="blog-widget">
                             <ul>
