@@ -43,7 +43,6 @@ class LoginView(FormView):
         """Manages the user connection.
         """
         error: bool = False
-        print(f"HELLO DATA {request.POST}")
 
         form: ConnectionForm = ConnectionForm(request.POST)
         if form.is_valid():
