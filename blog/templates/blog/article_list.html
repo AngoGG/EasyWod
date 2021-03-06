@@ -31,18 +31,18 @@
 <!-- Blog Section Begin -->
 
 <section class="blog-section spad">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
         {% for article in object_list %}
             <div class="col-lg-3 col-md-6">
-                <div class="single-blog-item blog-item">
-                    <div class="blog-img">
+                <div class="single-blog-item blog-item" style="height:400px;">
+                    <div class="flex justify-content-center text-center" style="padding-top:20px;">
                         <a href="{% url 'blog:article_detail' article.pk %}"><img src="{% static "img/logo.png" %}" alt=""></a>
                     </div>
                     <div class="blog-text">
                         <span class="blog-time">{{ article.publication_date }}</span>
                         <h3>{{ article.title }}</h3>
-                        <p>{{ article.body|safe }}</p><br>
+                        <!-- <p>{{ article.body|safe }}</p> This content will be replaced by the Article Snippet when created -->
                         {% if user.type == "EMPLOYEE" %}
                         <div class="blog-widget">
                             <ul>
