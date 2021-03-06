@@ -19,7 +19,9 @@ class EditForm(forms.ModelForm):
         fields = ("title", "body")
 
         widgets = {
-            "title": forms.TextInput(attrs={"placeholder": "Titre de l'article"}),
+            "title": forms.TextInput(
+                attrs={"placeholder": "Titre de l'article", "class": "form-control"}
+            ),
             "body": forms.TextInput(
                 attrs={"placeholder": "Entrez le contenu de votre Article"}
             ),
