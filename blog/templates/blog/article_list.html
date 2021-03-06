@@ -62,15 +62,6 @@
                 </div>
             </div>
         {% endfor %}    
-            <div class="col-lg-12 text-center">
-                <div class="row d-flex justify-content-center">
-                {% if user.type == "EMPLOYEE" %}
-                    <div class="blog-btn">'
-                        <a href="{% url 'blog:add_article'%}" class="primary-btn">Créer Article</a>
-                    </div>
-                {% endif %}
-                </div>
-            </div>
         </div>
     </div>
 </section>
