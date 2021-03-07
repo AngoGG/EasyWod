@@ -2,13 +2,18 @@ from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
 from user.models import User
+from membership.models import Membership, UserMembership, Subscription
 
 
 class TestRegistrationView(TestCase):
     def test_register_post(self) -> None:
         """Test if the url returns a correct 302 http status code
         and test if a user is correctly created.
+        A new user must have an active TRIAL subscription.
         """
+
+        Membership.objects.create(membership_type="TRIAL")
+
         client: Client = Client()
         response: HttpResponse = client.post(
             "/user/register",
@@ -30,6 +35,16 @@ class TestRegistrationView(TestCase):
         self.assertTrue(user_created.check_password("password8chars"))
         self.assertEqual("Matt", user_created.first_name)
         self.assertEqual("Fraser", user_created.last_name)
+
+        # Check if the User has a correct TRIAL membership
+        self.assertEqual(
+            "TRIAL", user_created.user_membership.membership.membership_type
+        )
+
+        # Check if the User subscription is active
+        assert Subscription.objects.filter(
+            user_membership=user_created.user_membership, active=True
+        ).exists()
 
     def test_register_get(self) -> None:
         """Test if the url returns a correct 200 http status code.
