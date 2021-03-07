@@ -8,6 +8,7 @@ class User(AbstractBaseUser):
     class Types(models.TextChoices):
         EMPLOYEE = "EMPLOYEE", "Employee"
         MEMBER = "MEMBER", "Member"
+        VISITOR = "VISITOR", "Visitor"
 
     type = models.CharField(max_length=50, choices=Types.choices, default=Types.MEMBER)
     email = models.EmailField(
