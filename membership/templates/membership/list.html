@@ -1,0 +1,37 @@
+{% block content %}
+<div class="container">
+    <br>
+    <h1>Page Test pour voir l'abonnement en cours de l'utilisateur connecté</h1>
+    <hr>
+    <div class="row">
+    {% for object in object_list %}
+        <div class="col-sm-4 col-md-4">
+            <div class="card" style="width: 18rem;">
+                <h5>{{ object.membership_type }}</h5>
+                <ul>
+                    {% if object.membership_type == 'PREMIUM' %}
+                    <li> Prix : ${{ object.price }}<small>/mois</small></li>
+                    <li> Nombre de cours : Illimité </li>
+                    {% else %}
+                    <li> Nombre de cours d'essais : {{ object.trial_courses }}</li>
+                    {% endif %}
+                </ul>
+                <div>
+                {% if object.membership_type != 'Premium' %}
+                    <form method="POST" action="{% url 'membership:select' %}">
+                        {% csrf_token %}
+                        {% if object.membership_type != current_membership %}
+                        <button class="btn btn-warning">Change</button>
+                        {% else %}
+                        <small>Formule actuelle</small>
+                        {% endif %}
+                        <input type="hidden" name="membership_type" value="{{ object.membership_type }}">
+                    </form>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

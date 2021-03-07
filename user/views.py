@@ -8,6 +8,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import FormView, View, UpdateView
 from .forms import ConnectionForm, RegisterForm
 from .models import User
+from membership.models import Membership, UserMembership, Subscription
 
 
 class RegistrationView(FormView):
@@ -17,12 +18,13 @@ class RegistrationView(FormView):
     def post(self, request: HttpRequest) -> HttpResponse:
         """Manages the user registration.
         """
-
         email: str = request.POST.get("email")
         password: str = request.POST.get("password1")
         first_name: str = request.POST.get("first_name")
         last_name: str = request.POST.get("last_name")
         date_of_birth = f'{request.POST.get("date_of_birth_year")}-{request.POST.get("date_of_birth_month")}-{request.POST.get("date_of_birth_day")}'
+
+        free_membership = Membership.objects.get(membership_type='TRIAL')
 
         user: User = User.objects.create_user(
             email=email,
@@ -31,6 +33,18 @@ class RegistrationView(FormView):
             last_name=last_name,
             date_of_birth=date_of_birth,
         )
+
+        # Creating a new UserMembership
+        user_membership = UserMembership.objects.create(
+            user=user, membership=free_membership
+        )
+        user_membership.save()
+
+        # Creating a new UserSubscription
+        user_subscription = Subscription()
+        user_subscription.user_membership = user_membership
+        user_subscription.save()
+
         login(self.request, user)
         return redirect("/")
 
@@ -43,7 +57,6 @@ class LoginView(FormView):
         """Manages the user connection.
         """
         error: bool = False
-        print(f"HELLO DATA {request.POST}")
 
         form: ConnectionForm = ConnectionForm(request.POST)
         if form.is_valid():
@@ -81,8 +94,6 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
         form: PasswordChangeForm = PasswordChangeForm(
             data=request.POST, user=request.user
         )
-
-        print(f"HELLO DATA {request.POST}")
 
         if form.is_valid():
             form.save()

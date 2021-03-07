@@ -7,10 +7,10 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractBaseUser):
     class Types(models.TextChoices):
         EMPLOYEE = "EMPLOYEE", "Employee"
-        CUSTOMER = "CUSTOMER", "Customer"
+        MEMBER = "MEMBER", "Member"
         VISITOR = "VISITOR", "Visitor"
 
-    type = models.CharField(max_length=50, choices=Types.choices, default=Types.VISITOR)
+    type = models.CharField(max_length=50, choices=Types.choices, default=Types.MEMBER)
     email = models.EmailField(
         verbose_name=_("Adresse électronique"), max_length=255, unique=True,
     )
@@ -80,16 +80,6 @@ class Employee(User):
     def save(self, *args, **kwargs):
         if not self.pk:
             self.type = User.Types.EMPLOYEE
-        return super().save(*args, **kwargs)
-
-
-class Visitor(User):
-    class Meta:
-        proxy = True
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.type = User.Types.VISITOR
         return super().save(*args, **kwargs)
 
 
