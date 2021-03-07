@@ -10,6 +10,7 @@ class TestRegistrationView(TestCase):
         """Test if the url returns a correct 302 http status code
         and test if a user is correctly created.
         A new user must have an active TRIAL subscription.
+        A new user must have the MEMBER type.
         """
 
         Membership.objects.create(membership_type="TRIAL")
@@ -35,6 +36,7 @@ class TestRegistrationView(TestCase):
         self.assertTrue(user_created.check_password("password8chars"))
         self.assertEqual("Matt", user_created.first_name)
         self.assertEqual("Fraser", user_created.last_name)
+        self.assertEqual("MEMBER", user_created.type)
 
         # Check if the User has a correct TRIAL membership
         self.assertEqual(

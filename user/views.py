@@ -95,8 +95,6 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
             data=request.POST, user=request.user
         )
 
-        print(f"HELLO DATA {request.POST}")
-
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
