@@ -8,40 +8,85 @@
 <small>
     Hello {{ user.email }}<br>
     Nombres d'inscrits: {{ event.reserved_slot }}/ {{ event.slot }}<br>
+
+
+
     {% if event.start|date:"YmdHis" > time|date:"YmdHis"  %}
-        {% if user_remaining_courses and user_remaining_courses != 0 %}
-            {% if event.reserved_slot < event.slot %}
-                {% if is_registered is False %}
-                    <form method="POST" action="{% url 'event:register_event'%}">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button>S'inscrire à ce cours</button>
-                    </form>
-                {% endif %}
-            {% elif has_cancelled is False %}
+
+        {% if event.reserved_slot < event.slot %}
+
+            {% if is_registered is True %}
+
+                {% if  has_cancelled is False %}
+
                 Vous êtes déjà inscrit à ce cours: Se désinscrire
                 <form method="POST" action="{% url 'event:unsubscribe_event'%}">
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button>Se désinscrire du cours</button>
                 </form>
-            {% endif %}
-            <p>Les gens inscrits:</p>
-            <ul>
-            {% for user_registered in event.eventmember_set.all %}
-                {% if user_registered.date_cancellation is None %}
-                    <li>{{ user_registered.user }} inscrit le {{ user_registered.date_inscription }}</li>
+
                 {% endif %}
-            {% endfor %}
-            </ul>
+
+            {% else %}
+
+                {% if  has_cancelled is True %}
+                    <p>Vous vous êtes désinscrit de ce cours et ne pouvez plus vous y réinscrire, veuillez contacter la box.</p>
+                    
+                {% elif premium_active is True %}
+
+                    <form method="POST" action="{% url 'event:register_event'%}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button>S'inscrire à ce cours</button>
+                    </form>
+
+                {% elif  premium_subscription == "inactive" %}
+
+                    <p>Vous n'avez actuellement aucun abonnement permettant de vous inscrire à un cours, veuillez contacter la box.</p>
+
+                {% elif user_remaining_courses and user_remaining_courses < 0 %}
+
+                <form method="POST" action="{% url 'event:register_event'%}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button>S'inscrire à ce cours</button>
+                </form>
+
+                {% elif user_remaining_courses and user_remaining_courses == 0 %}
+
+                <p>Vous n'avez plus de cours d'essai disponible, veuillez contacter la box.</p>
+
+                {% endif %}
+
+            {% endif %}
+
         {% else %}
-            <p>Vous n'avez plus de cours d'essai disponible, veuillez contacter la box.</p>
+
+        <p>Cet évènement est plein.</p>
+
         {% endif %}
+        
     {% else %}
+
     <p>Cet évènement est passé, impossible de s'inscrire.</p>
+
     {% endif %}
-    
-</form>
+
+
+<p>Les gens inscrits:</p>
+<ul>
+
+{% for user_registered in event.eventmember_set.all %}
+
+    {% if user_registered.date_cancellation is None %}
+
+        <li>{{ user_registered.user }} inscrit le {{ user_registered.date_inscription }}</li>
+
+    {% endif %}
+
+{% endfor %}
+
 </small>
 <hr>
 <p>
@@ -55,8 +100,8 @@ Fin de l'évènement : {{ event.end}}
 <a href="{% url 'event:event_calendar'%}">Retour</a>
 
 <script>
-    var user_id = "{{ user.id }}"
-    var event_id = "{{ event.pk }}"
+    let user_id = "{{ user.id }}"
+    let event_id = "{{ event.pk }}"
     document.getElementById("id_user").value = user_id
     document.getElementById("id_event").value = event_id
 </script>
