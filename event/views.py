@@ -9,19 +9,31 @@ from django.views.generic.edit import FormMixin
 from .models import Event, EventMember
 from .forms import AddEventMemberForm, EventForm
 from user.models import User
+from membership.models import Membership
 
 
 class CalendarView(ListView):
+    def get(self, request):
+        event_list = Event.objects.all()
+        time = datetime.now()
+        user_membership = self.request.user.user_membership.membership.membership_type
+        if user_membership == "TRIAL":
+            user_events = EventMember.objects.filter(user=self.request.user).count()
+            user_remaining_courses = (
+                Membership.objects.get(membership_type="TRIAL").trial_courses
+                - user_events
+            )
 
-    context_object_name = "events"
-    queryset = Event.objects.all()
-    template_name = "event/event_calendar.html"
-    extra_context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['time'] = datetime.now()
-        return context
+        return render(
+            request,
+            "event/event_calendar.html",
+            {
+                "events": event_list,
+                "time": time,
+                "user_events": user_events,
+                "user_remaining_courses": user_remaining_courses,
+            },
+        )
 
 
 class AddEvent(UserPassesTestMixin, View):
