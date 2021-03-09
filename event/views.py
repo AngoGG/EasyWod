@@ -16,23 +16,35 @@ class CalendarView(ListView):
     def get(self, request):
         event_list = Event.objects.all()
         time = datetime.now()
-        user_membership = self.request.user.user_membership.membership.membership_type
-        if user_membership == "TRIAL":
-            user_events = EventMember.objects.filter(user=self.request.user).count()
-            user_remaining_courses = (
-                Membership.objects.get(membership_type="TRIAL").trial_courses
-                - user_events
+        if self.request.user.type != "EMPLOYEE":
+            user_membership = (
+                self.request.user.user_membership.membership.membership_type
             )
-
+            if user_membership == "TRIAL":
+                user_events = EventMember.objects.filter(
+                    user=self.request.user, date_cancellation__isnull=True
+                ).count()
+                user_remaining_courses = (
+                    Membership.objects.get(membership_type="TRIAL").trial_courses
+                    - user_events
+                )
+                return render(
+                    request,
+                    "event/event_calendar.html",
+                    {
+                        "events": event_list,
+                        "time": time,
+                        "user_events": user_events,
+                        "user_remaining_courses": user_remaining_courses,
+                    },
+                )
+            return render(
+                request,
+                "event/event_calendar.html",
+                {"events": event_list, "time": time, "user_events": user_events,},
+            )
         return render(
-            request,
-            "event/event_calendar.html",
-            {
-                "events": event_list,
-                "time": time,
-                "user_events": user_events,
-                "user_remaining_courses": user_remaining_courses,
-            },
+            request, "event/event_calendar.html", {"events": event_list, "time": time,},
         )
 
 
@@ -71,6 +83,7 @@ class AddEvent(UserPassesTestMixin, View):
 class EventView(View):
     def get(self, request, pk):
         event = Event.objects.get(pk=pk)
+        time = datetime.now()
 
         is_registered = event.eventmember_set.filter(user_id=request.user.pk).exists()
         if is_registered:
@@ -80,9 +93,30 @@ class EventView(View):
             has_cancelled = False if registration.date_cancellation is None else True
         else:
             has_cancelled = False
-
-        time = datetime.now()
-
+        if self.request.user.type != "EMPLOYEE":
+            user_membership = (
+                self.request.user.user_membership.membership.membership_type
+            )
+            if user_membership == "TRIAL":
+                user_events = EventMember.objects.filter(
+                    user=self.request.user, date_cancellation__isnull=True
+                ).count()
+                user_remaining_courses = (
+                    Membership.objects.get(membership_type="TRIAL").trial_courses
+                    - user_events
+                )
+            return render(
+                request,
+                "event/event_detail.html",
+                {
+                    "form": AddEventMemberForm(),
+                    "event": event,
+                    "is_registered": is_registered,
+                    "has_cancelled": has_cancelled,
+                    "user_remaining_courses": user_remaining_courses,
+                    "time": time,
+                },
+            )
         return render(
             request,
             "event/event_detail.html",
