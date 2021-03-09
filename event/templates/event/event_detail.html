@@ -41,7 +41,7 @@
                         <button>S'inscrire à ce cours</button>
                     </form>
 
-                {% elif  premium_subscription == "inactive" %}
+                {% elif  premium_active is False %}
 
                     <p>Vous n'avez actuellement aucun abonnement permettant de vous inscrire à un cours, veuillez contacter la box.</p>
 
@@ -66,13 +66,13 @@
         <p>Cet évènement est plein.</p>
 
         {% endif %}
+
         
     {% else %}
 
     <p>Cet évènement est passé, impossible de s'inscrire.</p>
 
     {% endif %}
-
 
 <p>Les gens inscrits:</p>
 <ul>
