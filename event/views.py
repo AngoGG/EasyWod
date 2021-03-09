@@ -17,7 +17,8 @@ class CalendarView(ListView):
         event_list = Event.objects.all()
         time = datetime.now()
         # If User if employee, just send event list and time
-        if self.request.user.type != "EMPLOYEE":
+
+        if self.request.user.is_authenticated and self.request.user.type != "EMPLOYEE":
             user_membership = (
                 self.request.user.user_membership.membership.membership_type
             )
@@ -97,7 +98,7 @@ class EventView(View):
             has_cancelled = False if registration.date_cancellation is None else True
         else:
             has_cancelled = False
-        if self.request.user.type != "EMPLOYEE":
+        if self.request.user.is_authenticated and self.request.user.type != "EMPLOYEE":
             user_membership = (
                 self.request.user.user_membership.membership.membership_type
             )
