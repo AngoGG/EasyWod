@@ -47,3 +47,20 @@ class TestContactView(TestCase):
         assert response.status_code == 302  # Testing redirection
         assert message.name == "User"
         assert message.email == "user@gmail.com"
+
+    def test_contact_view_no_captcha(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        response = client.post(
+            "/contact/",
+            {
+                'name': ['User'],
+                'email': ['user@gmail.com'],
+                'subject': ['Sujet important'],
+                'message': ['Test'],
+                'g-recaptcha-response': [''],
+            },
+        )
+        message = ContactMessage.objects.first()
+
+        assert response.status_code == 302  # Testing redirection
+        assert message is None
