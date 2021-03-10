@@ -65,6 +65,10 @@
         <div class="row">
             <div class="hero-text col-lg-12">
                 <h1>Les cours</h1>
+                {% if user.user_membership.membership.membership_type == "TRIAL" %}
+                <p>Vous êtes actuellement en abonnement d'essai: Vous avez participé à 
+                {{ user_events }} cours, il vous en reste {{ user_remaining_courses }}</p>
+                {% endif %}
             </div>
             {% if user.type == "EMPLOYEE" %}
             <div class="hero-text col-lg-12">

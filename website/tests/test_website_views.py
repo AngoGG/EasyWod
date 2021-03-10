@@ -2,6 +2,7 @@ from django.core import mail
 from django.test import Client, TestCase
 from user.models import User
 from website.models import ContactMessage
+import config.settings as Settings
 
 
 class TestPasswordResetView(TestCase):
@@ -29,6 +30,9 @@ class TestPasswordResetView(TestCase):
 class TestContactView(TestCase):
     def test_contact_view(self):
         client: Client = Client(HTTP_HOST="localhost")
+        # Setting up Captcha setting keys
+        Settings.RECAPTCHA_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+        repatcha_test_public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
         response = client.post(
             "/contact/",
             {
@@ -36,6 +40,7 @@ class TestContactView(TestCase):
                 'email': ['user@gmail.com'],
                 'subject': ['Sujet important'],
                 'message': ['Test'],
+                'g-recaptcha-response': [repatcha_test_public_key],
             },
         )
         message = ContactMessage.objects.first()

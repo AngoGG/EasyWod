@@ -9,19 +9,48 @@ from django.views.generic.edit import FormMixin
 from .models import Event, EventMember
 from .forms import AddEventMemberForm, EventForm
 from user.models import User
+from membership.models import Membership, Subscription
 
 
 class CalendarView(ListView):
+    def get(self, request):
+        event_list = Event.objects.all()
+        time = datetime.now()
+        # If User if employee, just send event list and time
 
-    context_object_name = "events"
-    queryset = Event.objects.all()
-    template_name = "event/event_calendar.html"
-    extra_context = {}
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['time'] = datetime.now()
-        return context
+        if self.request.user.is_authenticated and self.request.user.type != "EMPLOYEE":
+            user_membership = (
+                self.request.user.user_membership.membership.membership_type
+            )
+            # If User if on trial memberbership, get his trial remaining events and the events in which he participated
+            if user_membership == "TRIAL":
+                user_events = EventMember.objects.filter(
+                    user=self.request.user, date_cancellation__isnull=True
+                ).count()
+                user_remaining_courses = (
+                    Membership.objects.get(membership_type="TRIAL").trial_courses
+                    - user_events
+                )
+                return render(
+                    request,
+                    "event/event_calendar.html",
+                    {
+                        "events": event_list,
+                        "time": time,
+                        "user_events": user_events,
+                        "user_remaining_courses": user_remaining_courses,
+                    },
+                )
+            # Else, juste returns the time and all user events
+            else:
+                return render(
+                    request,
+                    "event/event_calendar.html",
+                    {"events": event_list, "time": time},
+                )
+        return render(
+            request, "event/event_calendar.html", {"events": event_list, "time": time,},
+        )
 
 
 class AddEvent(UserPassesTestMixin, View):
@@ -59,6 +88,7 @@ class AddEvent(UserPassesTestMixin, View):
 class EventView(View):
     def get(self, request, pk):
         event = Event.objects.get(pk=pk)
+        time = datetime.now()
 
         is_registered = event.eventmember_set.filter(user_id=request.user.pk).exists()
         if is_registered:
@@ -68,9 +98,60 @@ class EventView(View):
             has_cancelled = False if registration.date_cancellation is None else True
         else:
             has_cancelled = False
-
-        time = datetime.now()
-
+        if self.request.user.is_authenticated and self.request.user.type != "EMPLOYEE":
+            user_membership = (
+                self.request.user.user_membership.membership.membership_type
+            )
+            if user_membership == "TRIAL":
+                user_events = EventMember.objects.filter(
+                    user=self.request.user, date_cancellation__isnull=True
+                ).count()
+                user_remaining_courses = (
+                    Membership.objects.get(membership_type="TRIAL").trial_courses
+                    - user_events
+                )
+                # If User if on Premium memberbership, check if his subscribtion is active
+            elif user_membership == "PREMIUM":
+                if Subscription.objects.filter(
+                    user_membership=self.request.user.user_membership, active=True
+                ).exists():
+                    return render(
+                        request,
+                        "event/event_detail.html",
+                        {
+                            "form": AddEventMemberForm(),
+                            "event": event,
+                            "is_registered": is_registered,
+                            "has_cancelled": has_cancelled,
+                            "premium_active": True,
+                            "time": time,
+                        },
+                    )
+                else:
+                    return render(
+                        request,
+                        "event/event_detail.html",
+                        {
+                            "form": AddEventMemberForm(),
+                            "event": event,
+                            "is_registered": is_registered,
+                            "has_cancelled": has_cancelled,
+                            "premium_active": False,
+                            "time": time,
+                        },
+                    )
+            return render(
+                request,
+                "event/event_detail.html",
+                {
+                    "form": AddEventMemberForm(),
+                    "event": event,
+                    "is_registered": is_registered,
+                    "has_cancelled": has_cancelled,
+                    "user_remaining_courses": user_remaining_courses,
+                    "time": time,
+                },
+            )
         return render(
             request,
             "event/event_detail.html",
