@@ -113,7 +113,7 @@
                             <label>Adresse</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ user.address_info }}</p>
+                            <p>{% if user.address_info %}{{ user.address_info }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -121,7 +121,7 @@
                             <label>Infos additionnelles adresse</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ user.address_additional_info }}</p>
+                            <p>{% if user.address_additional_info %}{{ user.address_additional_info }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -129,7 +129,7 @@
                             <label>Ville</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ user.city }}</p>
+                            <p>{% if user.city %}{{ user.city }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -137,7 +137,7 @@
                             <label>Code Postal</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ user.zip_code }}</p>
+                            <p>{% if user.zip_code %}{{ user.zip_code }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
@@ -145,7 +145,7 @@
                             <label>Pays</label>
                         </div>
                         <div class="col-md-6">
-                            <p>{{ user.country }}</p>
+                            <p>{% if user.country %}{{ user.country }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                 </div>
