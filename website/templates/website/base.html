@@ -38,7 +38,7 @@
                                 <li><a id="event" {% if request.path|slice:":7"  == '/event/' %}class="active"{% endif %} href="{% url "event:event_calendar" %}">Cours</a></li>
                                 <li><a id="blog" {% if request.path|slice:":6"  == '/blog/' %}class="active"{% endif %} href="{% url "blog:article_list" %}">Blog</a></li>
                                 {% if not user.is_authenticated %}
-                                <li><a id="connection" href="{% url "user:login" %}">Connexion</a></li>
+                                <li><a id="connection" {% if request.path == '/user/login' %}class="active"{% endif %} href="{% url "user:login" %}">Connexion</a></li>
                                 {% else %}
                                 <li><a id="connection" {% if request.path == '/user/profile' %}class="active"{% endif %} href="{% url "user:profile" %}">Profile</a></li>
                                 <li><a id="deconnection" href="{% url "user:logout" %}">Deconnexion</a></li>
