@@ -39,8 +39,7 @@
             </div>
          </div>
         <div class="col-lg-2 text-center">
-            <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Modifier"/>
-            <a href="{% url "website:home" %}" class="primary-btn">Modifier</a>
+            <a href="{% url "user:member_update" member.pk%}" class="btn btn-secondary">Modifier infos</a>
         </div>
     </div>
 </div>
