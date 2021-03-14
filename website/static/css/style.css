@@ -313,13 +313,16 @@ ol {
 .inner-header .main-menu {
 	float: right;
 	margin-right: -15px;
+
 }
 
 .inner-header .main-menu ul li {
 	list-style: none;
 	display: inline-block;
-	margin-right: 30px;
+	padding: 31px 0 34px 0;
+	margin-right: 10px;
 }
+
 
 .inner-header .main-menu ul li:nth-child(5) {
 	margin-right: 60px;
@@ -350,6 +353,8 @@ ol {
 	background: #82D026;
 	content: "";
 }
+
+
 
 .inner-header .main-menu ul li.phone-num {
 	background: #F3F4FF;

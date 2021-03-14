@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import FormView, View, UpdateView
+from django.views.generic import DetailView, FormView, ListView, View, UpdateView
 from .forms import ConnectionForm, RegisterForm
 from .models import User
+from membership.libs import membership_queries
 from membership.models import Membership, UserMembership, Subscription
 
 
@@ -82,6 +83,59 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, "user/profile.html", **kwargs)
 
 
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    queryset = User.objects.all()
+    model = User
+    template_name = "user/user_update.html"
+    fields = [
+        'email',
+        'first_name',
+        'last_name',
+        'address_info',
+        'address_additional_info',
+        'city',
+        'zip_code',
+        'country',
+    ]
+
+    def get_queryset(self):
+        queryset = super(ProfileUpdateView, self).get_queryset()
+        return queryset.filter(pk=self.request.user.pk)
+
+    def get_success_url(self):
+        return reverse('user:profile')
+
+
+class MemberDetailView(DetailView):
+    model = User
+    context_object_name = "member"
+    template_name = "user/member_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_membership'] = membership_queries.get_all_active_membership()
+        return context
+
+
+class MemberUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    context_object_name = "member"
+    template_name = "user/user_update.html"
+    fields = [
+        'email',
+        'first_name',
+        'last_name',
+        'address_info',
+        'address_additional_info',
+        'city',
+        'zip_code',
+        'country',
+    ]
+
+    def get_success_url(self):
+        return reverse('user:list')
+
+
 class UserPasswordChangeView(LoginRequiredMixin, FormView):
     def get(self, request: HttpRequest) -> HttpResponse:
         return render(
@@ -102,25 +156,15 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
         return render(request, "user/change_password.html", locals())
 
 
-class UserUpdateView(LoginRequiredMixin, UpdateView):
-    queryset = User.objects.all()
-    model = User
-    template_name = "user/user_update.html"
-    fields = [
-        'email',
-        'first_name',
-        'last_name',
-        'address_info',
-        'address_additional_info',
-        'city',
-        'zip_code',
-        'country',
-    ]
+class MemberListView(LoginRequiredMixin, ListView):
 
-    def get_queryset(self):
-        queryset = super(UserUpdateView, self).get_queryset()
-        return queryset.filter(pk=self.request.user.pk)
+    paginate_by = 10  # if pagination is desired
+    template_name = "user/member_list.html"
+    queryset = User.objects.filter(type="MEMBER")
+    paginate_by = 10
+    ordering = ['-date_joined']
 
-    def get_success_url(self):
-        return reverse('user:profile')
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_membership'] = membership_queries.get_all_active_membership()
+        return context

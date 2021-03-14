@@ -1,0 +1,64 @@
+{% load static %}
+{% if user.is_authenticated and user.type == "EMPLOYEE" %}
+<header class="header-section">
+    <div class="container-fluid">
+        <div class="inner-header">
+            <div class="row"> 
+                <div class="col-lg-2 col-md-2">
+                    <div class="logo">
+                        <a href="{% url "website:home" %}"><img src="{% static "img/logo.png" %}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-md-10">
+                    <nav class="nav-bar main-menu mobile-menu">
+                        <ul>
+                            <li><a id="home" {% if request.path == '/' %}class="active"{% endif %} href="{% url "website:home" %}">Home</a></li>
+                            <li><a id="event" {% if request.path|slice:":7"  == '/event/' %}class="active"{% endif %} href="{% url "event:event_calendar" %}">Cours</a></li>
+                            <li><a id="blog" {% if request.path|slice:":6"  == '/blog/' %}class="active"{% endif %} href="{% url "blog:article_list" %}">Blog</a></li>
+                            {% if not user.is_authenticated %}
+                            <li><a id="connection" {% if request.path == '/user/login' %}class="active"{% endif %} href="{% url "user:login" %}">Connexion</a></li>
+                            {% else %}
+                            <li><a id="connection" {% if request.path == '/user/profile' %}class="active"{% endif %} href="{% url "user:profile" %}">Profile</a></li>
+                            <li><a id="deconnection" href="{% url "user:logout" %}">Deconnexion</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    <div id="mobile-menu-wrap"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% else %}
+<header class="header-section">
+    <div class="container-fluid">
+        <div class="inner-header">
+            <div class="row"> 
+                <div class="col-lg-2 col-md-2">
+                    <div class="logo">
+                        <a href="{% url "website:home" %}"><img src="{% static "img/logo.png" %}" alt=""></a>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-md-10">
+                    <nav class="nav-bar main-menu mobile-menu">
+                        <ul>
+                            <li><a id="home" {% if request.path == '/' %}class="active"{% endif %} href="{% url "website:home" %}">Home</a></li>
+                            <li><a id="event" {% if request.path|slice:":7"  == '/event/' %}class="active"{% endif %} href="{% url "event:event_calendar" %}">Cours</a></li>
+                            <li><a id="blog" {% if request.path|slice:":6"  == '/blog/' %}class="active"{% endif %} href="{% url "blog:article_list" %}">Blog</a></li>
+                            {% if not user.is_authenticated %}
+                            <li><a id="connection" {% if request.path == '/user/login' %}class="active"{% endif %} href="{% url "user:login" %}">Connexion</a></li>
+                            {% else %}
+                            <li><a id="connection" {% if request.path == '/user/profile' %}class="active"{% endif %} href="{% url "user:profile" %}">Profile</a></li>
+                            <li><a id="deconnection" href="{% url "user:logout" %}">Deconnexion</a></li>
+                            {% endif %}
+                            <li class="phone-num"><i class="fa fa-phone"></i><span>08 36 65 65 65</span></li>
+                        </ul>
+                    </nav>
+                    <div id="mobile-menu-wrap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% endif %}

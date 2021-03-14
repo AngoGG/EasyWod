@@ -1,0 +1,134 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Création Compte {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/profile-bg.jpg" %}">
+    <div class="container text-center">
+        <div class="row">
+            <div class="hero-text col-lg-12">
+            </div>
+        </div>      
+    </div>
+</div>
+<!-- Hero Section End -->
+<div class="container emp-profile">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="profile-img">
+                <img src="{% static "img/team/coach-tiven.png" %}" style="max-width:50%; height:auto; " alt=""/>
+                <div class="file btn btn-lg btn-primary">
+                    Change Photo
+                    <input type="file" name="file"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="profile-head">
+                <h2>
+                    {{ member.first_name }} {{ member.last_name }}
+                </h2>
+                <h5>
+                    Membre depuis le {{ member.date_joined }}
+                </h5>
+                <p class="proile-rating">ABONNEMENT EN COURS: <span>{{member.user_membership.membership.membership_type}}</span></p>
+            </div>
+         </div>
+        <div class="col-lg-2 text-center">
+            <a href="{% url "user:member_update" member.pk%}" class="btn btn-secondary">Modifier infos</a>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12 flex d-flex justify-content-center">
+    <div class="col-lg-6">
+        <div class="tab-content profile-tab" id="myTabContent">
+            <div>
+                <div class="row">
+                    <div class="col-lg-6 align-text-center">
+                        <label>Prénom</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{{ member.first_name }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Nom</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{{ member.last_name }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Adresse Mail</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{{ member.email }}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Date de Naissance</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{{ member.date_of_birth }}</p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Adresse</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{% if member.address_info %}{{ member.address_info }} {% else %} Non renseigné {% endif %}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Infos additionnelles adresse</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{% if member.address_additional_info %}{{ member.address_additional_info }} {% else %} Non renseigné {% endif %}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Ville</label>
+                    </div>
+                    <div class="col-md-6">
+                        <p>{% if member.city %}{{ member.city }} {% else %} Non renseigné {% endif %}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Code Postal</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{% if member.zip_code %}{{ member.zip_code }} {% else %} Non renseigné {% endif %}</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <label>Pays</label>
+                    </div>
+                    <div class="col-lg-6">
+                        <p>{% if member.country %}{{ member.country }} {% else %} Non renseigné {% endif %}</p>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-12 text-center" style="margin-bottom:50px;">
+                    <a href="{% url "website:home" %}" class="primary-btn">Revenir à l'Accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

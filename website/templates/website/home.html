@@ -48,7 +48,6 @@
 </div>
 <!-- Boxes Section End -->
 <!-- About Counter Section Begin -->
-
 <section class="about-counter set-bg spad" data-setbg="{% static "img/about-counter.jpg" %}">
     <div class="container">
         <div class="row about-counter-text">
@@ -94,7 +93,7 @@
                         <i class="flaticon-008-tactics-2"></i>
                     </div>
                     <div class="counter-text">
-                        <span class="counter-num counter">{{ all_week_events }}</span>
+                        <span class="counter-num counter">{{ all_week_events.count }}</span>
                         <span>Cours cette semaine</span>
                     </div>
                 </div>

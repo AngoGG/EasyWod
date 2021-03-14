@@ -4,6 +4,8 @@ from user.models import User
 from website.models import ContactMessage
 import config.settings as Settings
 
+import os
+
 
 class TestPasswordResetView(TestCase):
     def test_send_reset_email(self):
@@ -38,7 +40,7 @@ class TestContactView(TestCase):
             {
                 'name': ['User'],
                 'email': ['user@gmail.com'],
-                'subject': ['Sujet important'],
+                'subject': ['Sujet important OK'],
                 'message': ['Test'],
                 'g-recaptcha-response': [repatcha_test_public_key],
             },
@@ -47,3 +49,22 @@ class TestContactView(TestCase):
         assert response.status_code == 302  # Testing redirection
         assert message.name == "User"
         assert message.email == "user@gmail.com"
+
+    def test_contact_view_no_captcha(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        Settings.RECAPTCHA_PRIVATE_KEY = str(os.environ.get("RECAPTCHA_PRIVATE_KEY"))
+        response = client.post(
+            "/contact/",
+            {
+                'name': ['User'],
+                'email': ['user@gmail.com'],
+                'subject': ['Sujet important KO'],
+                'message': ['Test'],
+                'g-recaptcha-response': [''],
+            },
+        )
+
+        message = ContactMessage.objects.first()
+
+        assert response.status_code == 302  # Testing redirection
+        assert message is None

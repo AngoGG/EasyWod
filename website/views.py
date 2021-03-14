@@ -14,9 +14,13 @@ from django.utils.http import urlsafe_base64_encode
 from django.views.generic import FormView, View
 
 import config.settings as Settings
+
 from .models import ContactMessage
-from user.models import User
 from event.libs import event_queries
+from membership.models import Membership, UserMembership
+from membership.libs import membership_queries
+from user.models import User
+from website.models import ContactMessage
 
 import requests
 
@@ -25,18 +29,58 @@ import requests
 
 class HomeView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
-        coaches = User.objects.filter(type="EMPLOYEE").count()
-        customers = User.objects.filter(type="CUSTOMER").count()
-        all_week_events = event_queries.get_all_week_events()
-        return render(
-            request,
-            "website/home.html",
-            {
-                "coaches": coaches,
-                "customers": customers,
-                "all_week_events": all_week_events,
-            },
-        )
+        if request.user.is_authenticated and request.user.type == "EMPLOYEE":
+            # Retrieving membership informations
+            all_members = User.objects.filter(type="MEMBER")
+            active_premium_members = (
+                membership_queries.get_all_active_premium_membership()
+            )
+            inactive_premium_members = (
+                membership_queries.get_all_inactive_premium_membership()
+            )
+            active_trial_members = membership_queries.get_all_active_trial_membership()
+            inactive_trial_members = (
+                membership_queries.get_all_inactive_trial_membership()
+            )
+
+            # Retrieving contact messages informations
+            contact_messages = ContactMessage.objects.all()
+
+            # Retrieving week events count
+            all_week_events = event_queries.get_all_week_events()
+            average_attendance = event_queries.get_weeks_events_average_attendees()
+
+            return render(
+                request,
+                "website/home_employee.html",
+                {
+                    "members_info": {
+                        "all_members": all_members,
+                        "active_premium_members": active_premium_members,
+                        "inactive_premium_members": inactive_premium_members,
+                        "active_trial_members": active_trial_members,
+                        "inactive_trial_members": inactive_trial_members,
+                    },
+                    "contact_messages": contact_messages,
+                    "event_info": {
+                        "all_week_events": all_week_events,
+                        "average_attendance": average_attendance,
+                    },
+                },
+            )
+        else:
+            coaches = User.objects.filter(type="EMPLOYEE").count()
+            customers = User.objects.filter(type="CUSTOMER").count()
+            all_week_events = event_queries.get_all_week_events()
+            return render(
+                request,
+                "website/home.html",
+                {
+                    "coaches": coaches,
+                    "customers": customers,
+                    "all_week_events": all_week_events,
+                },
+            )
 
 
 class PasswordResetView(View):
