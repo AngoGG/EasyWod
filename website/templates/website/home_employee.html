@@ -1,0 +1,68 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Accueil {{ block.super }}
+{% endblock %}
+
+{% block content %}
+
+<div class ="col-lg-12" style="margin-top:50px;">
+    <div class="container contact-section">
+        <div class ="text-center"><h3>Informations utilisateurs</h3></div>
+        <table class="table table-striped table-hover" style="margin-top:25px;"style="margin-top:25px;">
+            <tbody>
+                <tr class="text-center">
+                    <td colspan="2"><b>Nombre total de membres inscrits:</b> {{ members_info.all_members.count }}</td>
+                </tr>
+                <tr class="text-center">
+                    <td><b>Nombres d'abonnés Premium Actifs:</b> {{ members_info.active_premium_members.count }}</td>
+                    <td><b>Nombres d'abonnés Premium Inactifs:</b> {{ members_info.inactive_premium_members.count }}</td>
+                </tr>
+                <tr class="text-center">
+                    <td><b>Nombres d'abonnés Trial Actifs:</b>  {{ members_info.active_trial_members.count }}</td>
+                    <td><b>Nombres d'abonnés Trial Inactifs:</b>  {{ members_info.inactive_trial_members.count }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class ="col-lg-12" style="margin-top:50px;">
+    <div class="container contact-section">
+    <div class ="text-center"><h3>Informations cours</h3></div>
+        <table class="table table-striped table-hover" style="margin-top:25px;"style="margin-top:25px;">
+            <tbody>
+                <tr class="text-center">
+                    <td><b>Nombre de cours cette semaine:</b>  {{ event_info.all_week_events.count }}</td>
+                    <td><b>Remplissage moyen des cours:</b>  {{ event_info.average_attendance }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class ="col-lg-12" style="margin-top:50px;">
+    <div class="container contact-section">
+        <div class ="text-center"><h3>Messages à traiter</h3></div>
+        <table class="table table-striped table-hover" style="margin-top:25px;"style="margin-top:25px;">
+            <thead>
+                <tr>
+                <th scope="col">Date du message</th>
+                <th scope="col">Sujet</th>
+                <th scope="col">Auteur</th>
+                <th scope="col">Voir message</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in contact_messages %}
+                    <tr>
+                        <td scope="row">8h du mataing</td>
+                        <td>{{ message.subject }}</td>
+                        <td>{{ message.email }}</td>
+                        <td>Le lien</td>
+                    </tr>
+                {% endfor%}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
