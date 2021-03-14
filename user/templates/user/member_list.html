@@ -26,7 +26,7 @@
                     <tr>
                         <td scope="row">{{ user.last_name }}</td>
                         <td>{{ user.first_name }}</td>
-                        <td>{{ user.email }}</td>
+                        <td><a href="{% url "user:detail" user.pk%}">{{ user.email }}</a></td>
                         <td>{{ user.date_joined }}</td>
                         <td>{{user.user_membership.membership.membership_type }}</td>
                         <td>{% if user.email in active_membership %} Actif {% else %} Inactif {% endif %}</td>

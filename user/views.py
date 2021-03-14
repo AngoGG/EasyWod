@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import FormView, ListView, View, UpdateView
+from django.views.generic import DetailView, FormView, ListView, View, UpdateView
 from .forms import ConnectionForm, RegisterForm
 from .models import User
 from membership.libs import membership_queries
@@ -81,6 +81,17 @@ class LogoutView(View):
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request: HttpRequest, **kwargs) -> HttpResponse:
         return render(request, "user/profile.html", **kwargs)
+
+
+class MemberDetailView(DetailView):
+    model = User
+    context_object_name = "member"
+    template_name = "user/member_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_membership'] = membership_queries.get_all_active_membership()
+        return context
 
 
 class UserPasswordChangeView(LoginRequiredMixin, FormView):

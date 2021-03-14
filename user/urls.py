@@ -24,6 +24,7 @@ urlpatterns = [
     path(r"login", views.LoginView.as_view(), name="login"),
     path(r"logout", views.LogoutView.as_view(), name="logout"),
     path(r"profile", views.ProfileView.as_view(), name="profile"),
+    path(r"detail/<int:pk>", views.MemberDetailView.as_view(), name="detail"),
     path(r"update/<int:pk>", views.UserUpdateView.as_view(), name="update"),
     path(r"member_list", views.MemberListView.as_view(), name="member_list"),
     path(
