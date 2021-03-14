@@ -18,7 +18,7 @@
 <!-- Hero Section End -->
 <div class="container emp-profile">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <div class="profile-img">
                 <img src="{% static "img/team/coach-tiven.png" %}" style="max-width:50%; height:auto; " alt=""/>
                 <div class="file btn btn-lg btn-primary">
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <div class="profile-head">
                 <h2>
                     {{ user.first_name }} {{ user.last_name }}
@@ -35,8 +35,11 @@
                 <h5>
                     Membre depuis le {{ user.date_joined }}
                 </h5>
-            </div>
-            <div style="position : absolute; bottom   : 0">
+                {% if user.type == "EMPLOYEE" %}
+                <p class="proile-rating">RÔLE: <span>Employé</span></p>
+                {% else %}
+                <p class="proile-rating">ABONNEMENT EN COURS: <span>{{user.user_membership.membership.membership_type}}</span></p>
+                {% endif %}
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="user_info-tab" data-toggle="tab" href="#user_info" role="tab" aria-controls="user_info" aria-selected="true">Informations personnelles</a>
@@ -48,104 +51,104 @@
                 <br>
             </div>
          </div>
-        <div class="col-md-2 text-center">
-            <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+        <div class="col-lg-2 text-center">
+            <a href="{% url "website:home" %}" class="btn btn-secondary">Modifier Profile</a>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-lg-4">
             <div class="profile-work text-center">
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-lg-8">
             <div class="tab-content profile-tab" id="myTabContent">
                 <div class="tab-pane fade show active" id="user_info" role="tabpanel" aria-labelledby="user_info-tab">
                     <div class="row">
-                        <div class="col-md-6 align-text-center">
+                        <div class="col-lg-6 align-text-center">
                             <label>Prénom</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{{ user.first_name }}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Nom</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{{ user.last_name }}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Adresse Mail</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{{ user.email }}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Date de Naissance</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{{ user.date_of_birth }}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Mot de Passe</label>
                         </div>
-                        <div class="col-md-6 d-flex justify-content-between">
+                        <div class="col-lg-6 d-flex justify-content-between">
                             *********<a href="{% url "user:change_password" %}" class="btn btn-secondary">Modifier</a>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="address_info" role="tabpanel" aria-labelledby="address_info-tab">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Adresse</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{% if user.address_info %}{{ user.address_info }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Infos additionnelles adresse</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{% if user.address_additional_info %}{{ user.address_additional_info }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Ville</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{% if user.city %}{{ user.city }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Code Postal</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{% if user.zip_code %}{{ user.zip_code }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <label>Pays</label>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-lg-6">
                             <p>{% if user.country %}{{ user.country }} {% else %} Non renseigné {% endif %}</p>
                         </div>
                     </div>
                 </div>
                 <br>
                 <div class="row">
-                    <div class="col-md-12 text-center">
+                    <div class="col-lg-12 text-center">
                         <a href="{% url "website:home" %}" class="btn btn-success">Revenir à l'Accueil</a>
                     </div>
                 </div>
