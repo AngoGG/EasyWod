@@ -1,4 +1,5 @@
 from membership.models import Membership, UserMembership, Subscription
+from membership.models import Membership, UserMembership, Subscription
 
 
 def get_all_active_premium_membership():
@@ -27,3 +28,11 @@ def get_all_inactive_trial_membership():
         user_membership__membership__membership_type="TRIAL"
     )
     return inactive_trial_members
+
+
+def get_all_active_membership():
+    active_membership = Subscription.objects.filter(active=True)
+    active_member_list = []
+    for member in active_membership:
+        active_member_list.append(member.user_membership.user.email)
+    return active_member_list

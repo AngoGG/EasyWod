@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import FormView, View, UpdateView
+from django.views.generic import FormView, ListView, View, UpdateView
 from .forms import ConnectionForm, RegisterForm
 from .models import User
+from membership.libs import membership_queries
 from membership.models import Membership, UserMembership, Subscription
 
 
@@ -124,3 +125,16 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse('user:profile')
 
+
+class MemberListView(LoginRequiredMixin, ListView):
+
+    paginate_by = 10  # if pagination is desired
+    template_name = "user/member_list.html"
+    queryset = User.objects.filter(type="MEMBER")
+    paginate_by = 10
+    ordering = ['-date_joined']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_membership'] = membership_queries.get_all_active_membership()
+        return context
