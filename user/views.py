@@ -83,6 +83,29 @@ class ProfileView(LoginRequiredMixin, View):
         return render(request, "user/profile.html", **kwargs)
 
 
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    queryset = User.objects.all()
+    model = User
+    template_name = "user/user_update.html"
+    fields = [
+        'email',
+        'first_name',
+        'last_name',
+        'address_info',
+        'address_additional_info',
+        'city',
+        'zip_code',
+        'country',
+    ]
+
+    def get_queryset(self):
+        queryset = super(ProfileUpdateView, self).get_queryset()
+        return queryset.filter(pk=self.request.user.pk)
+
+    def get_success_url(self):
+        return reverse('user:profile')
+
+
 class MemberDetailView(DetailView):
     model = User
     context_object_name = "member"
@@ -92,6 +115,25 @@ class MemberDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['active_membership'] = membership_queries.get_all_active_membership()
         return context
+
+
+class MemberUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    context_object_name = "member"
+    template_name = "user/user_update.html"
+    fields = [
+        'email',
+        'first_name',
+        'last_name',
+        'address_info',
+        'address_additional_info',
+        'city',
+        'zip_code',
+        'country',
+    ]
+
+    def get_success_url(self):
+        return reverse('user:list')
 
 
 class UserPasswordChangeView(LoginRequiredMixin, FormView):
@@ -112,29 +154,6 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
             update_session_auth_hash(request, form.user)
             return render(request, "user/profile.html")
         return render(request, "user/change_password.html", locals())
-
-
-class UserUpdateView(LoginRequiredMixin, UpdateView):
-    queryset = User.objects.all()
-    model = User
-    template_name = "user/user_update.html"
-    fields = [
-        'email',
-        'first_name',
-        'last_name',
-        'address_info',
-        'address_additional_info',
-        'city',
-        'zip_code',
-        'country',
-    ]
-
-    def get_queryset(self):
-        queryset = super(UserUpdateView, self).get_queryset()
-        return queryset.filter(pk=self.request.user.pk)
-
-    def get_success_url(self):
-        return reverse('user:profile')
 
 
 class MemberListView(LoginRequiredMixin, ListView):
