@@ -36,7 +36,11 @@
                 <h5>
                     Membre depuis le {{ member.date_joined }}
                 </h5>
+                {% if member.type == "EMPLOYEE" %}
+                <p class="proile-rating">RÔLE: <span>Employé</span></p>
+                {% else %}
                 <p class="proile-rating">ABONNEMENT EN COURS: <span>{{member.user_membership.membership.membership_type}}</span></p>
+                {% endif %}
             </div>
          </div>
     </div>
@@ -61,7 +65,11 @@
                 <h5>
                     Membre depuis le {{ user.date_joined }}
                 </h5>
+                {% if user.type == "EMPLOYEE" %}
+                <p class="proile-rating">RÔLE: <span>Employé</span></p>
+                {% else %}
                 <p class="proile-rating">ABONNEMENT EN COURS: <span>{{user.user_membership.membership.membership_type}}</span></p>
+                {% endif %}
             </div>
          </div>
     </div>
