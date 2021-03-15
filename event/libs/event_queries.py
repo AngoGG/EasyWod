@@ -30,9 +30,11 @@ def get_weeks_events_average_attendees():
     # Divide events members by events and return the average
     week_events = get_all_week_events()
     total_members = 0
+    if week_events.count() > 0:
+        for event in week_events:
+            total_members += event.reserved_slot
 
-    for event in week_events:
-        total_members += event.reserved_slot
-
-    return total_members / week_events.count()
+        return total_members / week_events.count()
+    else:
+        return 0
 
