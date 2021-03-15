@@ -104,6 +104,9 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return queryset.filter(pk=self.request.user.pk)
 
     def get_success_url(self):
+        messages.success(
+            self.request, "Vos informations ont bien été mises à jour.",
+        )
         return reverse('user:profile')
 
 
