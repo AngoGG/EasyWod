@@ -2,6 +2,7 @@ from os import environ
 
 from django.contrib import messages  # import messages
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
 from django.db.models.query import QuerySet

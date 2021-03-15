@@ -1,7 +1,8 @@
 import datetime
+from django.contrib import messages  # import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
@@ -117,7 +118,15 @@ class MemberDetailView(DetailView):
         return context
 
 
-class MemberUpdateView(LoginRequiredMixin, UpdateView):
+class MemberUpdateView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return (
+            True
+            if self.request.user.is_authenticated
+            and self.request.user.type == "EMPLOYEE"
+            else False
+        )
+
     model = User
     context_object_name = "member"
     template_name = "user/user_update.html"
@@ -133,7 +142,10 @@ class MemberUpdateView(LoginRequiredMixin, UpdateView):
     ]
 
     def get_success_url(self):
-        return reverse('user:list')
+        messages.success(
+            self.request, "Les informations du membre ont bien été mises à jour.",
+        )
+        return reverse('user:member_list')
 
 
 class UserPasswordChangeView(LoginRequiredMixin, FormView):
@@ -156,7 +168,14 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
         return render(request, "user/change_password.html", locals())
 
 
-class MemberListView(LoginRequiredMixin, ListView):
+class MemberListView(UserPassesTestMixin, ListView):
+    def test_func(self):
+        return (
+            True
+            if self.request.user.is_authenticated
+            and self.request.user.type == "EMPLOYEE"
+            else False
+        )
 
     paginate_by = 10  # if pagination is desired
     template_name = "user/member_list.html"
