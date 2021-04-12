@@ -1,8 +1,8 @@
 import json
-from datetime import datetime
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
+from django.utils import timezone
 from event.models import Event, EventMember
 from user.models import User
 
@@ -17,7 +17,7 @@ class TestCalendarView(TestCase):
 class TestEventView(TestCase):
     def test_event_without_registration_access(self) -> None:
         Event.objects.create(
-            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+            name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
         )
 
         event_created: QuerySet = Event.objects.first()
@@ -38,7 +38,7 @@ class TestEventView(TestCase):
         user_created: QuerySet = User.objects.first()  # type: ignore
 
         Event.objects.create(
-            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+            name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
         )
 
         event_created: QuerySet = Event.objects.first()
@@ -147,7 +147,7 @@ class TestRegisterForEvent(TestCase):
         user_created: QuerySet = User.objects.first()  # type: ignore
 
         Event.objects.create(
-            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+            name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
         )
 
         event_created: QuerySet = Event.objects.first()
@@ -180,7 +180,7 @@ class TestUnsubscribeFromEvent(TestCase):
         user_created: QuerySet = User.objects.first()  # type: ignore
 
         Event.objects.create(
-            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+            name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
         )
 
         event_created: QuerySet = Event.objects.first()
@@ -216,7 +216,7 @@ class TestUserRegistrations(TestCase):
         user_created: QuerySet = User.objects.first()  # type: ignore
 
         Event.objects.create(
-            name="WOD", start=datetime.now(), end=datetime.now(), slot="1"
+            name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
         )
 
         event_created: QuerySet = Event.objects.first()
