@@ -53,6 +53,7 @@ class DeactivateMemberShipView(UpdateView):
         user_membership.active = False
 
         user_membership.save()
+
         messages.success(
             request, "L'abonnement de l'utilisateur a bien été désactivé",
         )

@@ -33,18 +33,21 @@
                     {% else %}
                     <p> Nombre de cours d'essais : {{ membership.trial_courses }}</p>
                     {% endif %}
-                    {% if membership.membership_type != 'Premium' %}
+                    {% if membership.membership_type != current_membership %}
                     <form method="POST" action="{% url 'membership:change'%}">
                         {% csrf_token %}
-                        {% if membership.membership_type != current_membership %}
-                        <button class="btn btn-warning">Change</button>
-                        {% else %}
+                        <button class="btn btn-warning">Changer</button>
                         <small>Formule actuelle</small>
-                        {% endif %}
                         <input type="hidden" name="membership_type" value="{{ membership.membership_type }}">
                         <input type="hidden" name="member" value="{{ member.pk }}">
                     </form>
-                {% endif %}
+                    {% else %}
+                    <form method="POST" action="{% url 'membership:deactivate'%}">
+                        {% csrf_token %}
+                        <button class="btn btn-warning">Désactiver</button>
+                        <input type="hidden" name="member" value="{{ member.pk }}">
+                    </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
