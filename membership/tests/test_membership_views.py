@@ -79,3 +79,39 @@ class TestMembershipView(TestCase):
             "PREMIUM", user_modified.user_membership.membership.membership_type
         )
 
+    def test_deactivate_membership(self) -> None:
+        """Test if we can deactivate a user membership
+        """
+        Membership.objects.create(membership_type="PREMIUM")
+        premium_membership = Membership.objects.get(membership_type='PREMIUM')
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can access the membership page, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        # Creating a new UserMembership
+        user_membership = UserMembership.objects.create(
+            user=user, membership=premium_membership
+        )
+        user_membership.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        client.post(
+            f"/membership/deactivate", {'member': [user.pk]},
+        )
+
+        user_modified: QuerySet = User.objects.first()  # type: ignore
+        # Check if the User has a correct TRIAL membership
+        self.assertEqual(False, user_modified.user_membership.active)

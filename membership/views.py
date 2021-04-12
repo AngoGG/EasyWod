@@ -28,7 +28,6 @@ class UserMembershipView(DetailView):
 
 class UpdateMemberShipView(UpdateView):
     def post(self, request, *args, **kwargs):
-        print(f'POST : {self.request.POST}')
 
         selected_membership = Membership.objects.get(
             membership_type=self.request.POST['membership_type']
@@ -41,5 +40,20 @@ class UpdateMemberShipView(UpdateView):
         user_membership.save()
         messages.success(
             request, "Le plan d'abonnement de l'utilisateur a bien été mis à jour",
+        )
+        return redirect("/")
+
+
+class DeactivateMemberShipView(UpdateView):
+    def post(self, request, *args, **kwargs):
+
+        print(f'HELLO MDR')
+        user_membership = UserMembership.objects.get(user=self.request.POST['member'])
+
+        user_membership.active = False
+
+        user_membership.save()
+        messages.success(
+            request, "L'abonnement de l'utilisateur a bien été désactivé",
         )
         return redirect("/")
