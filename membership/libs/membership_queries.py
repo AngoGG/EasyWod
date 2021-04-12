@@ -2,29 +2,31 @@ from membership.models import Membership, UserMembership
 
 
 def get_all_active_premium_membership():
+    print(f'HELLO')
     active_premium_members = UserMembership.objects.filter(active=True).filter(
-        user_membership__membership__membership_type="PREMIUM"
+        membership__membership_type="PREMIUM"
     )
+    print(f'active_premium_members : {active_premium_members}')
     return active_premium_members
 
 
 def get_all_inactive_premium_membership():
     inactive_premium_members = UserMembership.objects.filter(active=False).filter(
-        user_membership__membership__membership_type="PREMIUM"
+        membership__membership_type="PREMIUM"
     )
     return inactive_premium_members
 
 
 def get_all_active_trial_membership():
     active_trial_members = UserMembership.objects.filter(active=True).filter(
-        user_membership__membership__membership_type="TRIAL"
+        membership__membership_type="TRIAL"
     )
     return active_trial_members
 
 
 def get_all_inactive_trial_membership():
     inactive_trial_members = UserMembership.objects.filter(active=False).filter(
-        user_membership__membership__membership_type="TRIAL"
+        membership__membership_type="TRIAL"
     )
     return inactive_trial_members
 
