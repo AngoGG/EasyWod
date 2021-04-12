@@ -17,6 +17,8 @@ coverage = "*"
 django-ckeditor = "*"
 django-recaptcha = "*"
 requests = "*"
+mypy = "*"
+flake8 = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,31 +1,48 @@
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Gestion Abonnement {{ block.super }}
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <br>
-    <h1>Page Test pour voir l'abonnement en cours de l'utilisateur connecté</h1>
-    <hr>
-    <div class="row">
-    {% for object in object_list %}
-        <div class="col-sm-4 col-md-4">
-            <div class="card" style="width: 18rem;">
-                <h5>{{ object.membership_type }}</h5>
-                <ul>
-                    {% if object.membership_type == 'PREMIUM' %}
-                    <li> Prix : ${{ object.price }}<small>/mois</small></li>
-                    <li> Nombre de cours : Illimité </li>
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/profile-bg.jpg" %}">
+    <div class="container text-center">
+        <div class="row">
+            <div class="hero-text col-lg-12">
+                <h1>Gestion abonnement</h1>
+                <p>{{ member }}</p>
+            </div>
+        </div>      
+    </div>
+</div>
+<!-- Hero Section End -->
+<div class="container ">
+    <div class="row flex justify-content-center">
+    {% for membership in membership_list %}
+        <div class="col-sm-4 col-md-4" style="margin-top:25px;margin-bottom:25px;">
+            <div class="card" >
+                <div class="card-header">
+                    {{ membership.membership_type }}
+                </div>
+                <div class="card-body" style="height:150px;">
+                    <h5 class="card-title">Prix : ${{ membership.price }}<small>/mois</small></h5>
+                    {% if membership.membership_type == 'PREMIUM' %}
+                    <p class="card-text">Nombre de cours : Illimité</p>
                     {% else %}
-                    <li> Nombre de cours d'essais : {{ object.trial_courses }}</li>
+                    <p> Nombre de cours d'essais : {{ membership.trial_courses }}</p>
                     {% endif %}
-                </ul>
-                <div>
-                {% if object.membership_type != 'Premium' %}
-                    <form method="POST" action="{% url 'membership:select' %}">
+                    {% if membership.membership_type != 'Premium' %}
+                    <form method="POST" action="{% url 'membership:change'%}">
                         {% csrf_token %}
-                        {% if object.membership_type != current_membership %}
+                        {% if membership.membership_type != current_membership %}
                         <button class="btn btn-warning">Change</button>
                         {% else %}
                         <small>Formule actuelle</small>
                         {% endif %}
-                        <input type="hidden" name="membership_type" value="{{ object.membership_type }}">
+                        <input type="hidden" name="membership_type" value="{{ membership.membership_type }}">
+                        <input type="hidden" name="member" value="{{ member.pk }}">
                     </form>
                 {% endif %}
                 </div>

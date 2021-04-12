@@ -8,7 +8,7 @@ from membership.models import Membership, UserMembership, Subscription
 
 class TestMembershipView(TestCase):
     def test_access_page(self) -> None:
-        """Test if a connected user can access the MemberShip Page
+        """Test if we can access a user membership page
         """
         Membership.objects.create(membership_type="TRIAL")
         free_membership = Membership.objects.get(membership_type='TRIAL')
@@ -41,11 +41,11 @@ class TestMembershipView(TestCase):
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
-        response: HttpResponse = client.get("/membership/")
+        response: HttpResponse = client.get(f"/membership/{user.pk}")
         self.assertTemplateUsed(response, "membership/list.html")
 
     def test_changing_membership(self) -> None:
-        """Test if a user can change his membership
+        """Test if we can change a user membership
         """
         Membership.objects.create(membership_type="TRIAL")
         Membership.objects.create(membership_type="PREMIUM")
@@ -79,7 +79,9 @@ class TestMembershipView(TestCase):
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
-        client.post("/membership/", {'membership_type': ['PREMIUM']})
+        client.post(
+            "/membership/", {'membership_type': ['PREMIUM'], 'member': [user.pk]}
+        )
 
         user_modified: QuerySet = User.objects.first()  # type: ignore
         # Check if the User has a correct TRIAL membership
