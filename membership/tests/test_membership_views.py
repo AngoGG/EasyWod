@@ -33,11 +33,6 @@ class TestMembershipView(TestCase):
         )
         user_membership.save()
 
-        # Creating a new UserSubscription
-        user_subscription = Subscription()
-        user_subscription.user_membership = user_membership
-        user_subscription.save()
-
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
@@ -70,11 +65,6 @@ class TestMembershipView(TestCase):
             user=user, membership=free_membership
         )
         user_membership.save()
-
-        # Creating a new UserSubscription
-        user_subscription = Subscription()
-        user_subscription.user_membership = user_membership
-        user_subscription.save()
 
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
