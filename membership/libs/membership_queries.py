@@ -32,6 +32,6 @@ def get_all_inactive_trial_membership():
 def get_all_active_membership():
     active_membership = UserMembership.objects.filter(active=True)
     active_member_list = []
-    for member in active_membership:
-        active_member_list.append(member.user_membership.user.email)
+    for membership in active_membership:
+        active_member_list.append(membership.user.email)
     return active_member_list
