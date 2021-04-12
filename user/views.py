@@ -42,11 +42,6 @@ class RegistrationView(FormView):
         )
         user_membership.save()
 
-        # Creating a new UserSubscription
-        user_subscription = Subscription()
-        user_subscription.user_membership = user_membership
-        user_subscription.save()
-
         login(self.request, user)
         return redirect("/")
 

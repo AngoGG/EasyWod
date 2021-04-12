@@ -44,9 +44,7 @@ class TestRegistrationView(TestCase):
         )
 
         # Check if the User subscription is active
-        assert Subscription.objects.filter(
-            user_membership=user_created.user_membership, active=True
-        ).exists()
+        assert UserMembership.objects.filter(user=user_created, active=True).exists()
 
     def test_register_get(self) -> None:
         """Test if the url returns a correct 200 http status code.
