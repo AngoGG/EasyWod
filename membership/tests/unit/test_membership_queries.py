@@ -1,6 +1,6 @@
 from django.test import TestCase
 from user.models import User
-from membership.models import Membership, UserMembership, Subscription
+from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
 
 
@@ -26,10 +26,6 @@ class TestMembershipQueries(TestCase):
             user=user_1, membership=premium_membership
         )
         user_membership_1.save()
-        # Creating a new UserSubscription
-        user_subscription_1 = Subscription()
-        user_subscription_1.user_membership = user_membership_1
-        user_subscription_1.save()
 
         user_2 = User.objects.create_user(
             email="haley-adams@gmail.com",
@@ -43,10 +39,6 @@ class TestMembershipQueries(TestCase):
             user=user_2, membership=premium_membership
         )
         user_membership_2.save()
-        # Creating a new UserSubscription
-        user_subscription_2 = Subscription()
-        user_subscription_2.user_membership = user_membership_2
-        user_subscription_2.save()
 
         active_membership_list = membership_queries.get_all_active_membership()
         assert "haley-adams@gmail.com" in active_membership_list

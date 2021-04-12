@@ -2,7 +2,7 @@ from django.contrib import messages  # import messages
 from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView, UpdateView
 
-from membership.models import Membership, UserMembership, Subscription
+from membership.models import Membership, UserMembership
 from user.models import User
 
 

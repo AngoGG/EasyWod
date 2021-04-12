@@ -36,17 +36,7 @@ class UserMembership(models.Model):
     membership = models.ForeignKey(
         Membership, related_name='user_membership', on_delete=models.SET_NULL, null=True
     )
-
-    def __str__(self):
-        return self.user.email
-
-
-class Subscription(models.Model):
-    user_membership = models.ForeignKey(
-        UserMembership, related_name='subscription', on_delete=models.CASCADE
-    )
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.user_membership.user.email
-
+        return self.user.email

@@ -10,7 +10,7 @@ from django.views.generic import DetailView, FormView, ListView, View, UpdateVie
 from .forms import ConnectionForm, RegisterForm
 from .models import User
 from membership.libs import membership_queries
-from membership.models import Membership, UserMembership, Subscription
+from membership.models import Membership, UserMembership
 
 
 class RegistrationView(FormView):
