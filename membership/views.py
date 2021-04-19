@@ -22,7 +22,6 @@ class UserMembershipView(DetailView):
         current_membership = self.get_user_membership(context['member'])
         context['current_membership'] = str(current_membership.membership)
         context['membership_list'] = Membership.objects.all()
-        print(f' LE CONTEXT : {context}')
         return context
 
 
@@ -47,7 +46,6 @@ class UpdateMemberShipView(UpdateView):
 class DeactivateMemberShipView(UpdateView):
     def post(self, request, *args, **kwargs):
 
-        print(f'HELLO MDR')
         user_membership = UserMembership.objects.get(user=self.request.POST['member'])
 
         user_membership.active = False
