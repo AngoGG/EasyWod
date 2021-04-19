@@ -115,3 +115,4 @@ class TestMembershipView(TestCase):
         user_modified: QuerySet = User.objects.first()  # type: ignore
         # Check if the User has a correct TRIAL membership
         self.assertEqual(False, user_modified.user_membership.active)
+        self.assertIsNotNone(user_modified.user_membership.unsubscription_date)

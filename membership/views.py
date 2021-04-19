@@ -1,5 +1,6 @@
 from django.contrib import messages  # import messages
 from django.shortcuts import redirect
+from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView
 
 from membership.models import Membership, UserMembership
@@ -49,6 +50,7 @@ class DeactivateMemberShipView(UpdateView):
         user_membership = UserMembership.objects.get(user=self.request.POST['member'])
 
         user_membership.active = False
+        user_membership.unsubscription_date = timezone.now()
 
         user_membership.save()
 
