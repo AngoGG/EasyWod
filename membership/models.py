@@ -40,7 +40,7 @@ class UserMembership(models.Model):
     )
     active: models.BooleanField = models.BooleanField(default=True)
     subscribtion_date: models.DateTimeField = models.DateTimeField(
-        verbose_name=_("Date d'abonnement"), default=timezone.now()
+        verbose_name=_("Date d'abonnement"), null=True
     )
     unsubscription_date: models.DateTimeField = models.DateTimeField(
         verbose_name=_("Date de désabonnement"), null=True
