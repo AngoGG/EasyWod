@@ -24,7 +24,7 @@
         <div class="col-sm-4 col-md-4" style="margin-top:25px;margin-bottom:25px;">
             <div class="card" >
                 <div class="card-header">
-                    {{ membership.membership_type }}
+                    {{ membership.membership_type }} {% if membership.membership_type == current_membership %}<small>Formule actuelle</small>{%endif%}
                 </div>
                 <div class="card-body" style="height:150px;">
                     <h5 class="card-title">Prix : ${{ membership.price }}<small>/mois</small></h5>
@@ -37,7 +37,7 @@
                     <form method="POST" action="{% url 'membership:change'%}">
                         {% csrf_token %}
                         <button class="btn btn-warning">Changer</button>
-                        <small>Formule actuelle</small>
+                        
                         <input type="hidden" name="membership_type" value="{{ membership.membership_type }}">
                         <input type="hidden" name="member" value="{{ member.pk }}">
                     </form>
