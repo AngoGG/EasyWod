@@ -78,6 +78,7 @@ class TestMembershipView(TestCase):
         self.assertEqual(
             "PREMIUM", user_modified.user_membership.membership.membership_type
         )
+        self.assertIsNotNone(user_modified.user_membership.subscribtion_date)
 
     def test_deactivate_membership(self) -> None:
         """Test if we can deactivate a user membership

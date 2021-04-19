@@ -37,6 +37,9 @@ class UpdateMemberShipView(UpdateView):
 
         user_membership.membership = selected_membership
 
+        if self.request.POST['membership_type'] == "PREMIUM":
+            user_membership.subscribtion_date = timezone.now()
+
         user_membership.save()
         messages.success(
             request, "Le plan d'abonnement de l'utilisateur a bien été mis à jour",
