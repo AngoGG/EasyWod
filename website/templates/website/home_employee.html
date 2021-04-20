@@ -59,7 +59,7 @@
                         <td scope="row">8h du mataing</td>
                         <td>{{ message.subject }}</td>
                         <td>{{ message.email }}</td>
-                        <td>Le lien</td>
+                        <td><a href ="{% url 'contact_us:message_detail' message.id%}">Le lien</a></td>
                     </tr>
                 {% endfor%}
             </tbody>

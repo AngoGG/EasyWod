@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.contrib import messages  # import messages
-from django.views.generic import View
+from django.views.generic import DetailView, View
 from django.shortcuts import redirect
 
 import requests
@@ -39,3 +39,8 @@ class ContactView(View):
                 request, "Captcha invalide, Veuillez réessayer.",
             )
         return redirect("/")
+
+
+class ContactMessageView(DetailView):
+    model = ContactMessage
+    template_name = "contact_us/message_detail.html"
