@@ -45,7 +45,7 @@ class HomeView(View):
             )
 
             # Retrieving contact messages informations
-            contact_messages = ContactMessage.objects.all()
+            contact_messages = ContactMessage.objects.filter(answer_date__isnull=True)
 
             # Retrieving week events count
             all_week_events = event_queries.get_all_week_events()
