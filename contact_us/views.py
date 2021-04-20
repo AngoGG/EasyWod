@@ -51,7 +51,7 @@ class ContactMessageView(DetailView):
 
 class AnswerContactMessageView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
-        subject: str = f"[{self.request.POST['subject']}]Réponse à votre demande"
+        subject: str = f"[{self.request.POST['subject']}] Réponse à votre demande"
         email: str = self.request.POST['message']
         contact_email: str = self.request.POST['contact_email']
         try:
