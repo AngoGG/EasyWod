@@ -7,8 +7,8 @@ class ContactMessage(models.Model):
     email = models.EmailField(_("Adresse Mail"), max_length=254)
     subject = models.CharField(_("Sujet"), max_length=50)
     message = models.CharField(_("Message"), max_length=50)
-    message_date = models.DateField(_("Date du message"), auto_now_add=True)
-    answer_date = models.DateField(_("Date de réponse"), null=True)
+    message_date = models.DateTimeField(_("Date du message"), auto_now_add=True)
+    answer_date = models.DateTimeField(_("Date de réponse"), null=True)
 
     def __str__(self):
         return self.subject
