@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(r"", include("website.urls"), name="website"),
     path(r"blog/", include("blog.urls"), name="blog"),
+    path(r"contact/", include("contact_us.urls"), name="contact"),
     path(r"event/", include("event.urls"), name="event"),
     path(f'membership/', include("membership.urls"), name='membership'),
     path(r"user/", include("user.urls"), name="user"),
