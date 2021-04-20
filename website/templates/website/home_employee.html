@@ -56,7 +56,7 @@
             <tbody>
                 {% for message in contact_messages %}
                     <tr>
-                        <td scope="row">8h du mataing</td>
+                        <td scope="row">{{ message.message_date }}</td>
                         <td>{{ message.subject }}</td>
                         <td>{{ message.email }}</td>
                         <td><a href ="{% url 'contact_us:message_detail' message.id%}">Le lien</a></td>
