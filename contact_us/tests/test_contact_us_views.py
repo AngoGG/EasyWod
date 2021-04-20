@@ -48,7 +48,33 @@ class TestContactView(TestCase):
         assert message is None
 
 
-class TestContactAnswerView(TestCase):
+class TestContactMessageView(TestCase):
+    def test_contact_message_access(self):
+        # First we have to create a contact message
+        client: Client = Client(HTTP_HOST="localhost")
+        # Setting up Captcha setting keys
+        Settings.RECAPTCHA_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+        repatcha_test_public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+        response = client.post(
+            "/contact/",
+            {
+                'name': ['User'],
+                'email': ['user@gmail.com'],
+                'subject': ['Sujet important OK'],
+                'message': ['Test'],
+                'g-recaptcha-response': [repatcha_test_public_key],
+            },
+        )
+        message = ContactMessage.objects.first()
+
+        print(f'HELLO MESSAGE : {message.id}')
+
+        response = client.get(f"/contact/message/{message.id}")
+        assert response.status_code == 200  # Testing redirection
+        assert response.template_name == ["contact_us/message_detail.html"]
+
+
+class TestAnswerContactMessageView(TestCase):
     def test_send_reset_email(self):
         # First we have to create a contact message
         client: Client = Client(HTTP_HOST="localhost")
