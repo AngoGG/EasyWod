@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.utils import timezone
 
 # Create your views here.
 from django.contrib import messages  # import messages
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpRequest, HttpResponse
 from django.views.generic import DetailView, View
 from django.shortcuts import redirect
 
@@ -44,3 +47,29 @@ class ContactView(View):
 class ContactMessageView(DetailView):
     model = ContactMessage
     template_name = "contact_us/message_detail.html"
+
+
+class AnswerContactMessageView(View):
+    def post(self, request: HttpRequest) -> HttpResponse:
+        subject: str = f"[{self.request.POST['subject']}]Réponse à votre demande"
+        email: str = self.request.POST['message']
+        contact_email: str = self.request.POST['contact_email']
+        try:
+            send_mail(
+                subject,
+                email,
+                Settings.DEFAULT_FROM_EMAIL,
+                [contact_email],
+                fail_silently=False,
+            )
+        except BadHeaderError:
+            return HttpResponse("Paramètres invalides.")
+        messages.success(
+            request, "La réponse au message a bien été envoyé au demandeur.",
+        )
+        message = ContactMessage.objects.get(pk=self.request.POST['message_id'])
+        message.answer_date = timezone.now()
+        message.save()
+
+        print(f'LE MESSAGE : {message.answer_date}')
+        return redirect("/")

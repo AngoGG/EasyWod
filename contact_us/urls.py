@@ -10,4 +10,9 @@ urlpatterns = [
     path(
         r"message/<int:pk>", views.ContactMessageView.as_view(), name="message_detail"
     ),
+    path(
+        r"answer_message/",
+        views.AnswerContactMessageView.as_view(),
+        name="answer_message",
+    ),
 ]
