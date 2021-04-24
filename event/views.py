@@ -9,7 +9,7 @@ from django.views.generic.edit import FormMixin
 from .models import Event, EventMember
 from .forms import AddEventMemberForm, EventForm
 from user.models import User
-from membership.models import Membership, Subscription
+from membership.models import Membership
 
 
 class CalendarView(ListView):

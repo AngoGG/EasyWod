@@ -2,7 +2,7 @@ from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
 from user.models import User
-from membership.models import Membership, UserMembership, Subscription
+from membership.models import Membership, UserMembership
 
 
 class TestRegistrationView(TestCase):
@@ -44,9 +44,7 @@ class TestRegistrationView(TestCase):
         )
 
         # Check if the User subscription is active
-        assert Subscription.objects.filter(
-            user_membership=user_created.user_membership, active=True
-        ).exists()
+        assert UserMembership.objects.filter(user=user_created, active=True).exists()
 
     def test_register_get(self) -> None:
         """Test if the url returns a correct 200 http status code.

@@ -1,5 +1,7 @@
+from datetime import timezone
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from user.models import User
@@ -30,23 +32,19 @@ class Membership(models.Model):
 
 
 class UserMembership(models.Model):
-    user = models.OneToOneField(
+    user: Membership = models.OneToOneField(
         User, related_name='user_membership', on_delete=models.CASCADE
     )
-    membership = models.ForeignKey(
+    membership: Membership = models.ForeignKey(
         Membership, related_name='user_membership', on_delete=models.SET_NULL, null=True
+    )
+    active: models.BooleanField = models.BooleanField(default=True)
+    subscribtion_date: models.DateTimeField = models.DateTimeField(
+        verbose_name=_("Date d'abonnement"), null=True
+    )
+    unsubscription_date: models.DateTimeField = models.DateTimeField(
+        verbose_name=_("Date de désabonnement"), null=True
     )
 
     def __str__(self):
         return self.user.email
-
-
-class Subscription(models.Model):
-    user_membership = models.ForeignKey(
-        UserMembership, related_name='subscription', on_delete=models.CASCADE
-    )
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.user_membership.user.email
-

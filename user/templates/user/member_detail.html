@@ -35,7 +35,25 @@
                 <h5>
                     Membre depuis le {{ member.date_joined }}
                 </h5>
-                <p class="proile-rating">ABONNEMENT EN COURS: <span>{{member.user_membership.membership.membership_type}}</span></p>
+                <p class="proile-rating">ABONNEMENT EN COURS: 
+                    
+                    {% if member.user_membership.active %} 
+                    <span>
+                        {{member.user_membership.membership.membership_type}}
+                    </span>
+                        {% if member.user_membership.membership.membership_type == "PREMIUM" %} 
+                        depuis le {{member.user_membership.subscribtion_date }}
+                        {%endif%} 
+                    {% else %}
+                    <span>
+                        AUCUN 
+                    </span>
+                        {% if member.user_membership.membership.membership_type == "PREMIUM" %} 
+                        désabonné depuis {{member.user_membership.unsubscription_date }}
+                        {%endif%} 
+                    {% endif %} 
+                  
+                </p>
             </div>
          </div>
         <div class="col-lg-2 text-center">

@@ -2,6 +2,7 @@ from os import environ
 
 from django.contrib import messages  # import messages
 from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
 from django.db.models.query import QuerySet
@@ -15,12 +16,12 @@ from django.views.generic import FormView, View
 
 import config.settings as Settings
 
-from .models import ContactMessage
+from contact_us.views import ContactMessage
 from event.libs import event_queries
 from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
 from user.models import User
-from website.models import ContactMessage
+
 
 import requests
 
@@ -44,7 +45,7 @@ class HomeView(View):
             )
 
             # Retrieving contact messages informations
-            contact_messages = ContactMessage.objects.all()
+            contact_messages = ContactMessage.objects.filter(answer_date__isnull=True)
 
             # Retrieving week events count
             all_week_events = event_queries.get_all_week_events()
@@ -125,33 +126,3 @@ class PasswordResetView(View):
                 "Un message contenant des instructions pour réinitialiser le mot de passe a été envoyé dans votre boîte de réception.",
             )
             return redirect("/")
-
-
-class ContactView(View):
-    def post(self, request):
-
-        captcha_token = request.POST.get('g-recaptcha-response')
-        captcha_url = "https://www.google.com/recaptcha/api/siteverify"
-        captcha_secret = Settings.RECAPTCHA_PRIVATE_KEY
-
-        data = {'secret': captcha_secret, 'response': captcha_token}
-        captcha_server_response = requests.post(url=captcha_url, data=data)
-
-        captcha_server_response = captcha_server_response.json()
-
-        if captcha_server_response['success'] is True:
-            ContactMessage.objects.create(
-                name=request.POST.get('name'),
-                email=request.POST.get('email'),
-                subject=request.POST.get('subject'),
-                message=request.POST.get('message'),
-            )
-            messages.success(
-                request,
-                "Votre demande a bien été envoyée, nous la traiterons dans les meilleurs délais",
-            )
-        else:
-            messages.error(
-                request, "Captcha invalide, Veuillez réessayer.",
-            )
-        return redirect("/")

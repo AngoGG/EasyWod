@@ -1,4 +1,102 @@
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update">
-</form>
+{% extends "website/base.html" %}
+{% load static %}
+
+{% block title %}
+- Création Compte {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section Begin -->
+<div class="hero-section set-bg" data-setbg="{% static "img/profile-bg.jpg" %}">
+    <div class="container text-center">
+        <div class="row">
+            <div class="hero-text col-lg-12">
+            </div>
+        </div>      
+    </div>
+</div>
+<!-- Hero Section End -->
+{% if request.path|slice:":13" == '/user/detail/'%}
+<div class="container emp-profile">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="profile-img">
+                <img src="{% static "img/team/coach-tiven.png" %}" style="max-width:50%; height:auto; " alt=""/>
+                <div class="file btn btn-lg btn-primary">
+                    Change Photo
+                    <input type="file" name="file"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="profile-head">
+                <h2>
+                    {{ member.first_name }} {{ member.last_name }}
+                </h2>
+                <h5>
+                    Membre depuis le {{ member.date_joined }}
+                </h5>
+                {% if member.type == "EMPLOYEE" %}
+                <p class="proile-rating">RÔLE: <span>Employé</span></p>
+                {% else %}
+                <p class="proile-rating">ABONNEMENT EN COURS: <span>{{member.user_membership.membership.membership_type}}</span></p>
+                {% endif %}
+            </div>
+         </div>
+    </div>
+</div>
+{% else %}
+<div class="container emp-profile">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="profile-img">
+                <img src="{% static "img/team/coach-tiven.png" %}" style="max-width:50%; height:auto; " alt=""/>
+                <div class="file btn btn-lg btn-primary">
+                    Change Photo
+                    <input type="file" name="file"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="profile-head">
+                <h2>
+                    {{ user.first_name }} {{ user.last_name }}
+                </h2>
+                <h5>
+                    Membre depuis le {{ user.date_joined }}
+                </h5>
+                {% if user.type == "EMPLOYEE" %}
+                <p class="proile-rating">RÔLE: <span>Employé</span></p>
+                {% else %}
+                <p class="proile-rating">ABONNEMENT EN COURS: <span>{{user.user_membership.membership.membership_type}}</span></p>
+                {% endif %}
+            </div>
+         </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="col-lg-12 flex d-flex justify-content-center">
+    <div class="col-lg-6">
+        <div class="tab-content profile-tab" id="myTabContent">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                {% for field in form %}
+                    <div class="col-lg-6 align-text-center">
+                        <label>{{field.label}}</label>
+                    </div>
+                    <div class="col-lg-6">
+                        {{field}}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="text-center">
+                    <input type="submit" value="Update" class="primary-btn" style="margin-top:25px;margin-bottom:25px;">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

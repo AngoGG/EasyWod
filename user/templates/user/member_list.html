@@ -13,12 +13,13 @@
         <table class="table table-striped table-hover" style="margin-top:25px;"style="margin-top:25px;">
             <thead>
                 <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Prénom</th>
-                <th scope="col">Email</th>
-                <th scope="col">Date d'inscription</th>
-                <th scope="col">Type d'abonnement</th>
-                <th scope="col">Etat abonnement</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prénom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Date d'inscription</th>
+                    <th scope="col">Type d'abonnement</th>
+                    <th scope="col">Etat abonnement</th>
+                    <th scope="col">Accès abonnement</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                         <td>{{ user.date_joined }}</td>
                         <td>{{user.user_membership.membership.membership_type }}</td>
                         <td>{% if user.email in active_membership %} Actif {% else %} Inactif {% endif %}</td>
+                        <td><a href="{% url "membership:select" pk=user.pk%}" class="btn btn-secondary">Accéder</a></td>
                     </tr>
                 {% endfor%}
             </tbody>

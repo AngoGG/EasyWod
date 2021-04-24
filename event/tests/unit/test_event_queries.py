@@ -23,3 +23,28 @@ class TestEventQueries(TestCase):
         assert event_2 in all_week_events
         assert event_3 not in all_week_events
         assert all_week_events.count() == 2
+
+    def test_get_weeks_events_average_attendees(self) -> None:
+        Event.objects.create(
+            name="WOD",
+            start=datetime.now(),
+            end=datetime.now(),
+            slot="5",
+            reserved_slot="1",
+        )
+        Event.objects.create(
+            name="WOD2",
+            start=datetime.now(),
+            end=datetime.now(),
+            slot="5",
+            reserved_slot="5",
+        )
+        average_attendance = event_queries.get_weeks_events_average_attendees()
+
+        assert average_attendance == 3
+
+    def test_get_weeks_events_average_attendees_no_event(self) -> None:
+
+        average_attendance = event_queries.get_weeks_events_average_attendees()
+
+        assert average_attendance == 0
