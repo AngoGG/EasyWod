@@ -43,7 +43,7 @@ class UserMembership(models.Model):
         verbose_name=_("Date d'abonnement"), null=True
     )
     unsubscription_date: models.DateTimeField = models.DateTimeField(
-        verbose_name=_("Date de désabonnement"), null=True
+        verbose_name=_("Date de désabonnement"), null=True, blank=True
     )
 
     def __str__(self):
