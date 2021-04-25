@@ -19,6 +19,7 @@ django-recaptcha = "*"
 requests = "*"
 mypy = "*"
 flake8 = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"
