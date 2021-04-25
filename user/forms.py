@@ -63,6 +63,7 @@ class RegisterForm(UserCreationForm):
             "date_of_birth",
             "password1",
             "password2",
+            "profile_picture",
         )
 
 
