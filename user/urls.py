@@ -37,6 +37,10 @@ urlpatterns = [
         views.UserPasswordChangeView.as_view(),
         name="change_password",
     ),
+    path(
+        "change_profile_picture",
+        views.ChangeProfilePictureView.as_view(),
+        name="change_profile_picture",
+    ),
 ]
-
 

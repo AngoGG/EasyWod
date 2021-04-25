@@ -185,3 +185,19 @@ class MemberListView(UserPassesTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['active_membership'] = membership_queries.get_all_active_membership()
         return context
+
+
+class ChangeProfilePictureView(View):
+    def post(self, request: HttpRequest) -> HttpResponse:
+
+        print(f'La requete {request.POST}')
+        print(f'Les fichiers {request.FILES}')
+
+        user = User.objects.get(pk=request.POST['user_id'])
+        user.profile_picture = request.FILES['file']
+        user.save()
+        messages.success(
+            self.request, "La photo de profil a bien été changée.",
+        )
+        return redirect('/user/profile')
+
