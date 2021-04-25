@@ -79,7 +79,7 @@ class UserAdmin(BaseUserAdmin):
         ("Informations générales", {"fields": ("email", "password")}),
         (
             "Informations personnelles",
-            {"fields": ("first_name", "last_name", "date_of_birth")},
+            {"fields": ("first_name", "last_name", "date_of_birth", "profile_picture")},
         ),
         ("Type d'utilisateurs", {"fields": ("type",)}),
         ("Permissions", {"fields": ("is_admin",)}),
