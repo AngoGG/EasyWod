@@ -1,8 +1,17 @@
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
+
+from config import settings
 from user.models import User
 from membership.models import Membership, UserMembership
+
+import os
+from io import BytesIO
+from PIL import Image
+from pathlib import Path
 
 
 class TestRegistrationView(TestCase):
@@ -242,4 +251,54 @@ class TestUserUpdateView(TestCase):
         new_user: QuerySet = User.objects.first()
         assert new_user.address_info == "Updated Address"
         assert response.status_code == 302  # Testing redirection
+
+
+class TestChangeProfilePictureView(TestCase):
+    def create_image(
+        self, storage, filename, size=(100, 100), image_mode='RGB', image_format='PNG'
+    ):
+        """
+        Generate a test image, returning the filename that it was saved as.
+
+        If ``storage`` is ``None``, the BytesIO containing the image data
+        will be passed instead.
+        """
+        data = BytesIO()
+        Image.new(image_mode, size).save(data, image_format)
+        data.seek(0)
+        if not storage:
+            return data
+        image_file = ContentFile(data.read())
+        return storage.save(filename, image_file)
+
+    def test_change_profile_picture(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        user: QuerySet = User.objects.last()
+
+        # set up form data
+        avatar = self.create_image(None, 'avatar.png')
+        avatar_file = SimpleUploadedFile('front.png', avatar.getvalue())
+
+        response: HttpResponse = client.post(
+            f"/user/change_profile_picture",
+            {"user_id": [user.id], "file": [avatar_file],},
+            format='multipart',
+        )
+        updated_user: QuerySet = User.objects.last()
+        profile_picture_path = Path(
+            str(settings.BASE_DIR) + '/..' + str(updated_user.profile_picture.url)
+        )
+
+        assert response.status_code == 302  # Testing redirection
+        assert updated_user.profile_picture.url == '/media/profile_pictures/front.png'
+        os.remove(profile_picture_path)
 
