@@ -2,10 +2,11 @@ from django.shortcuts import render
 from django.utils import timezone
 
 # Create your views here.
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib import messages  # import messages
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import DetailView, View
+from django.views.generic import DetailView, ListView, View
 from django.shortcuts import redirect
 
 import requests
@@ -73,3 +74,31 @@ class AnswerContactMessageView(View):
 
         print(f'LE MESSAGE : {message.answer_date}')
         return redirect("/")
+
+
+class ContactMessageListView(UserPassesTestMixin, ListView):
+    def test_func(self):
+        return (
+            True
+            if self.request.user.is_authenticated
+            and self.request.user.type == "EMPLOYEE"
+            else False
+        )
+
+    paginate_by = 10  # if pagination is desired
+    template_name = "contact_us/contact_message_list.html"
+    queryset = ContactMessage.objects.all()
+    ordering = ['-message_date']
+
+    def post(self, request):
+        contact_message_status = request.POST.getlist('contact_message_status')
+        if len(contact_message_status) == 1:
+            if contact_message_status[0] == 'answered':
+                result = ContactMessage.objects.filter(answer_date__isnull=False)
+            else:
+                result = ContactMessage.objects.filter(answer_date__isnull=True)
+        else:
+            result = ContactMessage.objects.all()
+        return render(
+            request, "contact_us/contact_message_list.html", {"object_list": result}
+        )
