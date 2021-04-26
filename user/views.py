@@ -182,11 +182,8 @@ class MemberListView(UserPassesTestMixin, ListView):
     ordering = ['-date_joined']
 
     def post(self, request):
-        print(request.POST)
         membership_type = request.POST.getlist('membership_type')
         membership_status = request.POST.getlist('membership_status')
-        print(f"membership_type: {membership_type}")
-        print(f"membership_status: {membership_status}")
         if (
             not request.POST['search']
             and (len(membership_type) == 2 or len(membership_type) == 0)
