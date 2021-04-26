@@ -3,6 +3,7 @@ from django.contrib import messages  # import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy, reverse
@@ -180,13 +181,57 @@ class MemberListView(UserPassesTestMixin, ListView):
     queryset = User.objects.filter(type="MEMBER")
     ordering = ['-date_joined']
 
+    def post(self, request):
+        print(request.POST)
+        membership_type = request.POST.getlist('membership_type')
+        membership_status = request.POST.getlist('membership_status')
+        print(f"membership_type: {membership_type}")
+        print(f"membership_status: {membership_status}")
+        if (
+            not request.POST['search']
+            and (len(membership_type) == 2 or len(membership_type) == 0)
+            and (len(membership_status) == 2 or len(membership_status) == 0)
+        ):
+            result = User.objects.all()
+        elif not request.POST['search']:
+            if len(membership_type) == 2 or len(membership_type) == 0:
+                if len(membership_status) == 1:
+                    if membership_status[0] == 'active':
+                        result = User.objects.filter(user_membership__active=True)
+                    else:
+                        result = User.objects.filter(user_membership__active=False)
+                else:
+                    result = User.objects.all()
+            else:
+                if len(membership_status) == 1:
+                    if membership_status[0] == 'active':
+                        result = User.objects.filter(
+                            user_membership__membership__membership_type=request.POST[
+                                'membership_type'
+                            ].upper()
+                        ).filter(user_membership__active=True)
+                    else:
+                        result = User.objects.filter(
+                            user_membership__membership__membership_type=request.POST[
+                                'membership_type'
+                            ].upper()
+                        ).filter(user_membership__active=False)
+                else:
+                    result = User.objects.filter(
+                        user_membership__membership__membership_type=request.POST[
+                            'membership_type'
+                        ].upper()
+                    )
+        else:
+            result = User.objects.filter(
+                Q(first_name=request.POST['search'])
+                | Q(last_name=request.POST['search'])
+            )
+        return render(request, 'user/member_list.html', {"object_list": result})
+
 
 class ChangeProfilePictureView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
-
-        print(f'La requete {request.POST}')
-        print(f'Les fichiers {request.FILES}')
-
         user = User.objects.get(pk=request.POST['user_id'])
         user.profile_picture = request.FILES['file']
         user.save()
