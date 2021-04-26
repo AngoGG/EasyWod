@@ -178,13 +178,7 @@ class MemberListView(UserPassesTestMixin, ListView):
     paginate_by = 10  # if pagination is desired
     template_name = "user/member_list.html"
     queryset = User.objects.filter(type="MEMBER")
-    paginate_by = 10
     ordering = ['-date_joined']
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['active_membership'] = membership_queries.get_all_active_membership()
-        return context
 
 
 class ChangeProfilePictureView(View):
