@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="profile-img">
-                <img src="{% static "img/team/coach-tiven.png" %}" style="max-width:50%; height:auto; " alt=""/>
+                <img src="{{ member.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
                 <div class="file btn btn-lg btn-primary">
                     Change Photo
                     <input type="file" name="file"/>
@@ -50,7 +50,7 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="profile-img">
-                <img src="{% static "img/team/coach-tiven.png" %}" style="max-width:50%; height:auto; " alt=""/>
+                <img src="{{ user.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
                 <div class="file btn btn-lg btn-primary">
                     Change Photo
                     <input type="file" name="file"/>
