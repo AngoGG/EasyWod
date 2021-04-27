@@ -107,11 +107,11 @@ class PasswordResetView(View):
                 c: dict = {
                     "email": user.email,
                     "domain": request.META["HTTP_HOST"],
-                    "site_name": "Pur Beurre",
+                    "site_name": "EasyWod",
                     "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                     "user": user,
                     "token": default_token_generator.make_token(user),
-                    "protocol": "http",
+                    "protocol": "https",
                 }
                 email: str = render_to_string(email_template_name, c)
                 try:
