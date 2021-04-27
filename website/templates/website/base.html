@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{% static "css/custom.css" %}" type="text/css">
 
 
+
     <script src="https://www.google.com/recaptcha/api.js"></script>
 
 </head>
@@ -104,7 +105,8 @@
 		</div>
 	</section>
     {% endif %}
-
+    
+    {% include 'website/subscribe_newsletter.html' %}
     {% include 'website/footer.html' %}
     
     <!-- Js Plugins -->
