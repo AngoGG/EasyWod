@@ -16,8 +16,6 @@ urlpatterns = [
         name="answer_message",
     ),
     path(
-        r"contact_message_list",
-        views.ContactMessageListView.as_view(),
-        name="contact_message_list",
+        r"messages_list", views.ContactMessageListView.as_view(), name="messages_list",
     ),
 ]

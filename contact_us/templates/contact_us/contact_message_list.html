@@ -44,6 +44,8 @@
                     <th scope="col" onclick="sortTable(4)">Etat du message</th>
                     <th scope="col" onclick="sortTable(5)">Date de réception</th>
                     <th scope="col" onclick="sortTable(6)">Date de réponse</th>
+                    <th scope="col">Voir message</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -55,6 +57,7 @@
                         <td>{% if message.answer_date %}Traité{% else%}A traiter {% endif %}</td>
                         <td>{{ message.message_date }}</td>
                         <td>{% if message.answer_date %}{{ message.answer_date }}{% endif %}</td>
+                        <td><a href="{% url 'contact_us:message_detail' message.id%}" class="btn btn-secondary">Accéder</a></td>
                     </tr>
                 {% endfor%}
             </tbody>
