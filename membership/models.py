@@ -32,7 +32,7 @@ class Membership(models.Model):
 
 
 class UserMembership(models.Model):
-    user: Membership = models.OneToOneField(
+    user: User = models.OneToOneField(
         User, related_name='user_membership', on_delete=models.CASCADE
     )
     membership: Membership = models.ForeignKey(
