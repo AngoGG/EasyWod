@@ -26,8 +26,7 @@
                     <img src="{% static "img/profile_default.jpg" %}" style="max-width:50%; height:auto; " alt=""/>
                 {% endif %}
                 <div class="file btn btn-lg btn-primary">
-                    Change Photo
-                    <input type="file" name="file"/>
+                    <a type="button" data-toggle="modal" data-target="#exampleModal">Changer de Photo</a>
                 </div>
             </div>
         </div>
@@ -152,5 +151,35 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal Contact Answer-->
+<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Changer la photo de profile</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" enctype="multipart/form-data" id="change_profile_picture" name="change_profile_picture" class="contactForm" action="{% url "user:change_profile_picture" %}">
+            {% csrf_token %}
+        <div class="modal-body input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Télécharger</span>
+            </div>
+            <div class="custom-file">
+                <input lang="fr" type="file" name="file" class="custom-file-input" id="inputGroupFile01" onchange="$(this).next().after().text($(this).val().split('\\').slice(-1)[0])">
+                <label class="custom-file-label">Choisir un fichier</label>
+            </div>
+        </div>
+        <div class="modal-footer justify-content-center">
+            <input type="hidden" name="user_id" value="{{ member.id}}" id="user_id">
+            <button type="submit" class="submit-btn contact-btn" >Valider le changement</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
