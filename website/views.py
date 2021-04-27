@@ -18,10 +18,11 @@ import config.settings as Settings
 
 from contact_us.views import ContactMessage
 from event.libs import event_queries
+
 from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
+from newsletter.forms import NewsletterSubscribeForm
 from user.models import User
-
 
 import requests
 
@@ -52,9 +53,9 @@ class HomeView(View):
             average_attendance = event_queries.get_weeks_events_average_attendees()
 
             return render(
-                request,
-                "website/home_employee.html",
-                {
+                request=request,
+                template_name="website/home_employee.html",
+                context={
                     "members_info": {
                         "all_members": all_members,
                         "active_premium_members": active_premium_members,
@@ -73,6 +74,7 @@ class HomeView(View):
             coaches = User.objects.filter(type="EMPLOYEE").count()
             customers = User.objects.filter(type="CUSTOMER").count()
             all_week_events = event_queries.get_all_week_events()
+            newsletter_form: NewsletterSubscribeForm = NewsletterSubscribeForm()
             return render(
                 request,
                 "website/home.html",
@@ -80,6 +82,7 @@ class HomeView(View):
                     "coaches": coaches,
                     "customers": customers,
                     "all_week_events": all_week_events,
+                    "newsletter_form": newsletter_form,
                 },
             )
 
