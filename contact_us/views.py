@@ -72,7 +72,6 @@ class AnswerContactMessageView(View):
         message.answer_date = timezone.now()
         message.save()
 
-        print(f'LE MESSAGE : {message.answer_date}')
         return redirect("/")
 
 
