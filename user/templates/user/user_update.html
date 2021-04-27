@@ -21,7 +21,11 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="profile-img">
-                <img src="{{ member.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
+                {% if member.profile_picture %}
+                    <img src="{{ member.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
+                {% else %}
+                    <img src="{% static "img/profile_default.jpg" %}" style="max-width:50%; height:auto; " alt=""/>
+                {% endif %}
                 <div class="file btn btn-lg btn-primary">
                     Change Photo
                     <input type="file" name="file"/>
@@ -50,7 +54,11 @@
     <div class="row">
         <div class="col-lg-4">
             <div class="profile-img">
-                <img src="{{ user.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
+                {% else %}
+                    <img src="{% static "img/profile_default.jpg" %}" style="max-width:50%; height:auto; " alt=""/>
+                {% endif %}
                 <div class="file btn btn-lg btn-primary">
                     Change Photo
                     <input type="file" name="file"/>
