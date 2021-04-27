@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "user.apps.UserConfig",
     "website.apps.WebsiteConfig",
     "membership.apps.MembershipConfig",
+    "newsletter.apps.NewsletterConfig",
     'ckeditor',
     'captcha',
 ]

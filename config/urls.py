@@ -30,6 +30,7 @@ urlpatterns = [
     path(r"contact/", include("contact_us.urls"), name="contact"),
     path(r"event/", include("event.urls"), name="event"),
     path(f'membership/', include("membership.urls"), name='membership'),
+    path(r"newsletter/", include("newsletter.urls"), name="newsletter"),
     path(r"user/", include("user.urls"), name="user"),
     path(
         "reset/<uidb64>/<token>/",
