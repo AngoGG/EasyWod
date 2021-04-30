@@ -58,6 +58,30 @@ class TestRegistrationView(TestCase):
         # Check if the User subscription is active
         assert UserMembership.objects.filter(user=user_created, active=True).exists()
 
+    def test_register_post_no_captcha(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        Settings.RECAPTCHA_PRIVATE_KEY = str(os.environ.get("RECAPTCHA_PRIVATE_KEY"))
+        response: HttpResponse = client.post(
+            "/user/register",
+            {
+                "email": "matt-fraser@gmail.com",
+                "first_name": "Matt",
+                "last_name": "Fraser",
+                "date_of_birth_year": 1997,
+                "date_of_birth_month": 10,
+                "date_of_birth_day": 4,
+                "password1": "password8chars",
+                "password2": "password8chars",
+                'g-recaptcha-response': [''],
+                "submit": "Register",
+            },
+        )
+
+        message = User.objects.first()
+
+        assert response.status_code == 200  # Testing redirection
+        assert message is None
+
     def test_register_get(self) -> None:
         """Test if the url returns a correct 200 http status code.
         """
