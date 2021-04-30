@@ -4,7 +4,7 @@ from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
 
-from config import settings
+import config.settings as Settings
 from user.models import User
 from membership.models import Membership, UserMembership
 
@@ -25,6 +25,8 @@ class TestRegistrationView(TestCase):
         Membership.objects.create(membership_type="TRIAL")
 
         client: Client = Client()
+        Settings.RECAPTCHA_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
+        repatcha_test_public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
         response: HttpResponse = client.post(
             "/user/register",
             {
@@ -36,6 +38,7 @@ class TestRegistrationView(TestCase):
                 "date_of_birth_day": 4,
                 "password1": "password8chars",
                 "password2": "password8chars",
+                'g-recaptcha-response': [repatcha_test_public_key],
                 "submit": "Register",
             },
         )
@@ -295,7 +298,7 @@ class TestChangeProfilePictureView(TestCase):
         )
         updated_user: QuerySet = User.objects.last()
         profile_picture_path = Path(
-            str(settings.BASE_DIR) + '/..' + str(updated_user.profile_picture.url)
+            str(Settings.BASE_DIR) + '/..' + str(updated_user.profile_picture.url)
         )
 
         assert response.status_code == 302  # Testing redirection
