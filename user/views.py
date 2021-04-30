@@ -37,7 +37,7 @@ class RegistrationView(FormView):
         captcha_server_response = captcha_server_response.json()
         if captcha_server_response['success'] is True:
             if form.is_valid():
-                email: str = form.cleaned_date["email"]
+                email: str = form.cleaned_data["email"]
                 password: str = request.POST.get("password1")
                 first_name: str = request.POST.get("first_name")
                 last_name: str = request.POST.get("last_name")
