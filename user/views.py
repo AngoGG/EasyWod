@@ -90,10 +90,11 @@ class LoginView(FormView):
     def post(self, request: HttpRequest) -> HttpResponse:
         """Manages the user connection.
         """
-        error: bool = False
 
         form: ConnectionForm = ConnectionForm(request.POST)
+
         if form.is_valid():
+            print(f'LA FORM VALID')
             username: str = form.cleaned_data["email"]
             password: str = form.cleaned_data["password"]
             user: User = authenticate(username=username, password=password)
@@ -101,8 +102,14 @@ class LoginView(FormView):
                 login(request, user)
                 return redirect("/")
             else:
-                error: bool = True
-        return render(request, "user/connection.html", locals())
+                messages.error(
+                    request,
+                    "L'utilisateur n'existe pas où le mot de passe est invalide, veuillez réessayer.",
+                )
+                return render(
+                    request, "user/connection.html", {"form": form, "email": username}
+                )
+        return redirect("/")
 
 
 class LogoutView(View):
