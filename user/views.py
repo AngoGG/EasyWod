@@ -1,4 +1,6 @@
 import datetime
+
+from django import forms
 from django.contrib import messages  # import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -12,6 +14,8 @@ from .forms import ConnectionForm, RegisterForm
 from .models import User
 from membership.libs import membership_queries
 from membership.models import Membership, UserMembership
+import requests
+import config.settings as Settings
 
 
 class RegistrationView(FormView):
@@ -21,30 +25,62 @@ class RegistrationView(FormView):
     def post(self, request: HttpRequest) -> HttpResponse:
         """Manages the user registration.
         """
-        email: str = request.POST.get("email")
-        password: str = request.POST.get("password1")
-        first_name: str = request.POST.get("first_name")
-        last_name: str = request.POST.get("last_name")
-        date_of_birth = f'{request.POST.get("date_of_birth_year")}-{request.POST.get("date_of_birth_month")}-{request.POST.get("date_of_birth_day")}'
+        form = RegisterForm(request.POST)
 
-        free_membership = Membership.objects.get(membership_type='TRIAL')
+        captcha_token = request.POST.get('g-recaptcha-response')
+        captcha_url = "https://www.google.com/recaptcha/api/siteverify"
+        captcha_secret = Settings.RECAPTCHA_PRIVATE_KEY
 
-        user: User = User.objects.create_user(
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name,
-            date_of_birth=date_of_birth,
-        )
+        data = {'secret': captcha_secret, 'response': captcha_token}
+        captcha_server_response = requests.post(url=captcha_url, data=data)
 
-        # Creating a new UserMembership
-        user_membership = UserMembership.objects.create(
-            user=user, membership=free_membership
-        )
-        user_membership.save()
+        captcha_server_response = captcha_server_response.json()
+        if captcha_server_response['success'] is True:
+            if form.is_valid():
+                email: str = form.cleaned_date["email"]
+                password: str = request.POST.get("password1")
+                first_name: str = request.POST.get("first_name")
+                last_name: str = request.POST.get("last_name")
+                date_of_birth = f'{request.POST.get("date_of_birth_year")}-{request.POST.get("date_of_birth_month")}-{request.POST.get("date_of_birth_day")}'
 
-        login(self.request, user)
-        return redirect("/")
+                free_membership = Membership.objects.get(membership_type='TRIAL')
+
+                user: User = User.objects.create_user(
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name,
+                    date_of_birth=date_of_birth,
+                )
+
+                # Creating a new UserMembership
+                user_membership = UserMembership.objects.create(
+                    user=user, membership=free_membership
+                )
+                user_membership.save()
+
+                login(self.request, user)
+                messages.success(
+                    request,
+                    "Votre compte a bien été créé, vous êtes maintenant connecté",
+                )
+                return redirect("/")
+            else:
+                messages.error(
+                    request, "Une erreur est survenue, veuillez réessayer.",
+                )
+                return render(request, "user/register.html", {"form": form})
+        else:
+            messages.error(
+                request, "Captcha invalide, veuillez réessayer.",
+            )
+            return render(request, "user/register.html", {"form": form})
+
+    def _clean_username(self, username):
+        username = self.cleaned_data['username']
+        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
+            raise forms.ValidationError(u'Username "%s" is already in use.' % username)
+        return username
 
 
 class LoginView(FormView):
