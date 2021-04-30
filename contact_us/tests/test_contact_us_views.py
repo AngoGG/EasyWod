@@ -67,8 +67,6 @@ class TestContactMessageView(TestCase):
         )
         message = ContactMessage.objects.first()
 
-        print(f'HELLO MESSAGE : {message.id}')
-
         response = client.get(f"/contact/message/{message.id}")
         assert response.status_code == 200  # Testing redirection
         assert response.template_name == ["contact_us/message_detail.html"]
