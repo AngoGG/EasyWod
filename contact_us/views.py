@@ -44,6 +44,7 @@ class ContactView(View):
                 request,
                 "Votre demande a bien été envoyée, nous la traiterons dans les meilleurs délais",
             )
+            return redirect('/')
         else:
             messages.error(
                 request, "Captcha invalide, Veuillez réessayer.",
