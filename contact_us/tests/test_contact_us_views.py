@@ -44,7 +44,7 @@ class TestContactView(TestCase):
 
         message = ContactMessage.objects.first()
 
-        assert response.status_code == 302  # Testing redirection
+        assert response.status_code == 200  # Testing redirection
         assert message is None
 
 
