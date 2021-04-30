@@ -94,7 +94,6 @@ class LoginView(FormView):
         form: ConnectionForm = ConnectionForm(request.POST)
 
         if form.is_valid():
-            print(f'LA FORM VALID')
             username: str = form.cleaned_data["email"]
             password: str = form.cleaned_data["password"]
             user: User = authenticate(username=username, password=password)
