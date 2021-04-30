@@ -14,6 +14,12 @@ import requests
 from .models import ContactMessage
 import config.settings as Settings
 
+from membership.models import Membership, UserMembership
+from membership.libs import membership_queries
+from newsletter.forms import NewsletterSubscribeForm
+from user.models import User
+from event.libs import event_queries
+
 
 class ContactView(View):
     def post(self, request):
@@ -42,7 +48,24 @@ class ContactView(View):
             messages.error(
                 request, "Captcha invalide, Veuillez réessayer.",
             )
-        return redirect("/")
+            coaches = User.objects.filter(type="EMPLOYEE").count()
+            customers = User.objects.filter(type="CUSTOMER").count()
+            all_week_events = event_queries.get_all_week_events()
+            newsletter_form: NewsletterSubscribeForm = NewsletterSubscribeForm()
+            return render(
+                request,
+                "website/home.html",
+                {
+                    "coaches": coaches,
+                    "customers": customers,
+                    "all_week_events": all_week_events,
+                    "newsletter_form": newsletter_form,
+                    "contact_name": request.POST.get('name'),
+                    "contact_email": request.POST.get('email'),
+                    "contact_subject": request.POST.get('subject'),
+                    "contact_message": request.POST.get('message'),
+                },
+            )
 
 
 class ContactMessageView(DetailView):
