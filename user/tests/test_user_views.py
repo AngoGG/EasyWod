@@ -329,3 +329,38 @@ class TestChangeProfilePictureView(TestCase):
         assert updated_user.profile_picture.url == '/media/profile_pictures/front.png'
         os.remove(profile_picture_path)
 
+
+class TestMemberListView(TestCase):
+    def test_access_page(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        user = User.objects.first()
+
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.get("/user/member_list")
+        assert response.status_code == 200  # Testing redirection
+
+    def test_access_page_not_employee(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.get("/user/member_list")
+        assert response.status_code == 403  # Testing redirection
+
