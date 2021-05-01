@@ -116,3 +116,152 @@ class TestAnswerContactMessageView(TestCase):
         self.assertEqual(
             mail.outbox[0].subject, f"[{message.subject}] Réponse à votre demande"
         )
+
+
+class TestContactMessageListView(TestCase):
+    def test_access_page(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        user = User.objects.first()
+
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.get("/contact/messages_list")
+        assert response.status_code == 200  # Testing redirection
+
+    def test_access_page_not_employee(self):
+        client: Client = Client(HTTP_HOST="localhost")
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.get("/contact/messages_list")
+        assert response.status_code == 403  # Testing redirection
+
+    def test_search_by_name(self):
+        client: Client = Client(HTTP_HOST="localhost")
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        ContactMessage.objects.create(
+            name="User",
+            email="user@mail.com",
+            subject="Demande",
+            message="Message Demande",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        user = User.objects.first()
+
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.post(
+            '/contact/messages_list',
+            {
+                'search': ['monsieurx'],
+                'contact_message_status': ['answered', 'to_answer'],
+            },
+        )
+        for result in response.context["object_list"]:
+            assert result.name == "User"
+            self.assertIsNone(result.answer)
+        assert response.status_code == 200
+
+    def test_search_answered_message(self):
+        client: Client = Client(HTTP_HOST="localhost")
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        ContactMessage.objects.create(
+            name="User",
+            email="user@mail.com",
+            subject="Demande",
+            message="Message Demande",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        user = User.objects.first()
+
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.post(
+            '/contact/messages_list',
+            {'search': [''], 'contact_message_status': ['answered'],},
+        )
+
+        for result in response.context["object_list"]:
+            assert result.name == "User"
+            self.assertIsNone(result.answer)
+        self.assertFalse(response.context["object_list"])
+        assert response.status_code == 200
+
+    def test_search_to_answer_message(self):
+        client: Client = Client(HTTP_HOST="localhost")
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        ContactMessage.objects.create(
+            name="User",
+            email="user@mail.com",
+            subject="Demande",
+            message="Message Demande",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        user = User.objects.first()
+
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response = client.post(
+            '/contact/messages_list',
+            {'search': [''], 'contact_message_status': ['to_answer'],},
+        )
+
+        self.assertTrue(response.context["object_list"])
+
+        for result in response.context["object_list"]:
+            assert result.name == "User"
+            self.assertIsNone(result.answer)
+
+        assert response.status_code == 200
