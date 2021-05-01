@@ -3,6 +3,8 @@ from django.core.mail import EmailMessage, send_mail, BadHeaderError
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from typing import Any, Dict, List
 
@@ -42,7 +44,7 @@ class Command(BaseCommand):
             )
         return article_list
 
-    def _get_subscriber_list(self) -> List[str]:
+    def _get_subscriber_list(self) -> List[Dict]:
         '''Get all the newsletter subscribers mails.
 
         Returns: List[str] Containing the subscribers emails.
@@ -50,11 +52,11 @@ class Command(BaseCommand):
         subscribers = SubscribedUsers.objects.all()
         subscriber_list = []
         for subscriber in subscribers:
-            subscriber_list.append(subscriber.email)
+            subscriber_list.append({"email": subscriber.email, "id": subscriber.id})
         return subscriber_list
 
     def _send_mail(
-        self, article_list: List[Dict], subscribers_list: List[str],
+        self, article_list: List[Dict], subscribers_list: List[Dict],
     ) -> None:
         '''Send the newsletter to subscribers.
         
@@ -65,16 +67,21 @@ class Command(BaseCommand):
         '''
         subject: str = f"EasyWod - Les articles de la semaine!"
         email_template_name: str = "newsletter/newsletter_email.html"
-        c: dict = {
-            "article_list": article_list,
-            "protocol": "https",
-            "domain": "easywod.angogg.com",
-        }
-        email: str = render_to_string(email_template_name, c)
-        for contact_email in subscribers_list:
+
+        for subscriber_info in subscribers_list:
+            c: dict = {
+                "article_list": article_list,
+                "protocol": "https",
+                "domain": "easywod.angogg.com",
+                "user_id": urlsafe_base64_encode(force_bytes(subscriber_info["id"])),
+            }
+            email: str = render_to_string(email_template_name, c)
             try:
                 msg = EmailMessage(
-                    subject, email, Settings.DEFAULT_FROM_EMAIL, [contact_email],
+                    subject,
+                    email,
+                    Settings.DEFAULT_FROM_EMAIL,
+                    [subscriber_info["email"]],
                 )
                 msg.content_subtype = "html"  # Main content is now text/html
                 msg.send()
