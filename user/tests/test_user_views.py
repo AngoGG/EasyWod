@@ -487,3 +487,53 @@ class TestMemberListView(TestCase):
             assert result.email == "user@gmail.com"
 
         assert response.status_code == 200
+
+    def test_search_with_premium_membership_inactive(self):
+        client: Client = Client(HTTP_HOST="localhost")
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.save()
+
+        searched_user = User.objects.create_user(
+            email="user@gmail.com",
+            password="password8chars",
+            first_name="User",
+            last_name="Testsearch",
+            date_of_birth="1997-4-10",
+        )
+
+        Membership.objects.create(membership_type="PREMIUM")
+        premium_membership = Membership.objects.get(membership_type='PREMIUM')
+
+        # Creating a new UserMembership
+
+        user_membership = UserMembership.objects.create(
+            user=searched_user, membership=premium_membership, active=False
+        )
+        user_membership.save()
+
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response = client.post(
+            '/user/member_list',
+            {
+                'search': [''],
+                'membership_type': ['premium'],
+                'membership_status': ['active'],
+            },
+        )
+
+        for result in response.context["object_list"]:
+            assert result.email == "user@gmail.com"
+
+        assert response.status_code == 200
