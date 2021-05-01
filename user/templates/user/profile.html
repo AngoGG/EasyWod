@@ -55,7 +55,9 @@
             </div>
          </div>
         <div class="col-lg-2 text-center">
+            {% if user.type == "EMPLOYEE" %}
             <a href="{% url "user:profile_update" user.pk%}" class="btn btn-secondary">Modifier Profile</a>
+            {% endif %}
         </div>
     </div>
     <div class="row">
