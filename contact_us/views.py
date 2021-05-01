@@ -93,6 +93,7 @@ class AnswerContactMessageView(View):
             request, "La réponse au message a bien été envoyé au demandeur.",
         )
         message = ContactMessage.objects.get(pk=self.request.POST['message_id'])
+        message.answer = email
         message.answer_date = timezone.now()
         message.save()
 
