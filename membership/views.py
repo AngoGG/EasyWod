@@ -74,6 +74,6 @@ class ReactivateMemberShipView(UpdateView):
         user_membership.save()
 
         messages.success(
-            request, "L'abonnement de l'utilisateur a bien été Réactivé",
+            request, "L'abonnement de l'utilisateur a bien été réactivé",
         )
         return redirect("/")
