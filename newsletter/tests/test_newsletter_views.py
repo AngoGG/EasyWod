@@ -16,3 +16,14 @@ class TestSubscribeView(TestCase):
         assert subscribers.email == "matt-fraser@gmail.com"
         assert response.status_code == 302  # Testing redirection
 
+
+class TestUnsubscribeView(TestCase):
+    def test_unsubscribe(self):
+        SubscribedUsers.objects.create(email="matt-fraser@gmail.com")
+        subscribers = SubscribedUsers.objects.first()
+        user_id_base_64 = urlsafe_base64_encode(force_bytes(subscribers.pk))
+        client: Client = Client(HTTP_HOST="localhost")
+        response = client.post(f"/newsletter/delete/{user_id_base_64}")
+
+        assert SubscribedUsers.objects.first() is None  # type: ignore
+        assert response.status_code == 302  # Testing redirection
