@@ -25,57 +25,46 @@
 <!-- Blog Details Hero Section End -->
 <!-- Blog Details Section Begin -->
 <div class="col-lg-12 d-flex justify-content-center">
-    <div class=" row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
-        <div class="col-lg-8 p-0 m-auto" >
+    <div class="row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+        
+        <div class="col-lg-6 p-0 m-auto" >
+            <div class="text-center">
+                <h3>Contenu du message</h3>
+            </div>
             <div class="blog-details-text" style="margin-top:25px;margin-bottom:25px;">
                 <div class="blog-details-title">
                     {{ contactmessage.message|safe }}
                 </div>
             </div>
         </div>
-        <div class="col-lg-12 text-center">
-            <div class="row d-flex justify-content-center" style="margin-top:25px;margin-bottom:25px;">
-            {% if user.type == "EMPLOYEE" %}
-                <div class="blog-btn">'
-                    <button type="button" data-toggle="modal" data-target="#exampleModal" class="primary-btn">Répondre</a>
-                </div>
-            {% endif %}
-            </div>
-        </div>
     </div>
 </div>
 
-<!-- Modal Contact Answer-->
-<div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Répondre au message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form method="POST" id="contactForm" name="contactForm" class="contactForm" action="{% url "contact_us:answer_message" %}">
-            {% csrf_token %}
-        <div class="modal-body contact-wrap">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-8" style="margin-top:25px;margin-bottom:25px;">
-                    <div class="form-group">
-                        <textarea name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message" required></textarea>
-                        <input type="hidden" name="contact_email" value="{{ contactmessage.email}}" id="contact_email">
-                        <input type="hidden" name="subject" value="{{ contactmessage.subject}}" id="subject">
-                        <input type="hidden" name="message_id" value="{{ contactmessage.id}}" id="message_id">
+<div class="col-lg-12 d-flex justify-content-center">
+    <div class=" row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+        <div class="col-lg-8 p-0 m-auto" >
+            <form method="POST" id="contactForm" name="contactForm" class="contactForm" action="{% url "contact_us:answer_message" %}">
+                {% csrf_token %}
+                <div class="row d-flex justify-content-center">
+                    <div class="col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+                        <div class="form-group">
+                            <label class="label" for="#">Répondre au message</label>
+                            <textarea name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message" required></textarea>
+                            <input type="hidden" name="contact_email" value="{{ contactmessage.email}}" id="contact_email">
+                            <input type="hidden" name="subject" value="{{ contactmessage.subject}}" id="subject">
+                            <input type="hidden" name="message_id" value="{{ contactmessage.id}}" id="message_id">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6" style="margin-bottom:25px;">
+                        <div class="text-center">
+                            <button type="submit" class="submit-btn contact-btn" style="height:50px;">Envoyer la réponse</button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-        <div class="modal-footer justify-content-center">
-            <button type="button" class="submit-btn contact-btn" data-dismiss="modal">Fermer</button>
-            <button type="submit" class="submit-btn contact-btn" >Envoyer la réponse</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
 {% endblock %}
 
