@@ -23,7 +23,6 @@ from event.libs import event_queries
 
 class ContactView(View):
     def post(self, request):
-
         captcha_token = request.POST.get('g-recaptcha-response')
         captcha_url = "https://www.google.com/recaptcha/api/siteverify"
         captcha_secret = Settings.RECAPTCHA_PRIVATE_KEY
@@ -103,10 +102,7 @@ class AnswerContactMessageView(View):
 class ContactMessageListView(UserPassesTestMixin, ListView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     paginate_by = 10  # if pagination is desired
@@ -116,13 +112,17 @@ class ContactMessageListView(UserPassesTestMixin, ListView):
 
     def post(self, request):
         contact_message_status = request.POST.getlist('contact_message_status')
-        if len(contact_message_status) == 1:
-            if contact_message_status[0] == 'answered':
-                result = ContactMessage.objects.filter(answer_date__isnull=False)
+        result = ContactMessage.objects.filter(email__contains=request.POST['search'])
+
+        if not result:
+            if len(contact_message_status) == 1:
+                to_answer: bool = contact_message_status[0] == 'to_answer'
+                result = ContactMessage.objects.filter(answer_date__isnull=to_answer)
             else:
-                result = ContactMessage.objects.filter(answer_date__isnull=True)
-        else:
-            result = ContactMessage.objects.all()
+                result = ContactMessage.objects.all()
+        elif len(contact_message_status) == 1:
+            to_answer: bool = contact_message_status[0] == 'to_answer'
+            result = result.filter(answer_date__isnull=to_answer)
         return render(
             request, "contact_us/contact_message_list.html", {"object_list": result}
         )

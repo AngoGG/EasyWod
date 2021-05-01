@@ -12,7 +12,11 @@
         <div class ="text-center">
           <h3>Liste des demandes de Contact</h3>
           <form action="" method="post">
-          {% csrf_token %}
+            <div class="input-group">
+                {% csrf_token %}
+                <input id="search" type="text" name="search" maxlength="50" class="input-sm form-control"
+                    placeholder="Adresse mail de l'utilisateur">
+            </div>
               <div class="input-group">
                 <div class="col-lg-12">
                   <label for="basic-url" class="form-label col-lg-3"><b>Etat de la demande</b></label>
