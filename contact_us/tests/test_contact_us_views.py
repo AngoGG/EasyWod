@@ -73,7 +73,7 @@ class TestContactMessageView(TestCase):
 
 
 class TestAnswerContactMessageView(TestCase):
-    def test_send_reset_email(self):
+    def test_send_answer_email(self):
         # First we have to create a contact message
         client: Client = Client(HTTP_HOST="localhost")
         # Setting up Captcha setting keys
@@ -108,6 +108,9 @@ class TestAnswerContactMessageView(TestCase):
             },
         )
 
+        message = ContactMessage.objects.first()
+
+        assert message.answer == "Voici une réponse à votre message"
         assert response.status_code == 302  # Testing redirection
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(
