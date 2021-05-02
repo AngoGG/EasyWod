@@ -83,8 +83,10 @@ class AddEvent(UserPassesTestMixin, View):
         # frequency calcul
 
         if request.POST.get("frequency", None) == 'daily':
+            interval = 1
             frequency = 7
         elif request.POST.get("frequency", None) == 'weekly':
+            interval = 7
             frequency = 1
         else:
             frequency = False
@@ -96,8 +98,8 @@ class AddEvent(UserPassesTestMixin, View):
                         name=str(name), start=start_object, end=end_object, slot=slot
                     )
                     event.save()
-                    start_object += timedelta(days=frequency)
-                    end_object += timedelta(days=frequency)
+                    start_object += timedelta(days=interval)
+                    end_object += timedelta(days=interval)
         else:
             event = Event(name=str(name), start=start_object, end=end_object, slot=slot)
             event.save()

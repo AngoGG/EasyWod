@@ -178,6 +178,27 @@ class TestAddEvent(TestCase):
             },
         )
         assert Event.objects.count() == 7
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=20
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=21
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=22
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=23
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=24
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=25
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=26
+        ).exists()
 
         Event.objects.all().delete()
 
@@ -194,6 +215,28 @@ class TestAddEvent(TestCase):
             },
         )
         assert Event.objects.count() == 14
+
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=20
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=21
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=22
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=28
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=3, start__day=2
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=3, start__day=3
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=3, start__day=4
+        ).exists()
 
         assert response.status_code == 302  # Testing redirection
 
@@ -248,6 +291,22 @@ class TestAddEvent(TestCase):
             },
         )
         assert Event.objects.count() == 5
+
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=20
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=2, start__day=27
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=3, start__day=3
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=3, start__day=10
+        ).exists()
+        assert Event.objects.filter(
+            start__year=2021, start__month=3, start__day=17
+        ).exists()
 
         assert response.status_code == 302  # Testing redirection
 
