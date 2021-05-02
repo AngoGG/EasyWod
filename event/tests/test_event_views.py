@@ -299,13 +299,13 @@ class TestAddEvent(TestCase):
             start__year=2021, start__month=2, start__day=27
         ).exists()
         assert Event.objects.filter(
-            start__year=2021, start__month=3, start__day=3
+            start__year=2021, start__month=3, start__day=6
         ).exists()
         assert Event.objects.filter(
-            start__year=2021, start__month=3, start__day=10
+            start__year=2021, start__month=3, start__day=13
         ).exists()
         assert Event.objects.filter(
-            start__year=2021, start__month=3, start__day=17
+            start__year=2021, start__month=3, start__day=20
         ).exists()
 
         assert response.status_code == 302  # Testing redirection
