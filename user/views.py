@@ -5,13 +5,19 @@ from django.contrib import messages  # import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy, reverse
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import DetailView, FormView, ListView, View, UpdateView
 from .forms import ConnectionForm, RegisterForm
 from .models import User
+from .tokens import account_activation_token
 from membership.libs import membership_queries
 from membership.models import Membership, UserMembership
 import requests
@@ -59,10 +65,23 @@ class RegistrationView(FormView):
                 )
                 user_membership.save()
 
-                login(self.request, user)
+                current_site = get_current_site(request)
+                mail_subject = 'Activation de votre compte EasyWod.'
+                message = render_to_string(
+                    'user/acc_active_email.html',
+                    {
+                        'user': user,
+                        'domain': current_site.domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': account_activation_token.make_token(user),
+                    },
+                )
+                email = EmailMessage(mail_subject, message, to=[email)
+                email.send()
+
                 messages.success(
                     request,
-                    "Votre compte a bien été créé, vous êtes maintenant connecté",
+                    "Un email de confirmation vous a été envoyé, merci de consulter votre boite afin d'activer votre compte.",
                 )
                 return redirect("/")
             else:
@@ -81,6 +100,29 @@ class RegistrationView(FormView):
         if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
             raise forms.ValidationError(u'Username "%s" is already in use.' % username)
         return username
+
+
+class ActivateView(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            messages.success(
+                request,
+                "Merci de votre confirmation. Vous pouvez maintenant vous connecter.",
+            )
+            return redirect("/")
+        else:
+            messages.error(
+                request,
+                "Le lien d'activation est invalide! Veuillez réessayer ou nous contacter.",
+            )
+            return redirect("/")
 
 
 class LoginView(FormView):
@@ -270,7 +312,7 @@ class MemberListView(UserPassesTestMixin, ListView):
 
 
 class ChangeProfilePictureView(View):
-    def post(self, request: HttpRequest) -> HttpResponse:
+    def get(self, request: HttpRequest) -> HttpResponse:
         user = User.objects.get(pk=request.POST['user_id'])
         user.profile_picture = request.FILES['file']
         user.save()

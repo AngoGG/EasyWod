@@ -1,0 +1,9 @@
+{% autoescape off %}
+
+<h1 style="text-align:center;">EasyWod</h1>
+<p>Bonjour {{ user.first_name }} {{ user.last_name }},</p>
+<p>Veuillez cliquer sur le lien suivant afin de confirmer votre adresse email et activer votre compte:</p>
+<p>{{ protocol }}://{{ domain }}{% url 'user:activate' uidb64=uid token=token %}</p>
+<p>EasyWod</p>
+{% endautoescape %}
+
