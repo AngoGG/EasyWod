@@ -67,7 +67,6 @@ class AddEvent(UserPassesTestMixin, View):
 
     def post(self, request):
 
-        print(f'REQUEST : {request.POST}')
         name = request.POST.get("name", None)
         date = request.POST.get("date", None)
         slot = request.POST.get("slot", 5)
