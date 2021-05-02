@@ -21,6 +21,11 @@ app_name: str = "user"
 
 urlpatterns = [
     path(r"register", views.RegistrationView.as_view(), name="register"),
+    path(
+        r'activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        views.ActivateView.as_view(),
+        name='activate',
+    ),
     path(r"login", views.LoginView.as_view(), name="login"),
     path(r"logout", views.LogoutView.as_view(), name="logout"),
     path(r"profile", views.ProfileView.as_view(), name="profile"),
@@ -37,4 +42,10 @@ urlpatterns = [
         views.UserPasswordChangeView.as_view(),
         name="change_password",
     ),
+    path(
+        "change_profile_picture",
+        views.ChangeProfilePictureView.as_view(),
+        name="change_profile_picture",
+    ),
 ]
+

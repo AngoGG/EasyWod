@@ -15,4 +15,7 @@ urlpatterns = [
         views.AnswerContactMessageView.as_view(),
         name="answer_message",
     ),
+    path(
+        r"messages_list", views.ContactMessageListView.as_view(), name="messages_list",
+    ),
 ]

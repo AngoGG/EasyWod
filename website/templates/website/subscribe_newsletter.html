@@ -1,0 +1,20 @@
+<section class="callto-section">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-sm-12">
+                <div  class="callto-text">
+                    <form action="{% url "newsletter:subscribe" %}" method="post">
+                        {% csrf_token %}
+                        <h2 style="margin-bottom: 25px;">Inscrivez vous à notre newsletter</h2>
+                        <div class="input-group justify-content-center">
+                            {{ newsletter_form.as_p }}
+                        </div>             
+                    <span class="input-group-btn" >
+                        <button class="btn primary-btn callto-btn" type="submit">S'inscrire maintenant</button>
+                    </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

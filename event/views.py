@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core import serializers
@@ -69,7 +69,7 @@ class AddEvent(UserPassesTestMixin, View):
 
         name = request.POST.get("name", None)
         date = request.POST.get("date", None)
-        slot = request.POST.get("slot", None)
+        slot = request.POST.get("slot", 5)
         start_time = request.POST.get("start_time", None)
         end_time = request.POST.get("end_time", None)
 
@@ -79,8 +79,29 @@ class AddEvent(UserPassesTestMixin, View):
         start_object = datetime.strptime(start, "%Y-%m-%d %H:%M")
         end_object = datetime.strptime(end, "%Y-%m-%d %H:%M")
 
-        event = Event(name=str(name), start=start_object, end=end_object, slot=slot)
-        event.save()
+        # frequency calcul
+
+        if request.POST.get("frequency", None) == 'daily':
+            interval = 1
+            frequency = 7
+        elif request.POST.get("frequency", None) == 'weekly':
+            interval = 7
+            frequency = 1
+        else:
+            frequency = False
+        if frequency:
+            period = int(request.POST.get("period", "1"))
+            for week in range(period):
+                for day in range(frequency):
+                    event = Event(
+                        name=str(name), start=start_object, end=end_object, slot=slot
+                    )
+                    event.save()
+                    start_object += timedelta(days=interval)
+                    end_object += timedelta(days=interval)
+        else:
+            event = Event(name=str(name), start=start_object, end=end_object, slot=slot)
+            event.save()
 
         return redirect("event:event_calendar")
 

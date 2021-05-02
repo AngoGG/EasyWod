@@ -25,29 +25,21 @@
 <!-- Blog Details Hero Section End -->
 <!-- Blog Details Section Begin -->
 <div class="col-lg-12 d-flex justify-content-center">
-    <div class=" row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
-        <div class="col-lg-8 p-0 m-auto" >
+    <div class="row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+        
+        <div class="col-lg-6 p-0 m-auto" >
+            <div class="text-center">
+                <h3>Contenu du message</h3>
+            </div>
             <div class="blog-details-text" style="margin-top:25px;margin-bottom:25px;">
                 <div class="blog-details-title">
                     {{ contactmessage.message|safe }}
                 </div>
             </div>
         </div>
-        <div class="col-lg-12 text-center">
-            <div class="row d-flex justify-content-center" style="margin-top:25px;margin-bottom:25px;">
-                        {% if user.type == "EMPLOYEE" %}
-                <div class="blog-btn">'
-                    <a href="" class="primary-btn">Répondre</a>
-                </div>
-            {% endif %}
-                <div class="blog-btn">'
-                    <a href="" class="primary-btn">Retour</a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
-<!-- Blog Details Section End -->
+{% if not contactmessage.answer_date %}
 <div class="col-lg-12 d-flex justify-content-center">
     <div class=" row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
         <div class="col-lg-8 p-0 m-auto" >
@@ -61,12 +53,12 @@
                             <input type="hidden" name="contact_email" value="{{ contactmessage.email}}" id="contact_email">
                             <input type="hidden" name="subject" value="{{ contactmessage.subject}}" id="subject">
                             <input type="hidden" name="message_id" value="{{ contactmessage.id}}" id="message_id">
-  
+
                         </div>
                     </div>
                     <div class="col-lg-6" style="margin-bottom:25px;">
                         <div class="text-center">
-                            <button type="submit" class="submit-btn contact-btn" style="height:50px;">Ajouter l'article</button>
+                            <button type="submit" class="submit-btn contact-btn" style="height:50px;">Envoyer la réponse</button>
                         </div>
                     </div>
                 </div>
@@ -74,6 +66,22 @@
         </div>
     </div>
 </div>
-
+{% else %}
+<div class="col-lg-12 d-flex justify-content-center">
+    <div class="row contact-wrap col-lg-8" style="margin-top:25px;margin-bottom:25px;">
+        
+        <div class="col-lg-6 p-0 m-auto" >
+            <div class="text-center">
+                <h3>Répondu le {{ contactmessage.answer_date}}</h3>
+            </div>
+            <div class="blog-details-text" style="margin-top:25px;margin-bottom:25px;">
+                <div class="blog-details-title">
+                    {{ contactmessage.answer|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
 

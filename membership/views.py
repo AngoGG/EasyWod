@@ -61,3 +61,19 @@ class DeactivateMemberShipView(UpdateView):
             request, "L'abonnement de l'utilisateur a bien été désactivé",
         )
         return redirect("/")
+
+
+class ReactivateMemberShipView(UpdateView):
+    def post(self, request, *args, **kwargs):
+
+        user_membership = UserMembership.objects.get(user=self.request.POST['member'])
+
+        user_membership.active = True
+        user_membership.unsubscription_date = timezone.now()
+
+        user_membership.save()
+
+        messages.success(
+            request, "L'abonnement de l'utilisateur a bien été réactivé",
+        )
+        return redirect("/")

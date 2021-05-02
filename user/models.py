@@ -30,12 +30,15 @@ class User(AbstractBaseUser):
     city = models.CharField(_("Ville"), max_length=50, null=True, blank=True)
     zip_code = models.IntegerField(_("Code Postal"), null=True, blank=True)
     country = models.CharField(_("Pays"), max_length=50, null=True, blank=True)
+    profile_picture: models.ImageField = models.ImageField(
+        _("Photo"), upload_to='profile_pictures/', null=True, blank=True
+    )
 
     date_joined: models.EmailField = models.DateTimeField(
         verbose_name=_("Date d'inscription"), auto_now_add=True
     )
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()

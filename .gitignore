@@ -1,5 +1,6 @@
 db.sqlite3
 .env
 tests_reports/
+media/profile_pictures/
 .coverage
 __pycache__

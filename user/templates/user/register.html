@@ -36,8 +36,12 @@
                         {% else %}
                         {{ field }}
                         {% endif %}
+                        {% for error in field.errors %}
+                        <p style="color: red">{{ error }}</p>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                {% endfor %}
+                    <div class="form-group g-recaptcha d-flex align-items-center justify-content-center" data-sitekey="6Ld993kaAAAAANu695eWvaykgfMl36Q61v5uotn5"></div>
                     <div class="controls d-flex align-items-center justify-content-center">
                         <button type="submit"  class="btn btn-success">Créer Compte</button>
                     </div>
@@ -47,4 +51,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

@@ -32,7 +32,7 @@ class Membership(models.Model):
 
 
 class UserMembership(models.Model):
-    user: Membership = models.OneToOneField(
+    user: User = models.OneToOneField(
         User, related_name='user_membership', on_delete=models.CASCADE
     )
     membership: Membership = models.ForeignKey(
@@ -43,7 +43,7 @@ class UserMembership(models.Model):
         verbose_name=_("Date d'abonnement"), null=True
     )
     unsubscription_date: models.DateTimeField = models.DateTimeField(
-        verbose_name=_("Date de désabonnement"), null=True
+        verbose_name=_("Date de désabonnement"), null=True, blank=True
     )
 
     def __str__(self):

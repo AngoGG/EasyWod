@@ -1,0 +1,15 @@
+{% autoescape off %}
+<p>Bonjour!</p>
+<p>Voici tous les nouvelles parues chez EasyWod cette semaine :</p>
+<ul>
+{% for article  in article_list %}
+    <li><a href="{{ protocol }}://{{ domain }}{% url 'blog:article_detail' article.id %}">"<b>{{ article.title}}</b>" posté le {{ article.publication_date}} par {{ article.author}}</href></li>
+{% endfor %}
+</ul>
+<p>Pour lancer le processus de réinitialisation du mot de passe de votre compte, cliquez sur le lien ci-dessous.</p>
+<br>
+<p>A bientôt !</p>
+<p>L'équipe Easy Wod</p>
+<br><br>
+<p><a href="{{ protocol }}://{{ domain }}{% url 'newsletter:unsubscribe' uidb64=user_id%}">Se désinscrire</a></p>
+{% endautoescape %}
