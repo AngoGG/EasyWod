@@ -1,3 +1,4 @@
+from django.core import mail
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.query import QuerySet
@@ -57,6 +58,10 @@ class TestRegistrationView(TestCase):
 
         # Check if the User subscription is active
         assert UserMembership.objects.filter(user=user_created, active=True).exists()
+
+        # Check if mail if sent
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].subject, f"Activation de votre compte EasyWod.")
 
     def test_register_post_no_captcha(self):
         client: Client = Client(HTTP_HOST="localhost")
