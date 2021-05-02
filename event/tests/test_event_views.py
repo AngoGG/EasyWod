@@ -131,6 +131,8 @@ class TestAddEvent(TestCase):
                 "slot": ["1"],
                 "start_time": ["15:00"],
                 "end_time": ["16:00"],
+                "period": ["2"],
+                "frequency": ["daily"],
             },
         )
 
@@ -192,6 +194,60 @@ class TestAddEvent(TestCase):
             },
         )
         assert Event.objects.count() == 14
+
+        assert response.status_code == 302  # Testing redirection
+
+    def test_weekly_event(self):
+        # Test send Daily starting today with 7 days
+        # Query Event should return 7 events with same hour
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.post(
+            "/event/add_event",
+            {
+                "name": ["WOD"],
+                "date": ["2021-02-20"],
+                "slot": ["1"],
+                "start_time": ["15:00"],
+                "end_time": ["16:00"],
+                "period": ["1"],
+                "frequency": ["weekly"],
+            },
+        )
+        assert Event.objects.count() == 1
+
+        Event.objects.all().delete()
+
+        response: HttpResponse = client.post(
+            "/event/add_event",
+            {
+                "name": ["WOD"],
+                "date": ["2021-02-20"],
+                "slot": ["1"],
+                "start_time": ["15:00"],
+                "end_time": ["16:00"],
+                "period": ["5"],
+                "frequency": ["weekly"],
+            },
+        )
+        assert Event.objects.count() == 5
 
         assert response.status_code == 302  # Testing redirection
 
