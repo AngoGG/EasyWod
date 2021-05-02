@@ -102,6 +102,12 @@ class TestLoginView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         response: HttpResponse = client.post(
             "/user/login",
@@ -169,6 +175,12 @@ class TestUserPasswordChangeView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
         response: HttpResponse = client.post(
@@ -192,6 +204,12 @@ class TestUserPasswordChangeView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
         response: HttpResponse = client.post(
@@ -217,6 +235,13 @@ class TestUserUpdateView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
         user: QuerySet = User.objects.first()
@@ -240,6 +265,13 @@ class TestUserUpdateView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
@@ -256,6 +288,13 @@ class TestUserUpdateView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
         user: QuerySet = User.objects.first()
@@ -306,6 +345,13 @@ class TestChangeProfilePictureView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
@@ -343,6 +389,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -360,6 +407,11 @@ class TestMemberListView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         client.login(username="matt-fraser@gmail.com", password="password8chars")
         response = client.get("/user/member_list")
         assert response.status_code == 403  # Testing redirection
@@ -378,6 +430,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -419,6 +472,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -452,6 +506,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         searched_user = User.objects.create_user(
@@ -502,6 +557,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         searched_user = User.objects.create_user(
@@ -552,6 +608,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -603,6 +660,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -655,6 +713,7 @@ class TestMemberListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         searched_user = User.objects.create_user(
