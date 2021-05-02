@@ -70,6 +70,12 @@ class TestAddEvent(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
@@ -89,6 +95,7 @@ class TestAddEvent(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         client: Client = Client()
@@ -110,6 +117,7 @@ class TestAddEvent(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         client: Client = Client()
@@ -143,6 +151,11 @@ class TestRegisterForEvent(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
 
@@ -212,6 +225,12 @@ class TestUserRegistrations(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
 
