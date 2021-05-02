@@ -70,7 +70,7 @@ class AddEvent(UserPassesTestMixin, View):
         print(f'REQUEST : {request.POST}')
         name = request.POST.get("name", None)
         date = request.POST.get("date", None)
-        slot = request.POST.get("slot", None)
+        slot = request.POST.get("slot", 5)
         start_time = request.POST.get("start_time", None)
         end_time = request.POST.get("end_time", None)
 
@@ -81,7 +81,6 @@ class AddEvent(UserPassesTestMixin, View):
         end_object = datetime.strptime(end, "%Y-%m-%d %H:%M")
 
         # frequency calcul
-        period = int(request.POST.get("period", 1))
 
         if request.POST.get("frequency", None) == 'daily':
             frequency = 7
@@ -90,6 +89,7 @@ class AddEvent(UserPassesTestMixin, View):
         else:
             frequency = False
         if frequency:
+            period = int(request.POST.get("period", "1"))
             for week in range(period):
                 for day in range(frequency):
                     event = Event(
