@@ -20,6 +20,7 @@ requests = "*"
 mypy = "*"
 flake8 = "*"
 pillow = "*"
+six = "*"
 
 [requires]
 python_version = "3.8"
