@@ -141,6 +141,45 @@ class TestAddEvent(TestCase):
 
         assert response.status_code == 302  # Testing redirection
 
+    def test_daily_event(self):
+        # Test send Daily starting today with 7 days
+        # Query Event should return 7 events with same hour
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.post(
+            "/event/add_event",
+            {
+                "name": ["WOD"],
+                "date": ["2021-02-20"],
+                "slot": ["1"],
+                "start_time": ["15:00"],
+                "end_time": ["16:00"],
+                "period": ["week"],
+                "frequency": ["daily"],
+            },
+        )
+
+        assert Event.objects.count() == 7
+
+        assert response.status_code == 302  # Testing redirection
+
 
 class TestRegisterForEvent(TestCase):
     def test_register(self):
