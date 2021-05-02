@@ -131,6 +131,7 @@ class TestContactMessageListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -148,6 +149,10 @@ class TestContactMessageListView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
         response = client.get("/contact/messages_list")
         assert response.status_code == 403  # Testing redirection
@@ -173,6 +178,7 @@ class TestContactMessageListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -211,6 +217,7 @@ class TestContactMessageListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
@@ -248,6 +255,7 @@ class TestContactMessageListView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user = User.objects.first()
