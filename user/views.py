@@ -312,7 +312,7 @@ class MemberListView(UserPassesTestMixin, ListView):
 
 
 class ChangeProfilePictureView(View):
-    def get(self, request: HttpRequest) -> HttpResponse:
+    def post(self, request: HttpRequest) -> HttpResponse:
         user = User.objects.get(pk=request.POST['user_id'])
         user.profile_picture = request.FILES['file']
         user.save()
