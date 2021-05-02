@@ -26,6 +26,7 @@ class TestAddArticleView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
@@ -53,6 +54,11 @@ class TestAddArticleView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
 
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
@@ -71,6 +77,13 @@ class TestAddArticleView(TestCase):
         )
 
         user_created: QuerySet = User.objects.first()  # type: ignore
+
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 
@@ -98,6 +111,7 @@ class TestArticleView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
@@ -130,9 +144,15 @@ class TestUpdateArticleView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
 
         Article.objects.create(
             title="title", author=user_created, body="body",
@@ -164,6 +184,12 @@ class TestUpdateArticleView(TestCase):
             date_of_birth="1997-4-10",
         )
 
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         user_created: QuerySet = User.objects.first()  # type: ignore
         Article.objects.create(
             title="title", author=user_created, body="body",
@@ -186,6 +212,12 @@ class TestUpdateArticleView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
 
@@ -223,6 +255,7 @@ class TestDeleteArticleView(TestCase):
         users = User.objects.filter(email="matt-fraser@gmail.com")
         for user in users:
             user.type = "EMPLOYEE"
+            user.is_active = True
             user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
@@ -252,6 +285,12 @@ class TestDeleteArticleView(TestCase):
             date_of_birth="1997-4-10",
         )
 
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
         user_created: QuerySet = User.objects.first()  # type: ignore
         Article.objects.create(
             title="title", author=user_created, body="body",
@@ -276,6 +315,12 @@ class TestDeleteArticleView(TestCase):
             last_name="Fraser",
             date_of_birth="1997-4-10",
         )
+
+        # Account Activation
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
 
         user_created: QuerySet = User.objects.first()  # type: ignore
 
