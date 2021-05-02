@@ -76,7 +76,7 @@ class RegistrationView(FormView):
                         'token': account_activation_token.make_token(user),
                     },
                 )
-                email = EmailMessage(mail_subject, message, to=[email)
+                email = EmailMessage(mail_subject, message, to=[email])
                 email.send()
 
                 messages.success(
