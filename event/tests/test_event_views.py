@@ -171,12 +171,27 @@ class TestAddEvent(TestCase):
                 "slot": ["1"],
                 "start_time": ["15:00"],
                 "end_time": ["16:00"],
-                "period": ["week"],
+                "period": ["1"],
                 "frequency": ["daily"],
             },
         )
-
         assert Event.objects.count() == 7
+
+        Event.objects.all().delete()
+
+        response: HttpResponse = client.post(
+            "/event/add_event",
+            {
+                "name": ["WOD"],
+                "date": ["2021-02-20"],
+                "slot": ["1"],
+                "start_time": ["15:00"],
+                "end_time": ["16:00"],
+                "period": ["2"],
+                "frequency": ["daily"],
+            },
+        )
+        assert Event.objects.count() == 14
 
         assert response.status_code == 302  # Testing redirection
 
