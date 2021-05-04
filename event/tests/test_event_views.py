@@ -372,6 +372,16 @@ class TestUnsubscribeFromEvent(TestCase):
 
         user_created: QuerySet = User.objects.first()  # type: ignore
 
+        Membership.objects.create(membership_type="TRIAL")
+        free_membership = Membership.objects.get(membership_type='TRIAL')
+
+        user_created: QuerySet = User.objects.first()  # type: ignore
+
+        user_membership = UserMembership.objects.create(
+            user=user_created, membership=free_membership, remaining_trial_courses=1
+        )
+        user_membership.save()
+
         Event.objects.create(
             name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
         )
@@ -388,6 +398,9 @@ class TestUnsubscribeFromEvent(TestCase):
             {"user": user_created.pk, "event": event_created.pk,},
         )
 
+        user_membership = UserMembership.objects.get(user=user_created)
+
+        assert user_membership.remaining_trial_courses == 2
         assert (
             event_created.eventmember_set.filter(user_id=user_created.pk).exists()
             is True
