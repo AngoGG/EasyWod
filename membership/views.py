@@ -79,22 +79,3 @@ class ReactivateMemberShipView(UpdateView):
         )
         return redirect("/")
 
-
-class CreateUserTrialMembership(View):
-    def get(self, request, *args, **kwargs):
-        print(f'REQUEST CREATE MEMBERSHIP : {kwargs["uid"]}')
-        user = User.objects.get(id=kwargs['uid'])
-
-        free_membership = Membership.objects.get(membership_type='TRIAL')
-        # Creating a new UserMembership
-        user_membership = UserMembership.objects.create(
-            user=user,
-            membership=free_membership,
-            remaining_trial_courses=free_membership.trial_courses,
-        )
-        user_membership.save()
-        # create usermembership
-        # return json response
-
-        return JsonResponse({'user_membership_status': 'created'})
-
