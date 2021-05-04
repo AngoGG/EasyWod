@@ -1,3 +1,4 @@
+from django.utils import timezone
 from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
 
@@ -51,4 +52,16 @@ def get_trial_to_deactivate():
 
 
 def get_previous_day_ended_trial():
-    pass
+    previous_day = timezone.now() - timezone.timedelta(1)
+    user_memberships = UserMembership.objects.filter(
+        membership__membership_type="TRIAL",
+        active=False,
+        unsubscription_date__year=previous_day.year,
+        unsubscription_date__month=previous_day.month,
+        unsubscription_date__day=previous_day.day,
+    )
+
+    user_email_list = []
+    for previous_day_ended_trials in user_memberships:
+        user_email_list.append(previous_day_ended_trials.user.email)
+    return user_email_list
