@@ -68,14 +68,20 @@ class ReactivateMemberShipView(UpdateView):
     def post(self, request, *args, **kwargs):
 
         user_membership = UserMembership.objects.get(user=self.request.POST['member'])
-
         user_membership.active = True
-        user_membership.unsubscription_date = timezone.now()
+        user_membership.unsubscription_date = None
 
+        if user_membership.membership.membership_type == "PREMIUM":
+            messages.success(
+                request, f"L'abonnement de l'utilisateur a bien été réactivé",
+            )
+        else:
+            user_membership.remaining_trial_courses = 3
+            messages.success(
+                request,
+                f"L'abonnement de l'utilisateur avec {user_membership.remaining_trial_courses} cours supplémentaires.",
+            )
         user_membership.save()
 
-        messages.success(
-            request, "L'abonnement de l'utilisateur a bien été réactivé",
-        )
         return redirect("/")
 
