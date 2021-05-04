@@ -3,6 +3,7 @@ from django.test import TestCase
 from user.models import User
 from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
+from django.utils import timezone
 
 
 class TestMembershipQueries(TestCase):
@@ -85,4 +86,47 @@ class TestMembershipQueries(TestCase):
         assert user_membership_2 not in trials_to_deactivate
 
     def test_get_ending_trial_membership(self) -> None:
-        pass
+        Membership.objects.create(membership_type="TRIAL")
+        trial_membership = Membership.objects.get(membership_type='TRIAL')
+
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        user = User.objects.get(email="matt-fraser@gmail.com")
+        user.is_active = True
+        user.save()
+
+        user_2 = User.objects.create_user(
+            email="haley-adams@gmail.com",
+            password="password8chars",
+            first_name="Haley",
+            last_name="Adams",
+            date_of_birth="1997-4-10",
+        )
+
+        # Creating a new UserMembership
+        user_membership = UserMembership.objects.create(
+            user=user,
+            membership=trial_membership,
+            active=False,
+            unsusbcription_date=timezone.now() - timezone.timedelta(1),
+        )
+        user_membership.save()
+
+        user_membership_2 = UserMembership.objects.create(
+            user=user_2,
+            membership=trial_membership,
+            active=False,
+            unsusbcription_date=timezone.now() - timezone.timedelta(6),
+        )
+        user_membership_2.save()
+
+        previous_day_ended_trials = membership_queries.get_previous_day_ended_trial()
+
+        assert user_membership.email in previous_day_ended_trials
+        assert user_membership_2.email not in previous_day_ended_trials

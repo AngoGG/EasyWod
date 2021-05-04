@@ -48,3 +48,7 @@ def get_trial_to_deactivate():
     for user_membership in user_memberships:
         user_email_list.append(user_membership)
     return user_email_list
+
+
+def get_previous_day_ended_trial():
+    pass
