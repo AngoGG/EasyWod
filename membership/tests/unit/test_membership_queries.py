@@ -1,9 +1,9 @@
 from django.test import TestCase
+from django.utils import timezone
 
 from user.models import User
 from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
-from django.utils import timezone
 
 
 class TestMembershipQueries(TestCase):
@@ -114,7 +114,7 @@ class TestMembershipQueries(TestCase):
             user=user,
             membership=trial_membership,
             active=False,
-            unsusbcription_date=timezone.now() - timezone.timedelta(1),
+            unsubscription_date=timezone.now() - timezone.timedelta(1),
         )
         user_membership.save()
 
@@ -122,11 +122,11 @@ class TestMembershipQueries(TestCase):
             user=user_2,
             membership=trial_membership,
             active=False,
-            unsusbcription_date=timezone.now() - timezone.timedelta(6),
+            unsubscription_date=timezone.now() - timezone.timedelta(6),
         )
         user_membership_2.save()
 
         previous_day_ended_trials = membership_queries.get_previous_day_ended_trial()
 
-        assert user_membership.email in previous_day_ended_trials
-        assert user_membership_2.email not in previous_day_ended_trials
+        assert user.email in previous_day_ended_trials
+        assert user_2.email not in previous_day_ended_trials
