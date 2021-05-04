@@ -160,7 +160,7 @@ class TestMembershipView(TestCase):
 
 
 class TestUserMembershipView(TestCase):
-    def test_create_user_membership(self) -> None:
+    def test_create_user_trial_membership(self) -> None:
         """Test if we can access a user membership page
         """
         Membership.objects.create(membership_type="TRIAL")
