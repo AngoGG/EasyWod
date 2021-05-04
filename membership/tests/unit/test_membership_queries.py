@@ -47,7 +47,7 @@ class TestMembershipQueries(TestCase):
 
     def test_get_trial_to_deactivate(self) -> None:
         Membership.objects.create(membership_type="TRIAL")
-        premium_membership = Membership.objects.get(membership_type='TRIAL')
+        trial_membership = Membership.objects.get(membership_type='TRIAL')
 
         User.objects.create_user(
             email="matt-fraser@gmail.com",
@@ -71,13 +71,18 @@ class TestMembershipQueries(TestCase):
 
         # Creating a new UserMembership
         user_membership = UserMembership.objects.create(
-            user=user, membership=premium_membership, remaining_trial_courses=0
+            user=user, membership=trial_membership, remaining_trial_courses=0
         )
         user_membership.save()
 
+        user_membership_2 = UserMembership.objects.create(
+            user=user_2, membership=trial_membership, remaining_trial_courses=3
+        )
+        user_membership_2.save()
+
         trials_to_deactivate = membership_queries.get_trial_to_deactivate()
-        assert "matt-fraser@gmail.com" in trials_to_deactivate
-        assert "haley-adams@gmail.com" not in trials_to_deactivate
+        assert user_membership in trials_to_deactivate
+        assert user_membership_2 not in trials_to_deactivate
 
     def test_get_ending_trial_membership(self) -> None:
         pass
