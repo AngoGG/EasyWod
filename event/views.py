@@ -24,20 +24,17 @@ class CalendarView(ListView):
             )
             # If User if on trial memberbership, get his trial remaining events and the events in which he participated
             if user_membership == "TRIAL":
-                user_events = EventMember.objects.filter(
-                    user=self.request.user, date_cancellation__isnull=True
-                ).count()
+
                 user_remaining_courses = (
-                    Membership.objects.get(membership_type="TRIAL").trial_courses
-                    - user_events
+                    self.request.user.user_membership.remaining_trial_courses
                 )
+
                 return render(
                     request,
                     "event/event_calendar.html",
                     {
                         "events": event_list,
                         "time": time,
-                        "user_events": user_events,
                         "user_remaining_courses": user_remaining_courses,
                     },
                 )
