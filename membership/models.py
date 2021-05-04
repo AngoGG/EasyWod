@@ -38,6 +38,9 @@ class UserMembership(models.Model):
     membership: Membership = models.ForeignKey(
         Membership, related_name='user_membership', on_delete=models.SET_NULL, null=True
     )
+    remaining_trial_courses = models.IntegerField(
+        verbose_name=_("Nombre de cours d'essai restants"), blank=True, null=True,
+    )
     active: models.BooleanField = models.BooleanField(default=True)
     subscribtion_date: models.DateTimeField = models.DateTimeField(
         verbose_name=_("Date d'abonnement"), null=True
