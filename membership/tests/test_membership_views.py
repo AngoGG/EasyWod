@@ -1,3 +1,5 @@
+import json
+
 from datetime import datetime
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
@@ -154,4 +156,4 @@ class TestMembershipView(TestCase):
         user_modified: QuerySet = User.objects.first()  # type: ignore
         # Check if the User has a correct TRIAL membership
         self.assertEqual(True, user_modified.user_membership.active)
-        self.assertIsNotNone(user_modified.user_membership.unsubscription_date)
+        self.assertIsNone(user_modified.user_membership.unsubscription_date)

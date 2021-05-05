@@ -18,7 +18,7 @@ from django.views.generic import DetailView, FormView, ListView, View, UpdateVie
 from .forms import ConnectionForm, RegisterForm
 from .models import User
 from .tokens import account_activation_token
-from membership.libs import membership_queries
+from membership.libs import membership_queries, user_membership_management
 from membership.models import Membership, UserMembership
 import requests
 import config.settings as Settings
@@ -49,8 +49,6 @@ class RegistrationView(FormView):
                 last_name: str = request.POST.get("last_name")
                 date_of_birth = f'{request.POST.get("date_of_birth_year")}-{request.POST.get("date_of_birth_month")}-{request.POST.get("date_of_birth_day")}'
 
-                free_membership = Membership.objects.get(membership_type='TRIAL')
-
                 user: User = User.objects.create_user(
                     email=email,
                     password=password,
@@ -58,12 +56,11 @@ class RegistrationView(FormView):
                     last_name=last_name,
                     date_of_birth=date_of_birth,
                 )
+                user_created = User.objects.first()
 
-                # Creating a new UserMembership
-                user_membership = UserMembership.objects.create(
-                    user=user, membership=free_membership
+                user_membership = user_membership_management.create_user_trial_membership(
+                    user_created.id
                 )
-                user_membership.save()
 
                 current_site = get_current_site(request)
                 mail_subject = 'Activation de votre compte EasyWod.'

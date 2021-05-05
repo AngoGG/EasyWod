@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.test import Client, TestCase
 from django.utils import timezone
 from event.models import Event, EventMember
+from membership.models import Membership, UserMembership
 from user.models import User
 
 
@@ -326,7 +327,15 @@ class TestRegisterForEvent(TestCase):
             user.is_active = True
             user.save()
 
+        Membership.objects.create(membership_type="TRIAL")
+        free_membership = Membership.objects.get(membership_type='TRIAL')
+
         user_created: QuerySet = User.objects.first()  # type: ignore
+
+        user_membership = UserMembership.objects.create(
+            user=user_created, membership=free_membership, remaining_trial_courses=2
+        )
+        user_membership.save()
 
         Event.objects.create(
             name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
@@ -344,7 +353,9 @@ class TestRegisterForEvent(TestCase):
 
         event = Event.objects.first()
         user = User.objects.first()
+        user_membership = UserMembership.objects.get(user=user_created)
 
+        assert user_membership.remaining_trial_courses == 1
         assert event.eventmember_set.filter(user_id=user.pk).exists()
         assert response.status_code == 302  # Testing redirection
 
@@ -360,6 +371,16 @@ class TestUnsubscribeFromEvent(TestCase):
         )
 
         user_created: QuerySet = User.objects.first()  # type: ignore
+
+        Membership.objects.create(membership_type="TRIAL")
+        free_membership = Membership.objects.get(membership_type='TRIAL')
+
+        user_created: QuerySet = User.objects.first()  # type: ignore
+
+        user_membership = UserMembership.objects.create(
+            user=user_created, membership=free_membership, remaining_trial_courses=1
+        )
+        user_membership.save()
 
         Event.objects.create(
             name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
@@ -377,6 +398,9 @@ class TestUnsubscribeFromEvent(TestCase):
             {"user": user_created.pk, "event": event_created.pk,},
         )
 
+        user_membership = UserMembership.objects.get(user=user_created)
+
+        assert user_membership.remaining_trial_courses == 2
         assert (
             event_created.eventmember_set.filter(user_id=user_created.pk).exists()
             is True

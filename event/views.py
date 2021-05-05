@@ -9,7 +9,7 @@ from django.views.generic.edit import FormMixin
 from .models import Event, EventMember
 from .forms import AddEventMemberForm, EventForm
 from user.models import User
-from membership.models import Membership
+from membership.models import Membership, UserMembership
 
 
 class CalendarView(ListView):
@@ -24,20 +24,17 @@ class CalendarView(ListView):
             )
             # If User if on trial memberbership, get his trial remaining events and the events in which he participated
             if user_membership == "TRIAL":
-                user_events = EventMember.objects.filter(
-                    user=self.request.user, date_cancellation__isnull=True
-                ).count()
+
                 user_remaining_courses = (
-                    Membership.objects.get(membership_type="TRIAL").trial_courses
-                    - user_events
+                    self.request.user.user_membership.remaining_trial_courses
                 )
+
                 return render(
                     request,
                     "event/event_calendar.html",
                     {
                         "events": event_list,
                         "time": time,
-                        "user_events": user_events,
                         "user_remaining_courses": user_remaining_courses,
                     },
                 )
@@ -195,6 +192,10 @@ class RegisterForEvent(View):
         event = Event.objects.get(pk=event_id)
         user = User.objects.get(pk=user_id)
 
+        user_membership = UserMembership.objects.get(user=user)
+        user_membership.remaining_trial_courses -= 1
+        user_membership.save()
+
         inscription = EventMember(event=event, user=user)
         inscription.save()
 
@@ -211,8 +212,11 @@ class UnsubscribeFromEvent(View):
         user_id = request.POST.get("user", None)
 
         event = Event.objects.get(pk=event_id)
-
         user = User.objects.get(pk=user_id)
+
+        user_membership = UserMembership.objects.get(user=user)
+        user_membership.remaining_trial_courses += 1
+        user_membership.save()
 
         inscription = EventMember.objects.get(event=event, user=user)
         inscription.date_cancellation = datetime.now()
