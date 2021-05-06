@@ -68,7 +68,7 @@ class RegistrationView(FormView):
                     'user/acc_active_email.html',
                     {
                         'user': user,
-                        'domain': current_site.domain,
+                        'domain': Settings.SITE_DOMAIN,
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                         'token': account_activation_token.make_token(user),
                     },
