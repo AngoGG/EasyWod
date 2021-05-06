@@ -106,7 +106,7 @@ class PasswordResetView(View):
                 email_template_name: str = "website/reset_password_email.txt"
                 c: dict = {
                     "email": user.email,
-                    "domain": request.META["HTTP_HOST"],
+                    "domain": Settings.SITE_DOMAIN,
                     "site_name": "EasyWod",
                     "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                     "user": user,

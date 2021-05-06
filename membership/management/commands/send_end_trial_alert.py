@@ -31,7 +31,7 @@ class Command(BaseCommand):
 
         c: dict = {
             "protocol": "https",
-            "domain": "easywod.angogg.com",
+            "domain": Settings.SITE_DOMAIN,
         }
 
         for user in user_list:

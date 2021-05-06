@@ -72,7 +72,7 @@ class Command(BaseCommand):
             c: dict = {
                 "article_list": article_list,
                 "protocol": "https",
-                "domain": "easywod.angogg.com",
+                "domain": Settings.SITE_DOMAIN,
                 "user_id": urlsafe_base64_encode(force_bytes(subscriber_info["id"])),
             }
             email: str = render_to_string(email_template_name, c)

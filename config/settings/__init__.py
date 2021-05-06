@@ -168,3 +168,5 @@ MESSAGE_TAGS = {
 
 RECAPTCHA_PUBLIC_KEY = str(os.environ.get("RECAPTCHA_PUBLIC_KEY"))
 RECAPTCHA_PRIVATE_KEY = str(os.environ.get("RECAPTCHA_PRIVATE_KEY"))
+
+SITE_DOMAIN = str(os.environ.get("SITE_DOMAIN"))
