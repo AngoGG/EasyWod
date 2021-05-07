@@ -314,9 +314,19 @@ class ChangeProfilePictureView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         user = User.objects.get(pk=request.POST['user_id'])
         user.profile_picture = request.FILES['file']
-        user.save()
-        messages.success(
-            self.request, "La photo de profil a bien été changée.",
-        )
+        if request.FILES['file'].content_type not in [
+            'image/png',
+            'image/jpeg',
+            'image/jpg',
+        ]:
+            messages.error(
+                self.request,
+                "Votre photo de profile doit être au format png, jpeg ou jpg, veuillez rééssayer.",
+            )
+        else:
+            user.save()
+            messages.success(
+                self.request, "La photo de profil a bien été changée.",
+            )
         return redirect('/user/profile')
 
