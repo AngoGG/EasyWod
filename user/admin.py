@@ -73,6 +73,7 @@ class UserAdmin(BaseUserAdmin):
         "date_joined",
         "type",
         "is_admin",
+        "is_active",
     )
     list_filter = ("is_admin",)
     fieldsets = (
@@ -82,7 +83,7 @@ class UserAdmin(BaseUserAdmin):
             {"fields": ("first_name", "last_name", "date_of_birth", "profile_picture")},
         ),
         ("Type d'utilisateurs", {"fields": ("type",)}),
-        ("Permissions", {"fields": ("is_admin",)}),
+        ("Permissions", {"fields": ("is_admin", "is_active",)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
