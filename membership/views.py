@@ -1,4 +1,5 @@
 from django.contrib import messages  # import messages
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -8,7 +9,12 @@ from membership.models import Membership, UserMembership
 from user.models import User
 
 
-class UserMembershipView(DetailView):
+class UserMembershipView(UserPassesTestMixin, DetailView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     model = User
     template_name = 'membership/list.html'
     context_object_name = "member"
@@ -27,7 +33,12 @@ class UserMembershipView(DetailView):
         return context
 
 
-class UpdateMemberShipView(UpdateView):
+class UpdateMemberShipView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     def post(self, request, *args, **kwargs):
 
         selected_membership = Membership.objects.get(
@@ -48,7 +59,12 @@ class UpdateMemberShipView(UpdateView):
         return redirect("/")
 
 
-class DeactivateMemberShipView(UpdateView):
+class DeactivateMemberShipView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     def post(self, request, *args, **kwargs):
 
         user_membership = UserMembership.objects.get(user=self.request.POST['member'])
@@ -64,7 +80,12 @@ class DeactivateMemberShipView(UpdateView):
         return redirect("/")
 
 
-class ReactivateMemberShipView(UpdateView):
+class ReactivateMemberShipView(UserPassesTestMixin, UpdateView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     def post(self, request, *args, **kwargs):
 
         user_membership = UserMembership.objects.get(user=self.request.POST['member'])
