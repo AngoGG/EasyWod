@@ -381,6 +381,67 @@ class TestChangeProfilePictureView(TestCase):
         os.remove(profile_picture_path)
 
 
+class MemberDetailView(TestCase):
+    def test_access_other_member_detail_employee(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        User.objects.create_user(
+            email="jocelaing@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
+        other_user = User.objects.get(email="jocelaing@gmail.com")
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response: HttpResponse = client.get(f"/user/detail/{other_user.id}",)
+        assert response.status_code == 403  # Testing redirection
+
+    def test_access_other_member_detail_not_employee(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        User.objects.create_user(
+            email="jocelaing@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
+        other_user = User.objects.get(email="jocelaing@gmail.com")
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response: HttpResponse = client.get(f"/user/detail/{other_user.id}",)
+        assert response.status_code == 200  # Testing redirection
+
+
 class TestMemberListView(TestCase):
     def test_access_page(self):
         client: Client = Client(HTTP_HOST="localhost")

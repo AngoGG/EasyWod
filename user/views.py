@@ -188,7 +188,12 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('user:profile')
 
 
-class MemberDetailView(DetailView):
+class MemberDetailView(UserPassesTestMixin, DetailView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     model = User
     context_object_name = "member"
     template_name = "user/member_detail.html"
@@ -202,10 +207,7 @@ class MemberDetailView(DetailView):
 class MemberUpdateView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     model = User
@@ -252,10 +254,7 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
 class MemberListView(UserPassesTestMixin, ListView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     paginate_by = 10  # if pagination is desired
