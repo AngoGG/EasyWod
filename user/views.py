@@ -3,7 +3,6 @@ import datetime
 from django import forms
 from django.contrib import messages  # import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -15,7 +14,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import DetailView, FormView, ListView, View, UpdateView
-from .forms import ConnectionForm, RegisterForm
+from .forms import ConnectionForm, RegisterForm, UpdatePasswordForm
 from .models import User
 from .tokens import account_activation_token
 from membership.libs import membership_queries, user_membership_management
@@ -236,17 +235,20 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
         return render(
             request,
             "user/change_password.html",
-            {"form": PasswordChangeForm(user=request.user)},
+            {"form": UpdatePasswordForm(user=request.user)},
         )
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        form: PasswordChangeForm = PasswordChangeForm(
+        form: UpdatePasswordForm = UpdatePasswordForm(
             data=request.POST, user=request.user
         )
 
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
+            messages.success(
+                self.request, "Votre mot de passe a bien été modifié.",
+            )
             return render(request, "user/profile.html")
         return render(request, "user/change_password.html", locals())
 
