@@ -80,6 +80,35 @@ class TestContactMessageView(TestCase):
         assert response.status_code == 200  # Testing redirection
         assert response.template_name == ["contact_us/message_detail.html"]
 
+    def test_contact_message_access_forbidden(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
+        user = User.objects.first()
+
+        client: Client = Client(HTTP_HOST="localhost")
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        ContactMessage.objects.create(
+            name="User",
+            email="user@gmail.com",
+            subject="Sujet important OK",
+            message="Test",
+        )
+        message = ContactMessage.objects.first()
+
+        response = client.get(f"/contact/message/{message.id}")
+        assert response.status_code == 403  # Testing redirection
+
 
 class TestAnswerContactMessageView(TestCase):
     def test_send_answer_email(self):
