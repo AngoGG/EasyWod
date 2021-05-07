@@ -4,6 +4,7 @@ from .models import User
 from datetime import date
 
 YEARS = [x for x in range(1900, date.today().year + 1)]
+YEARS.sort(reverse=True)
 
 
 class RegisterForm(UserCreationForm):
