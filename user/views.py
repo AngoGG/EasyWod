@@ -69,6 +69,7 @@ class RegistrationView(FormView):
                     {
                         'user': user,
                         'domain': Settings.SITE_DOMAIN,
+                        'protocol': 'https',
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                         'token': account_activation_token.make_token(user),
                     },
