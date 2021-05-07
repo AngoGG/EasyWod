@@ -56,7 +56,7 @@ class RegistrationView(FormView):
                     last_name=last_name,
                     date_of_birth=date_of_birth,
                 )
-                user_created = User.objects.first()
+                user_created = User.objects.get(email=email)
 
                 user_membership = user_membership_management.create_user_trial_membership(
                     user_created.id
