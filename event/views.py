@@ -53,10 +53,7 @@ class CalendarView(ListView):
 class AddEvent(UserPassesTestMixin, View):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     def get(self, request: HttpRequest) -> HttpResponse:
