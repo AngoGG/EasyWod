@@ -68,7 +68,12 @@ class ContactView(View):
             )
 
 
-class ContactMessageView(DetailView):
+class ContactMessageView(UserPassesTestMixin, DetailView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     model = ContactMessage
     template_name = "contact_us/message_detail.html"
 

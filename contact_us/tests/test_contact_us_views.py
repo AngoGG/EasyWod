@@ -50,20 +50,29 @@ class TestContactView(TestCase):
 
 class TestContactMessageView(TestCase):
     def test_contact_message_access(self):
-        # First we have to create a contact message
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
+        user = User.objects.first()
+
         client: Client = Client(HTTP_HOST="localhost")
-        # Setting up Captcha setting keys
-        Settings.RECAPTCHA_PRIVATE_KEY = "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
-        repatcha_test_public_key = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-        response = client.post(
-            "/contact/",
-            {
-                'name': ['User'],
-                'email': ['user@gmail.com'],
-                'subject': ['Sujet important OK'],
-                'message': ['Test'],
-                'g-recaptcha-response': [repatcha_test_public_key],
-            },
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        ContactMessage.objects.create(
+            name="User",
+            email="user@gmail.com",
+            subject="Sujet important OK",
+            message="Test",
         )
         message = ContactMessage.objects.first()
 
