@@ -1,3 +1,4 @@
+from datetime import timedelta
 import json
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
@@ -48,7 +49,6 @@ class TestEventView(TestCase):
 
         client: Client = Client()
         response: HttpResponse = client.get(f"/event/{event_created.pk}",)
-
         assert response.status_code == 200  # Testing redirection
 
 
@@ -428,7 +428,10 @@ class TestUserRegistrations(TestCase):
         user_created: QuerySet = User.objects.first()  # type: ignore
 
         Event.objects.create(
-            name="WOD", start=timezone.now(), end=timezone.now(), slot="1"
+            name="WOD",
+            start=timezone.now() + timedelta(days=2),
+            end=timezone.now() + timedelta(days=2),
+            slot="1",
         )
 
         event_created: QuerySet = Event.objects.first()
@@ -440,8 +443,7 @@ class TestUserRegistrations(TestCase):
 
         response: HttpResponse = client.get("/event/user_registrations",)
 
-        self.assertEqual(
-            json.loads(response.content),
-            {"events": [{"name": "WOD", "id": event_created.pk}]},
-        )
+        assert len(response.context["registrations_list"]) == 1
+        assert event_created in response.context["registrations_list"]
+        assert response.status_code == 200
 

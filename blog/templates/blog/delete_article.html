@@ -1,8 +1,37 @@
-<h1>Supprimer l'article</h1>
-<h3>Supprimer {{ article.title }}</h3>
+{% extends "website/base.html" %}
+{% load static %}
+{% load tz %}
 
-<form method="POST">
-    {% csrf_token %}
-    <strong> Êtes-vous sûr de vouloir supprimer cet article?<br>
-    <button>Supprimer Article</button>
-</form>
+{% block title %}
+- Nos Cours {{ block.super }}
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section Begin -->
+<div class="blog-details-hero set-bg" data-setbg="{% static "img/classes-bg.jpg" %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 p-0 m-auto">
+                <div class="bh-text">
+                    <h3>Supprimer un article</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Hero Section End -->
+<div class="col-lg-12 d-flex justify-content-center">
+    <div class="contact-wrap col-lg-8 text-center" style="margin-top:25px;margin-bottom:25px;">
+        <form method="POST">
+            {% csrf_token %}
+            <strong> Êtes-vous sûr de vouloir supprimer cet article?<br><br>
+            <button class="primary-btn">Supprimer Article</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+

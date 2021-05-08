@@ -30,10 +30,7 @@ class ArticleView(DetailView):
 class AddArticleView(UserPassesTestMixin, CreateView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     model = Article
@@ -63,10 +60,7 @@ class AddArticleView(UserPassesTestMixin, CreateView):
 class UpdateArticleView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     model = Article
@@ -77,10 +71,7 @@ class UpdateArticleView(UserPassesTestMixin, UpdateView):
 class DeleteArticleView(UserPassesTestMixin, DeleteView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     model = Article

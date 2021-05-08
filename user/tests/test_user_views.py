@@ -364,7 +364,7 @@ class TestChangeProfilePictureView(TestCase):
 
         # set up form data
         avatar = self.create_image(None, 'avatar.png')
-        avatar_file = SimpleUploadedFile('front.png', avatar.getvalue())
+        avatar_file = SimpleUploadedFile('front.png', avatar.getvalue(), "image/png")
 
         response: HttpResponse = client.post(
             f"/user/change_profile_picture",
@@ -379,6 +379,101 @@ class TestChangeProfilePictureView(TestCase):
         assert response.status_code == 302  # Testing redirection
         assert updated_user.profile_picture.url == '/media/profile_pictures/front.png'
         os.remove(profile_picture_path)
+
+    def test_change_profile_picture_forbidden_type(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        user: QuerySet = User.objects.last()
+
+        # set up form data
+        avatar = self.create_image(None, 'avatar.png')
+        avatar_file = SimpleUploadedFile('front.png', avatar.getvalue(), ".pdf")
+
+        response: HttpResponse = client.post(
+            f"/user/change_profile_picture",
+            {"user_id": [user.id], "file": [avatar_file],},
+            format='multipart',
+        )
+        updated_user: QuerySet = User.objects.last()
+
+        assert response.status_code == 302  # Testing redirection
+        assert updated_user.profile_picture == ''
+
+
+class MemberDetailView(TestCase):
+    def test_access_other_member_detail_employee(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        User.objects.create_user(
+            email="jocelaing@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.save()
+
+        other_user = User.objects.get(email="jocelaing@gmail.com")
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response: HttpResponse = client.get(f"/user/detail/{other_user.id}",)
+        assert response.status_code == 403  # Testing redirection
+
+    def test_access_other_member_detail_not_employee(self):
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        User.objects.create_user(
+            email="jocelaing@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.type = "EMPLOYEE"
+            user.is_active = True
+            user.save()
+
+        other_user = User.objects.get(email="jocelaing@gmail.com")
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+        response: HttpResponse = client.get(f"/user/detail/{other_user.id}",)
+        assert response.status_code == 200  # Testing redirection
 
 
 class TestMemberListView(TestCase):

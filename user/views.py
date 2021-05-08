@@ -3,7 +3,6 @@ import datetime
 from django import forms
 from django.contrib import messages  # import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -15,7 +14,7 @@ from django.urls import reverse_lazy, reverse
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import DetailView, FormView, ListView, View, UpdateView
-from .forms import ConnectionForm, RegisterForm
+from .forms import ConnectionForm, RegisterForm, UpdatePasswordForm
 from .models import User
 from .tokens import account_activation_token
 from membership.libs import membership_queries, user_membership_management
@@ -188,7 +187,12 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('user:profile')
 
 
-class MemberDetailView(DetailView):
+class MemberDetailView(UserPassesTestMixin, DetailView):
+    def test_func(self):
+        return (
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
+        )
+
     model = User
     context_object_name = "member"
     template_name = "user/member_detail.html"
@@ -202,10 +206,7 @@ class MemberDetailView(DetailView):
 class MemberUpdateView(UserPassesTestMixin, UpdateView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     model = User
@@ -234,17 +235,20 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
         return render(
             request,
             "user/change_password.html",
-            {"form": PasswordChangeForm(user=request.user)},
+            {"form": UpdatePasswordForm(user=request.user)},
         )
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        form: PasswordChangeForm = PasswordChangeForm(
+        form: UpdatePasswordForm = UpdatePasswordForm(
             data=request.POST, user=request.user
         )
 
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
+            messages.success(
+                self.request, "Votre mot de passe a bien été modifié.",
+            )
             return render(request, "user/profile.html")
         return render(request, "user/change_password.html", locals())
 
@@ -252,10 +256,7 @@ class UserPasswordChangeView(LoginRequiredMixin, FormView):
 class MemberListView(UserPassesTestMixin, ListView):
     def test_func(self):
         return (
-            True
-            if self.request.user.is_authenticated
-            and self.request.user.type == "EMPLOYEE"
-            else False
+            self.request.user.is_authenticated and self.request.user.type == "EMPLOYEE"
         )
 
     paginate_by = 10  # if pagination is desired
@@ -266,13 +267,12 @@ class MemberListView(UserPassesTestMixin, ListView):
     def post(self, request):
         membership_type = request.POST.getlist('membership_type')
         membership_status = request.POST.getlist('membership_status')
-        if (
-            not request.POST['search']
-            and (len(membership_type) == 2 or len(membership_type) == 0)
-            and (len(membership_status) == 2 or len(membership_status) == 0)
-        ):
-            result = User.objects.all()
-        elif not request.POST['search']:
+
+        result = User.objects.filter(
+            Q(first_name=request.POST['search']) | Q(last_name=request.POST['search'])
+        )
+
+        if not result.exists():
             if len(membership_type) == 2 or len(membership_type) == 0:
                 if len(membership_status) == 1:
                     if membership_status[0] == 'active':
@@ -282,30 +282,15 @@ class MemberListView(UserPassesTestMixin, ListView):
                 else:
                     result = User.objects.all()
             else:
+                result = User.objects.filter(
+                    user_membership__membership__membership_type=request.POST[
+                        'membership_type'
+                    ].upper()
+                )
                 if len(membership_status) == 1:
-                    if membership_status[0] == 'active':
-                        result = User.objects.filter(
-                            user_membership__membership__membership_type=request.POST[
-                                'membership_type'
-                            ].upper()
-                        ).filter(user_membership__active=True)
-                    else:
-                        result = User.objects.filter(
-                            user_membership__membership__membership_type=request.POST[
-                                'membership_type'
-                            ].upper()
-                        ).filter(user_membership__active=False)
-                else:
-                    result = User.objects.filter(
-                        user_membership__membership__membership_type=request.POST[
-                            'membership_type'
-                        ].upper()
-                    )
-        else:
-            result = User.objects.filter(
-                Q(first_name=request.POST['search'])
-                | Q(last_name=request.POST['search'])
-            )
+                    is_active: bool = membership_status[0] == 'active'
+                    result = result.filter(user_membership__active=is_active)
+
         return render(request, 'user/member_list.html', {"object_list": result})
 
 
@@ -313,9 +298,19 @@ class ChangeProfilePictureView(View):
     def post(self, request: HttpRequest) -> HttpResponse:
         user = User.objects.get(pk=request.POST['user_id'])
         user.profile_picture = request.FILES['file']
-        user.save()
-        messages.success(
-            self.request, "La photo de profil a bien été changée.",
-        )
+        if request.FILES['file'].content_type not in [
+            'image/png',
+            'image/jpeg',
+            'image/jpg',
+        ]:
+            messages.error(
+                self.request,
+                "Votre photo de profile doit être au format png, jpeg ou jpg, veuillez rééssayer.",
+            )
+        else:
+            user.save()
+            messages.success(
+                self.request, "La photo de profil a bien été changée.",
+            )
         return redirect('/user/profile')
 
