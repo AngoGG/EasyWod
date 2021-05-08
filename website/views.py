@@ -22,6 +22,7 @@ from event.libs import event_queries
 from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
 from newsletter.forms import NewsletterSubscribeForm
+from newsletter.models import SubscribedUsers
 from user.models import User
 
 import requests
@@ -75,6 +76,12 @@ class HomeView(View):
             customers = User.objects.filter(type="CUSTOMER").count()
             all_week_events = event_queries.get_all_week_events()
             newsletter_form: NewsletterSubscribeForm = NewsletterSubscribeForm()
+            if request.user.is_authenticated:
+                user_subscribed_to_newsletter = SubscribedUsers.objects.filter(
+                    email=request.user.email
+                ).exists()
+            else:
+                user_subscribed_to_newsletter = False
             return render(
                 request,
                 "website/home.html",
@@ -83,6 +90,7 @@ class HomeView(View):
                     "customers": customers,
                     "all_week_events": all_week_events,
                     "newsletter_form": newsletter_form,
+                    "subscribed_newsletter": user_subscribed_to_newsletter,
                 },
             )
 

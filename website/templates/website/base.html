@@ -105,7 +105,9 @@
 		</div>
 	</section>
     {% endif %}
-        
+    {% if not subscribed_newsletter %}
+        {% include 'website/subscribe_newsletter.html' %}
+    {% endif %}
     {% include 'website/footer.html' %}
     
     <!-- Js Plugins -->
