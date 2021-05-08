@@ -1,7 +1,7 @@
 
 {% if messages %}
 {% for message in messages %}
-<div name="alert" class="alert {{ message.tags }} alert-dismissible text-center" role="alert">
+<div name="alert" class="alert {{ message.tags }} alert-dismissible text-center" style="margin-top:10px;" role="alert">
     <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
     <div class="icon">
         <i class="fa fa-check"></i> {{ message }}
