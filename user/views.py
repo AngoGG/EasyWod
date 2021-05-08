@@ -267,13 +267,12 @@ class MemberListView(UserPassesTestMixin, ListView):
     def post(self, request):
         membership_type = request.POST.getlist('membership_type')
         membership_status = request.POST.getlist('membership_status')
-        if (
-            not request.POST['search']
-            and (len(membership_type) == 2 or len(membership_type) == 0)
-            and (len(membership_status) == 2 or len(membership_status) == 0)
-        ):
-            result = User.objects.all()
-        elif not request.POST['search']:
+
+        result = User.objects.filter(
+            Q(first_name=request.POST['search']) | Q(last_name=request.POST['search'])
+        )
+
+        if not result.exists():
             if len(membership_type) == 2 or len(membership_type) == 0:
                 if len(membership_status) == 1:
                     if membership_status[0] == 'active':
@@ -283,30 +282,15 @@ class MemberListView(UserPassesTestMixin, ListView):
                 else:
                     result = User.objects.all()
             else:
+                result = User.objects.filter(
+                    user_membership__membership__membership_type=request.POST[
+                        'membership_type'
+                    ].upper()
+                )
                 if len(membership_status) == 1:
-                    if membership_status[0] == 'active':
-                        result = User.objects.filter(
-                            user_membership__membership__membership_type=request.POST[
-                                'membership_type'
-                            ].upper()
-                        ).filter(user_membership__active=True)
-                    else:
-                        result = User.objects.filter(
-                            user_membership__membership__membership_type=request.POST[
-                                'membership_type'
-                            ].upper()
-                        ).filter(user_membership__active=False)
-                else:
-                    result = User.objects.filter(
-                        user_membership__membership__membership_type=request.POST[
-                            'membership_type'
-                        ].upper()
-                    )
-        else:
-            result = User.objects.filter(
-                Q(first_name=request.POST['search'])
-                | Q(last_name=request.POST['search'])
-            )
+                    is_active: bool = membership_status[0] == 'active'
+                    result = result.filter(user_membership__active=is_active)
+
         return render(request, 'user/member_list.html', {"object_list": result})
 
 
