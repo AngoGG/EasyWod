@@ -64,9 +64,9 @@
     <div class="container text-center">
         <div class="row">
             <div class="hero-text col-lg-12">
-                <h1>Les cours</h1>
-                {% if user.user_membership.membership.membership_type == "TRIAL" %}
+                {% if user.user_membership.membership.membership_type == "TRIAL" and user.type != "EMPLOYEE" %}
                 <p>Vous êtes actuellement en abonnement d'essai.<br>Il vous en reste actuellement {{ user_remaining_courses }} cours d'essai</p>
+                <a href="{% url "event:user_registrations" %}" class="primary-btn">Voir mes cours</a>
                 {% endif %}
             </div>
             {% if user.type == "EMPLOYEE" %}

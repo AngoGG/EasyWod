@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core import serializers
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views.generic import CreateView, DetailView, ListView, View
 from django.views.generic.edit import FormMixin
 from .models import Event, EventMember
@@ -225,14 +226,19 @@ class UnsubscribeFromEvent(View):
         return redirect("event:event_calendar")
 
 
-class UserRegistrations(View):
+class UserEventRegistrations(View):
     def get(self, request):
-        user_registrations = Event.objects.filter(eventmember__user_id=request.user.pk)
+        user_registrations = Event.objects.filter(
+            eventmember__user_id=request.user.pk, start__gte=timezone.now()
+        )
 
-        registrations_list = {"events": []}
+        registrations_list = []
+        for event in user_registrations:
+            registrations_list.append(event)
 
-        for registration in user_registrations:
-            event = {"name": registration.name, "id": registration.id}
-            registrations_list["events"].append(event)
+        return render(
+            request,
+            "event/user_events_registration.html",
+            {"registrations_list": registrations_list},
+        )
 
-        return JsonResponse(registrations_list)
