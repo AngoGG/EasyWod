@@ -7,49 +7,39 @@
 
 {% block content %}
 <!-- Hero Section Begin -->
-<div class="hero-section set-bg" data-setbg="{% static "img/aboutus-bg.jpg" %}">
+<div class="blog-details-hero set-bg" data-setbg="{% static "img/profile-bg.jpg" %}">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
-                <div class="hero-text">
-                    <h1>About us</h1>
+            <div class="col-lg-8 p-0 m-auto">
+                <div class="bh-text">
+                    <h3>Création de compte</h3>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- Hero Section End -->
-<div class="container" style="margin-top:30px">
-    <div class="col-md-10 col-md-offset-1 d-flex align-items-center justify-content-center">
-        <div class="panel panel-default">
-            <div class="panel-heading d-flex align-items-center justify-content-center">
-                <h3 class="panel-title"><strong>Créez votre compte</strong></h3>
-            </div>
-            <hr style="margin-top:10px;margin-bottom:10px;" >
-            <div class="panel-body ">
-                <form role="form" method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="form-group">
-                        {% if field.name == "date_of_birth" %}
-                        <p>{{ field.label }} <i class="fa fa-calendar"> {{ field }}</i></p>
-                        {% else %}
-                        {{ field }}
-                        {% endif %}
-                        {% for error in field.errors %}
-                        <p style="color: red">{{ error }}</p>
-                        {% endfor %}
-                    </div>
-                {% endfor %}
-                    <div class="form-group g-recaptcha d-flex align-items-center justify-content-center" data-sitekey="6Ld993kaAAAAANu695eWvaykgfMl36Q61v5uotn5"></div>
-                    <div class="controls d-flex align-items-center justify-content-center">
-                        <button type="submit"  class="btn btn-success">Créer Compte</button>
-                    </div>
-                    <hr style="margin-top:10px;margin-bottom:10px;" >
-                </form>
-            </div>
+<div class ="col-lg-12 d-flex align-items-center justify-content-center" style="margin-top:50px;">
+    <form role="form" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            {% if field.name == "date_of_birth" %}
+            <p>{{ field.label }} <i class="fa fa-calendar"> {{ field }}</i></p>
+            {% else %}
+            {{ field }}
+            {% endif %}
+            {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+            {% endfor %}
         </div>
-    </div>
+    {% endfor %}
+        <div class="form-group g-recaptcha d-flex align-items-center justify-content-center" data-sitekey="6Ld993kaAAAAANu695eWvaykgfMl36Q61v5uotn5"></div>
+        <div class="controls d-flex align-items-center justify-content-center">
+            <button type="submit"  class="btn btn-success">Créer Compte</button>
+        </div>
+        <hr style="margin-top:10px;margin-bottom:10px;" >
+    </form>
 </div>
 
 {% endblock %}
