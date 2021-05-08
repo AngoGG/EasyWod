@@ -60,21 +60,22 @@
     </script>
 {% csrf_token %}
 <!-- Hero Section Begin -->
-<div class="hero-section set-bg" data-setbg="{% static "img/classes-bg.jpg" %}">
-    <div class="container text-center">
+<div class="blog-details-hero set-bg" data-setbg="{% static "img/classes-bg.jpg" %}">
+    <div class="container">
         <div class="row">
-            <div class="hero-text col-lg-12">
-                {% if user.user_membership.membership.membership_type == "TRIAL" and user.type != "EMPLOYEE" %}
-                <p>Vous êtes actuellement en abonnement d'essai.<br>Il vous en reste actuellement {{ user_remaining_courses }} cours d'essai</p>
-                <a href="{% url "event:user_registrations" %}" class="primary-btn">Voir mes cours</a>
-                {% endif %}
+            <div class="col-lg-8 p-0 m-auto">
+                <div class="bh-text">
+                    <h3>Les cours à venir</h3>
+                    {% if user.user_membership.membership.membership_type == "TRIAL" and user.type != "EMPLOYEE" %}
+                    <p>Vous êtes actuellement en abonnement d'essai.<br>Il vous reste actuellement {{ user_remaining_courses }} cours d'essai</p>
+                    <a href="{% url "event:user_registrations" %}" class="primary-btn">Voir mes cours</a>
+                    {% endif %}
+                    {% if user.type == "EMPLOYEE" %}
+                        <a href="{% url "event:add_event" %}" class="primary-btn">Ajouter un cours</a>
+                    {% endif %}
+                </div>
             </div>
-            {% if user.type == "EMPLOYEE" %}
-            <div class="hero-text col-lg-12">
-                <a href="{% url "event:add_event" %}" class="primary-btn">Ajouter un cours</a>
-            </div>
-            {% endif %}
-        </div>      
+        </div>
     </div>
 </div>
 <!-- Hero Section End -->
