@@ -21,6 +21,7 @@ mypy = "*"
 flake8 = "*"
 pillow = "*"
 six = "*"
+isort = "*"
 
 [requires]
 python_version = "3.8"
