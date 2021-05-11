@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import json
+from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.core import serializers
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -199,6 +200,9 @@ class RegisterForEvent(View):
 
         event.reserved_slot += 1
         event.save()
+        messages.success(
+            self.request, "Votre inscription au cours a bien été prise en compte.",
+        )
 
         return redirect("event:event_calendar")
 
@@ -222,6 +226,10 @@ class UnsubscribeFromEvent(View):
 
         event.reserved_slot -= 1
         event.save()
+
+        messages.success(
+            self.request, "Votre désinscription du cours a bien été prise en compte.",
+        )
 
         return redirect("event:event_calendar")
 
