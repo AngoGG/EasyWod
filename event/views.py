@@ -229,7 +229,9 @@ class UnsubscribeFromEvent(View):
 class UserEventRegistrations(View):
     def get(self, request):
         user_registrations = Event.objects.filter(
-            eventmember__user_id=request.user.pk, start__gte=timezone.now()
+            eventmember__user_id=request.user.pk,
+            start__gte=timezone.now(),
+            eventmember__date_cancellation__isnull=True,
         )
 
         registrations_list = []
