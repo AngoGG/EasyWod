@@ -73,7 +73,7 @@ class HomeView(View):
             )
         else:
             coaches = User.objects.filter(type="EMPLOYEE").count()
-            customers = User.objects.filter(type="CUSTOMER").count()
+            members = User.objects.filter(type="MEMBER").count()
             all_week_events = event_queries.get_all_week_events()
             newsletter_form: NewsletterSubscribeForm = NewsletterSubscribeForm()
             if request.user.is_authenticated:
@@ -87,7 +87,7 @@ class HomeView(View):
                 "website/home.html",
                 {
                     "coaches": coaches,
-                    "customers": customers,
+                    "members": members,
                     "all_week_events": all_week_events,
                     "newsletter_form": newsletter_form,
                     "subscribed_newsletter": user_subscribed_to_newsletter,
