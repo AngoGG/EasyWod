@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
-from django.core.mail import EmailMessage, send_mail, BadHeaderError
+from typing import Any, Dict, List
+
+from django.core.mail import BadHeaderError, EmailMessage
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from typing import Any, Dict, List
-
+import config.settings as Settings
 from blog.models import Article
 from newsletter.models import SubscribedUsers
-
-import config.settings as Settings
 
 
 class Command(BaseCommand):

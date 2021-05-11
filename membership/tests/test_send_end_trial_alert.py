@@ -1,13 +1,10 @@
 from django.core import mail
-from django.db.models.query import QuerySet
-from django.test import TestCase
 from django.core.management import call_command
-
+from django.test import TestCase
 from django.utils import timezone
 
-from user.models import User
 from membership.models import Membership, UserMembership
-from membership.libs import membership_queries
+from user.models import User
 
 
 class TestSendNewsletter(TestCase):

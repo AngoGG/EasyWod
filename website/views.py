@@ -1,31 +1,23 @@
-from os import environ
-
 from django.contrib import messages  # import messages
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import BadHeaderError, send_mail
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.views.generic import FormView, View
+from django.views.generic import View
 
 import config.settings as Settings
-
 from contact_us.views import ContactMessage
 from event.libs import event_queries
-
-from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
 from newsletter.forms import NewsletterSubscribeForm
 from newsletter.models import SubscribedUsers
 from user.models import User
-
-import requests
 
 # Create your views here.
 

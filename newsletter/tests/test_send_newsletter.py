@@ -1,10 +1,11 @@
 from django.core import mail
+from django.core.management import call_command
 from django.db.models.query import QuerySet
 from django.test import TestCase
-from django.core.management import call_command
-from user.models import User
+
 from blog.models import Article
 from newsletter.models import SubscribedUsers
+from user.models import User
 
 
 class TestSendNewsletter(TestCase):

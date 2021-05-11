@@ -1,6 +1,6 @@
 from django.utils import timezone
-from membership.models import Membership, UserMembership
-from membership.libs import membership_queries
+
+from membership.models import UserMembership
 
 
 def get_all_active_premium_membership():

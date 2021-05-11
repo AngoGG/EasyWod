@@ -1,5 +1,5 @@
-from user.models import User
 from membership.models import Membership, UserMembership
+from user.models import User
 
 
 def create_user_trial_membership(user_id):

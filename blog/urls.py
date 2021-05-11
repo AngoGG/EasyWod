@@ -1,9 +1,10 @@
-from django.urls import include, path
+from django.urls import path
+
 from .views import (
     AddArticleView,
     ArticleView,
-    DeleteArticleView,
     BlogView,
+    DeleteArticleView,
     UpdateArticleView,
 )
 

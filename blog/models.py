@@ -1,9 +1,9 @@
-from django.db import models
-from user.models import User
-from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
 from ckeditor.fields import RichTextField
+from django.db import models
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
+from user.models import User
 
 # Create your models here.
 

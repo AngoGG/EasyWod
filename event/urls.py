@@ -1,8 +1,9 @@
-from django.urls import include, path
+from django.urls import path
+
 from .views import (
     AddEvent,
-    EventView,
     CalendarView,
+    EventView,
     RegisterForEvent,
     UnsubscribeFromEvent,
     UserEventRegistrations,

@@ -1,12 +1,10 @@
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-from django.utils.http import urlsafe_base64_decode
-from django.views.generic import CreateView, FormView, View
-
-
 # Create your views here.
 from django.urls import reverse_lazy
+from django.utils.http import urlsafe_base64_decode
+from django.views.generic import CreateView, View
 
 from .forms import NewsletterSubscribeForm
 from .models import SubscribedUsers

@@ -1,9 +1,9 @@
 from django.test import TestCase
 from django.utils import timezone
 
-from user.models import User
-from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
+from membership.models import Membership, UserMembership
+from user.models import User
 
 
 class TestMembershipQueries(TestCase):

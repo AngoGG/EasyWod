@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-from django.core.mail import EmailMessage, send_mail, BadHeaderError
+from typing import Any, Dict, List
+
+from django.core.mail import BadHeaderError, EmailMessage
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
-from typing import Any, Dict, List
-from membership.libs import membership_queries
-
 import config.settings as Settings
+from membership.libs import membership_queries
 
 
 class Command(BaseCommand):

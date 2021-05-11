@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+
 from django.test import TestCase
-from event.models import Event
+
 from event.libs import event_queries
+from event.models import Event
 
 
 class TestEventQueries(TestCase):

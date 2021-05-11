@@ -1,9 +1,10 @@
 from datetime import timedelta
-import json
+
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
 from django.utils import timezone
+
 from event.models import Event, EventMember
 from membership.models import Membership, UserMembership
 from user.models import User

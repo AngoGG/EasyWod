@@ -1,24 +1,19 @@
-from django.shortcuts import render
-from django.utils import timezone
-
+import requests
+from django.contrib import messages  # import messages
 # Create your views here.
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.contrib import messages  # import messages
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
+from django.utils import timezone
 from django.views.generic import DetailView, ListView, View
-from django.shortcuts import redirect
 
-import requests
-
-from .models import ContactMessage
 import config.settings as Settings
-
-from membership.models import Membership, UserMembership
-from membership.libs import membership_queries
+from event.libs import event_queries
 from newsletter.forms import NewsletterSubscribeForm
 from user.models import User
-from event.libs import event_queries
+
+from .models import ContactMessage
 
 
 class ContactView(View):

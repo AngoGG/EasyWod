@@ -1,11 +1,9 @@
-import json
-
-from datetime import datetime
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
-from user.models import User
+
 from membership.models import Membership, UserMembership
+from user.models import User
 
 
 class TestMembershipView(TestCase):

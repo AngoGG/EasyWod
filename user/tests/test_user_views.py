@@ -1,18 +1,18 @@
+import os
+from io import BytesIO
+from pathlib import Path
+
 from django.core import mail
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.query import QuerySet
 from django.http import HttpResponse
 from django.test import Client, TestCase
+from PIL import Image
 
 import config.settings as Settings
-from user.models import User
 from membership.models import Membership, UserMembership
-
-import os
-from io import BytesIO
-from PIL import Image
-from pathlib import Path
+from user.models import User
 
 
 class TestRegistrationView(TestCase):

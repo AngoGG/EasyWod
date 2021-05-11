@@ -1,5 +1,6 @@
-from datetime import datetime, date, timedelta
-from event.models import Event, EventMember
+from datetime import date, timedelta
+
+from event.models import Event
 
 
 def get_all_week_events():

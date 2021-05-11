@@ -1,6 +1,7 @@
-from django import forms
-from .models import Article
 from ckeditor.fields import RichTextField
+from django import forms
+
+from .models import Article
 
 
 class ArticleForm(forms.ModelForm):

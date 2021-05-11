@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-from django.core.management.base import BaseCommand
-from membership.libs import membership_queries
 from typing import Any, Dict, List
+
+from django.core.management.base import BaseCommand
 from django.utils import timezone
+
+from membership.libs import membership_queries
 
 
 class Command(BaseCommand):

@@ -1,10 +1,11 @@
+import os
+
 from django.core import mail
 from django.test import Client, TestCase
-from user.models import User
-from contact_us.models import ContactMessage
-import config.settings as Settings
 
-import os
+import config.settings as Settings
+from contact_us.models import ContactMessage
+from user.models import User
 
 
 class TestContactView(TestCase):
