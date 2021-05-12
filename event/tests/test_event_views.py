@@ -434,10 +434,19 @@ class TestUserRegistrations(TestCase):
             slot="1",
         )
 
+        event_2 = Event.objects.create(
+            name="WOD",
+            start=timezone.now() + timedelta(days=2),
+            end=timezone.now() + timedelta(days=2),
+            slot="1",
+        )
+
         event_created: QuerySet = Event.objects.first()
 
         EventMember.objects.create(event=event_created, user=user_created)
-
+        EventMember.objects.create(
+            event=event_2, user=user_created, date_cancellation=timezone.now()
+        )
         client: Client = Client()
         client.login(username="matt-fraser@gmail.com", password="password8chars")
 

@@ -83,8 +83,8 @@
                         <i class="flaticon-043-muscles"></i>
                     </div>
                     <div class="counter-text">
-                        <span class="counter-num counter"> {{ customers }}</span>
-                        <span>{% if customers == 1 or customers == 0 %} Membre {% else %} Membres{% endif %}</span>
+                        <span class="counter-num counter"> {{ members }}</span>
+                        <span>{% if members <= 1 %} Membre {% else %} Membres{% endif %}</span>
                     </div>
                 </div>
             </div>        
