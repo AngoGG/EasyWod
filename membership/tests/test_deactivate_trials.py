@@ -1,11 +1,8 @@
-from django.core import mail
-from django.db.models.query import QuerySet
-from django.test import TestCase
 from django.core.management import call_command
-from user.models import User
-from blog.models import Article
-from membership.libs import membership_queries
+from django.test import TestCase
+
 from membership.models import Membership, UserMembership
+from user.models import User
 
 
 class TestDeactivateTrials(TestCase):

@@ -13,8 +13,8 @@ Including another URLconfî
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.conf.urls import include
 from django.urls import path
+
 from . import views
 
 app_name: str = "user"

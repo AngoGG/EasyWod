@@ -1,8 +1,8 @@
-import datetime
-
+import requests
 from django import forms
 from django.contrib import messages  # import messages
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import (authenticate, login, logout,
+                                 update_session_auth_hash)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -10,17 +10,18 @@ from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import DetailView, FormView, ListView, View, UpdateView
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.views.generic import (DetailView, FormView, ListView, UpdateView,
+                                  View)
+
+import config.settings as Settings
+from membership.libs import membership_queries, user_membership_management
+
 from .forms import ConnectionForm, RegisterForm, UpdatePasswordForm
 from .models import User
 from .tokens import account_activation_token
-from membership.libs import membership_queries, user_membership_management
-from membership.models import Membership, UserMembership
-import requests
-import config.settings as Settings
 
 
 class RegistrationView(FormView):

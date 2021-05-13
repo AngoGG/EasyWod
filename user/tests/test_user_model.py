@@ -1,8 +1,9 @@
-import pytest
+import datetime
+
 from django.db.models.query import QuerySet
 from django.test import TestCase
+
 from user.models import User
-import datetime
 
 
 class TestUserModel(TestCase):

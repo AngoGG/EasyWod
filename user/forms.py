@@ -1,7 +1,9 @@
+from datetime import date
+
 from django import forms
 from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
+
 from .models import User
-from datetime import date
 
 YEARS = [x for x in range(1900, date.today().year + 1)]
 YEARS.sort(reverse=True)

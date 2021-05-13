@@ -1,17 +1,17 @@
 from datetime import datetime, timedelta
-import json
+
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.core import serializers
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.views.generic import CreateView, DetailView, ListView, View
-from django.views.generic.edit import FormMixin
-from .models import Event, EventMember
-from .forms import AddEventMemberForm, EventForm
-from user.models import User
+from django.views.generic import ListView, View
+
 from membership.models import Membership, UserMembership
+from user.models import User
+
+from .forms import AddEventMemberForm, EventForm
+from .models import Event, EventMember
 
 
 class CalendarView(ListView):

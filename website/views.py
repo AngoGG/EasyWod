@@ -1,53 +1,54 @@
-from os import environ
-
 from django.contrib import messages  # import messages
 from django.contrib.auth.forms import PasswordResetForm
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import BadHeaderError, send_mail
 from django.db.models.query import QuerySet
 from django.db.models.query_utils import Q
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.views.generic import FormView, View
+from django.views.generic import View
 
 import config.settings as Settings
-
 from contact_us.views import ContactMessage
 from event.libs import event_queries
-
-from membership.models import Membership, UserMembership
 from membership.libs import membership_queries
 from newsletter.forms import NewsletterSubscribeForm
 from newsletter.models import SubscribedUsers
 from user.models import User
 
-import requests
-
 # Create your views here.
 
 
 class HomeView(View):
+    '''Display Home page. 
+        Employee users have their own homepage with club informations.
+    '''
+
     def get(self, request: HttpRequest) -> HttpResponse:
+
         if request.user.is_authenticated and request.user.type == "EMPLOYEE":
             # Retrieving membership informations
-            all_members = User.objects.filter(type="MEMBER")
-            active_premium_members = (
+            all_members: QuerySet = User.objects.filter(type="MEMBER")
+            active_premium_members: QuerySet = (
                 membership_queries.get_all_active_premium_membership()
             )
-            inactive_premium_members = (
+            inactive_premium_members: QuerySet = (
                 membership_queries.get_all_inactive_premium_membership()
             )
-            active_trial_members = membership_queries.get_all_active_trial_membership()
-            inactive_trial_members = (
+            active_trial_members: QuerySet = (
+                membership_queries.get_all_active_trial_membership()
+            )
+            inactive_trial_members: QuerySet = (
                 membership_queries.get_all_inactive_trial_membership()
             )
 
             # Retrieving contact messages informations
-            contact_messages = ContactMessage.objects.filter(answer_date__isnull=True)
+            contact_messages: QuerySet = ContactMessage.objects.filter(
+                answer_date__isnull=True
+            )
 
             # Retrieving week events count
             all_week_events = event_queries.get_all_week_events()
@@ -96,6 +97,11 @@ class HomeView(View):
 
 
 class PasswordResetView(View):
+    '''Manage the Password reset functionality 
+    by sending a mail to the adress provided by the user 
+    containing the url link to set a new password.
+    '''
+
     def get(self, request: HttpRequest) -> HttpResponse:
         reset_password_form: PasswordResetForm = PasswordResetForm()
         return render(
@@ -137,3 +143,7 @@ class PasswordResetView(View):
                 "Un message contenant des instructions pour réinitialiser le mot de passe a été envoyé dans votre boîte de réception.",
             )
             return redirect("/")
+        messages.error(
+            request, "Une erreur est survenue, veuillez réessayer.",
+        )
+        return redirect("/")

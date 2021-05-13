@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -8,10 +8,11 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from user.models import User
-from .models import Article
-from .forms import ArticleForm, EditForm
 
+from user.models import User
+
+from .forms import ArticleForm, EditForm
+from .models import Article
 
 # Create your views here.
 

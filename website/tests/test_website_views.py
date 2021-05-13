@@ -1,9 +1,7 @@
 from django.core import mail
 from django.test import Client, TestCase
-from user.models import User
-import config.settings as Settings
 
-import os
+from user.models import User
 
 
 class TestPasswordResetView(TestCase):

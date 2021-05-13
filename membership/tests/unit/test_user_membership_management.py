@@ -1,7 +1,8 @@
 from django.test import TestCase
-from user.models import User
-from membership.models import Membership, UserMembership
+
 from membership.libs import user_membership_management
+from membership.models import Membership
+from user.models import User
 
 
 class TestUserMembershipManagement(TestCase):
