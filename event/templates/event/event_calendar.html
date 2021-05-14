@@ -35,7 +35,7 @@
                         id: '{{ event.id }}',
                         allDay: false,
                        
-                        {% if event.eventmember_set.count < event.slot %}
+                        {% if event.reserved_slot < event.slot %}
                             title: "{{ event.name }}",
                             color: '#3ADF00',
                         {% else %}
