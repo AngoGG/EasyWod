@@ -181,8 +181,8 @@ class RegisterForEvent(View):
             user_membership.remaining_trial_courses -= 1
             user_membership.save()
 
-            inscription = EventMember(event=event, user=user)
-            inscription.save()
+        inscription = EventMember(event=event, user=user)
+        inscription.save()
 
         event.reserved_slot += 1
         event.save()
