@@ -176,12 +176,13 @@ class RegisterForEvent(View):
         event = Event.objects.get(pk=event_id)
         user = User.objects.get(pk=user_id)
 
-        user_membership = UserMembership.objects.get(user=user)
-        user_membership.remaining_trial_courses -= 1
-        user_membership.save()
+        if user.user_membership.membership.membership_type == "TRIAL":
+            user_membership = UserMembership.objects.get(user=user)
+            user_membership.remaining_trial_courses -= 1
+            user_membership.save()
 
-        inscription = EventMember(event=event, user=user)
-        inscription.save()
+            inscription = EventMember(event=event, user=user)
+            inscription.save()
 
         event.reserved_slot += 1
         event.save()
