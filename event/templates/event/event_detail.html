@@ -39,59 +39,43 @@
             <hr class="my-4">
             {% if event.start|date:"YmdHis" > time|date:"YmdHis"  %}
 
-                {% if event.reserved_slot < event.slot %}
+                {% if is_registered is True %}
 
-                    {% if is_registered is True %}
+                    {% if  has_cancelled is False %}
 
-                        {% if  has_cancelled is False %}
-
-                        Vous êtes déjà inscrit à ce cours
-                        <form method="POST" action="{% url 'event:unsubscribe_event'%}">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <button class="btn btn-primary btn-lg">Se désinscrire du cours</button>
-                        </form>
-
-                        {% endif %}
+                    Vous êtes déjà inscrit à ce cours
+                    <form method="POST" action="{% url 'event:unsubscribe_event'%}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary btn-lg">Se désinscrire du cours</button>
+                    </form>
 
                     {% else %}
 
-                        {% if  has_cancelled is True %}
+                    <p>Vous vous êtes désinscrit de ce cours et ne pouvez plus vous y réinscrire, veuillez contacter la box.</p>
 
-                            <p>Vous vous êtes désinscrit de ce cours et ne pouvez plus vous y réinscrire, veuillez contacter la box.</p>
-                            
-                        {% elif premium_active is True %}
-
-                            <form method="POST" action="{% url 'event:register_event'%}">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <button class="btn btn-primary btn-lg">S'inscrire à ce cours</button>
-                            </form>
-
-                        {% elif  premium_active is False %}
-
-                            <p>Vous n'avez actuellement aucun abonnement permettant de vous inscrire à un cours, veuillez contacter la box.</p>
-
-                        {% elif user_remaining_courses and user_remaining_courses > 0 %}
-
-                            <form method="POST" action="{% url 'event:register_event'%}">
-                                {% csrf_token %}
-                                {{ form.as_p }}
-                                <button class="btn btn-primary btn-lg">S'inscrire à ce cours</button>
-                            </form>
-
-                        {% elif user_remaining_courses and user_remaining_courses == 0 %}
-
-                            <p>Vous n'avez plus de cours d'essai disponible, veuillez contacter la box.</p>
-
-                        {% endif %}
                     {% endif %}
 
-                {% else %}
+                {% elif active_membership is True %}
 
-                <p>Cet évènement est plein.</p>
+                    {% if user.user_membership.membership.membership_type == "TRIAL" and user_remaining_courses and user_remaining_courses == 0 %}
+                    
+                    <p>Vous n'avez plus de cours d'essai disponible, veuillez contacter la box.</p>
 
+                    {% else %}
+
+                    <form method="POST" action="{% url 'event:register_event'%}">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button class="btn btn-primary btn-lg">S'inscrire à ce cours</button>
+                    </form>
+
+                    {% endif %}
+
+                {% elif active_membership is False %}
+                <p>Votre abonnement est inactif, veuillez contacter la box.</p>
                 {% endif %}
+                
 
             {% else %}
 
