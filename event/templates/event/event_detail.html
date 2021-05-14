@@ -56,7 +56,7 @@
 
                     {% endif %}
 
-                {% elif active_membership is True %}
+                {% elif active_membership is True and event.reserved_slot < event.slot%}
 
                     {% if user.user_membership.membership.membership_type == "TRIAL" and user_remaining_courses and user_remaining_courses == 0 %}
                     
