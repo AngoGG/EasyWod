@@ -35,7 +35,7 @@
                         id: '{{ event.id }}',
                         allDay: false,
                        
-                        {% if event.eventmember_set.count < event.slot %}
+                        {% if event.reserved_slot < event.slot %}
                             title: "{{ event.name }}",
                             color: '#3ADF00',
                         {% else %}
@@ -68,8 +68,8 @@
                     <h3>Les cours à venir</h3>
                     {% if user.user_membership.membership.membership_type == "TRIAL" and user.type != "EMPLOYEE" %}
                     <p>Vous êtes actuellement en abonnement d'essai.<br>Il vous reste actuellement {{ user_remaining_courses }} cours d'essai</p>
-                    <a href="{% url "event:user_registrations" %}" class="primary-btn">Voir mes cours</a>
                     {% endif %}
+                    <a href="{% url "event:user_registrations" %}" class="primary-btn">Voir mes cours</a>
                     {% if user.type == "EMPLOYEE" %}
                         <a href="{% url "event:add_event" %}" class="primary-btn">Ajouter un cours</a>
                     {% endif %}

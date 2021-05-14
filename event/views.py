@@ -127,48 +127,33 @@ class EventView(View):
                     Membership.objects.get(membership_type="TRIAL").trial_courses
                     - user_events
                 )
-                # If User if on Premium memberbership, check if his subscribtion is active
+                return render(
+                    request,
+                    "event/event_detail.html",
+                    {
+                        "form": AddEventMemberForm(),
+                        "event": event,
+                        "is_registered": is_registered,
+                        "has_cancelled": has_cancelled,
+                        "user_remaining_courses": user_remaining_courses,
+                        "active_membership": self.request.user.user_membership.active,
+                        "time": time,
+                    },
+                )
+            # If User if on Premium memberbership, check if his subscribtion is active
             elif user_membership == "PREMIUM":
-                if Subscription.objects.filter(
-                    user_membership=self.request.user.user_membership, active=True
-                ).exists():
-                    return render(
-                        request,
-                        "event/event_detail.html",
-                        {
-                            "form": AddEventMemberForm(),
-                            "event": event,
-                            "is_registered": is_registered,
-                            "has_cancelled": has_cancelled,
-                            "premium_active": True,
-                            "time": time,
-                        },
-                    )
-                else:
-                    return render(
-                        request,
-                        "event/event_detail.html",
-                        {
-                            "form": AddEventMemberForm(),
-                            "event": event,
-                            "is_registered": is_registered,
-                            "has_cancelled": has_cancelled,
-                            "premium_active": False,
-                            "time": time,
-                        },
-                    )
-            return render(
-                request,
-                "event/event_detail.html",
-                {
-                    "form": AddEventMemberForm(),
-                    "event": event,
-                    "is_registered": is_registered,
-                    "has_cancelled": has_cancelled,
-                    "user_remaining_courses": user_remaining_courses,
-                    "time": time,
-                },
-            )
+                return render(
+                    request,
+                    "event/event_detail.html",
+                    {
+                        "form": AddEventMemberForm(),
+                        "event": event,
+                        "is_registered": is_registered,
+                        "has_cancelled": has_cancelled,
+                        "active_membership": self.request.user.user_membership.active,
+                        "time": time,
+                    },
+                )
         return render(
             request,
             "event/event_detail.html",
