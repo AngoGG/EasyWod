@@ -68,7 +68,7 @@
                           {% if user.profile_picture %}
                           <img src="{{ user.profile_picture.url}}" class ="member-list-picture" alt=""/>
                           {% else %}
-                              <img src="{% static "img/profile_default.jpg" %}" style="max-width:50%; height:auto; " alt=""/>
+                              <img src="{% static "img/profile_default.jpg" %}" class ="member-list-picture" alt=""/>
                           {% endif %}
                         </td>
                         <td scope="row">{{ user.last_name }}</td>
