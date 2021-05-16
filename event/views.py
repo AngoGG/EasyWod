@@ -220,7 +220,13 @@ class UnsubscribeFromEvent(View):
         return redirect("event:event_calendar")
 
 
-class UserEventRegistrations(View):
+class UserEventRegistrations(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.type == "MEMBER"
+
+    def handle_no_permission(self):
+        return redirect('event:event_calendar')
+
     def get(self, request):
         user_registrations = Event.objects.filter(
             eventmember__user_id=request.user.pk,
@@ -237,4 +243,3 @@ class UserEventRegistrations(View):
             "event/user_events_registration.html",
             {"registrations_list": registrations_list},
         )
-
