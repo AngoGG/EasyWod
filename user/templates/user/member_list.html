@@ -66,7 +66,7 @@
                     <tr>
                         <td scope="row">
                           {% if user.profile_picture %}
-                          <img src="{{ user.profile_picture.url}}" style="max-width:50%; height:auto; " alt=""/>
+                          <img src="{{ user.profile_picture.url}}" class ="member-list-picture" alt=""/>
                           {% else %}
                               <img src="{% static "img/profile_default.jpg" %}" style="max-width:50%; height:auto; " alt=""/>
                           {% endif %}
