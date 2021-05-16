@@ -181,8 +181,8 @@ class RegisterForEvent(View):
             user_membership.remaining_trial_courses -= 1
             user_membership.save()
 
-            inscription = EventMember(event=event, user=user)
-            inscription.save()
+        inscription = EventMember(event=event, user=user)
+        inscription.save()
 
         event.reserved_slot += 1
         event.save()
@@ -220,13 +220,19 @@ class UnsubscribeFromEvent(View):
         return redirect("event:event_calendar")
 
 
-class UserEventRegistrations(View):
+class UserEventRegistrations(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.type == "MEMBER"
+
+    def handle_no_permission(self):
+        return redirect('event:event_calendar')
+
     def get(self, request):
         user_registrations = Event.objects.filter(
             eventmember__user_id=request.user.pk,
             start__gte=timezone.now(),
             eventmember__date_cancellation__isnull=True,
-        )
+        ).order_by('start')
 
         registrations_list = []
         for event in user_registrations:
@@ -237,4 +243,3 @@ class UserEventRegistrations(View):
             "event/user_events_registration.html",
             {"registrations_list": registrations_list},
         )
-

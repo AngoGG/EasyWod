@@ -457,3 +457,33 @@ class TestUserRegistrations(TestCase):
         assert event_created in response.context["registrations_list"]
         assert response.status_code == 200
 
+    def test_get_user_registrations_not_connected_redirection(self):
+        "An anonymous user should not access the registrations page"
+
+        client: Client = Client()
+        response: HttpResponse = client.get("/event/user_registrations",)
+        assert response.status_code == 302
+
+    def test_get_user_registrations_employee_redirection(self):
+        "A user EMPLOYEE should not access the registrations page"
+        User.objects.create_user(
+            email="matt-fraser@gmail.com",
+            password="password8chars",
+            first_name="Matt",
+            last_name="Fraser",
+            date_of_birth="1997-4-10",
+        )
+
+        # Only Employee can create an Article, so we need to set the correct user type
+        users = User.objects.filter(email="matt-fraser@gmail.com")
+        for user in users:
+            user.is_active = True
+            user.type = "EMPLOYEE"
+            user.save()
+
+        client: Client = Client()
+        client.login(username="matt-fraser@gmail.com", password="password8chars")
+
+        response: HttpResponse = client.get("/event/user_registrations",)
+
+        assert response.status_code == 302
