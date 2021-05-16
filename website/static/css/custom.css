@@ -33,6 +33,12 @@
     top: 0;
 }
 
+.member-list-picture {
+    height: 150px;
+    width: 100px;
+    object-fit: cover;
+}
+
 .profile-head h5 {
     color: #333;
 }
