@@ -232,7 +232,7 @@ class UserEventRegistrations(UserPassesTestMixin, View):
             eventmember__user_id=request.user.pk,
             start__gte=timezone.now(),
             eventmember__date_cancellation__isnull=True,
-        )
+        ).order_by('start')
 
         registrations_list = []
         for event in user_registrations:
