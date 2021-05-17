@@ -65,39 +65,3 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
-
-
-class Customer(User):
-    class Meta:
-        proxy = True
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.type = User.Types.CUSTOMER
-        return super().save(*args, **kwargs)
-
-
-class Employee(User):
-    class Meta:
-        proxy = True
-
-    def save(self, *args, **kwargs):
-        if not self.pk:
-            self.type = User.Types.EMPLOYEE
-        return super().save(*args, **kwargs)
-
-
-class CustomerManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(type=User.TYPE.CUSTOMER)
-
-
-class EmployeeManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(type=User.TYPE.EMPLOYEE)
-
-
-class VisitorManager(models.Manager):
-    def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(type=User.TYPE.VISITOR)
-
