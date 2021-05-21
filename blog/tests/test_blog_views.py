@@ -130,6 +130,13 @@ class TestArticleView(TestCase):
         assert response.status_code == 200  # Testing redirection
         self.assertTemplateUsed(response, "blog/article_detail.html")
 
+    def test_article_absent_redirection(self) -> None:
+        client: Client = Client()
+
+        response: HttpResponse = client.get(f"/blog/article/1",)
+
+        assert response.status_code == 302  # Testing redirection
+
 
 class TestUpdateArticleView(TestCase):
     def test_update_article(self) -> None:
