@@ -202,9 +202,10 @@ class UnsubscribeFromEvent(View):
         event = Event.objects.get(pk=event_id)
         user = User.objects.get(pk=user_id)
 
-        user_membership = UserMembership.objects.get(user=user)
-        user_membership.remaining_trial_courses += 1
-        user_membership.save()
+        if user.user_membership.membership.membership_type == "TRIAL":
+            user_membership = UserMembership.objects.get(user=user)
+            user_membership.remaining_trial_courses += 1
+            user_membership.save()
 
         inscription = EventMember.objects.get(event=event, user=user)
         inscription.date_cancellation = datetime.now()
