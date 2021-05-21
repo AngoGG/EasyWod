@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -26,6 +28,18 @@ class BlogView(ListView):
 class ArticleView(DetailView):
     model = Article
     template_name = "blog/article_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        try:
+            self.object = self.get_object()
+        except Http404:
+            # redirect here
+            messages.error(
+                self.request, "Oups, l'article que vous cherchez n'existe plus.",
+            )
+            return redirect("/blog/")
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
 
 class AddArticleView(UserPassesTestMixin, CreateView):
