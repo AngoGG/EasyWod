@@ -165,6 +165,7 @@ MESSAGE_TAGS = {
     messages.ERROR: "alert-danger",
 }
 
+CKEDITOR_CONFIGS = {"default": {"height": 300, "width": "100%"}}
 
 RECAPTCHA_PUBLIC_KEY = str(os.environ.get("RECAPTCHA_PUBLIC_KEY"))
 RECAPTCHA_PRIVATE_KEY = str(os.environ.get("RECAPTCHA_PRIVATE_KEY"))
