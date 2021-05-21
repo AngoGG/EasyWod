@@ -1,8 +1,7 @@
 import requests
 from django import forms
 from django.contrib import messages  # import messages
-from django.contrib.auth import (authenticate, login, logout,
-                                 update_session_auth_hash)
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
@@ -13,8 +12,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.views.generic import (DetailView, FormView, ListView, UpdateView,
-                                  View)
+from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 
 import config.settings as Settings
 from membership.libs import membership_queries, user_membership_management
@@ -308,7 +306,13 @@ class ChangeProfilePictureView(View):
                 self.request,
                 "Votre photo de profile doit être au format png, jpeg ou jpg, veuillez rééssayer.",
             )
+        elif request.FILES['file'].size > 2000000:
+            messages.error(
+                self.request,
+                "Votre photo est trop lourde. Veuillez choisir une photo de moins de 2mo.",
+            )
         else:
+            print(f"FILE SIZE : {request.FILES['file'].size}")
             user.save()
             messages.success(
                 self.request, "La photo de profil a bien été changée.",
