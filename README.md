@@ -37,4 +37,4 @@ Nécessite Python 3.8 et pipenv d'installés sur le poste, effectuer les manipul
   5. Lancer la custom command fill_database, permettant de récupérer les données de l'API OpenFoodFacts `python manage.py fill_database`
   6. Lancer le serveur `python manage.py runserver`
   
-Le projet est configuré de sorte à utiliser une base de données SQLite en local, PostgreSQL n'est mis en place et utilisé que sur le site en production sur Heroku à l'adresse https://easywod.angogg.com/
+Le projet est configuré de sorte à utiliser une base de données SQLite en local, PostgreSQL n'est mis en place et utilisé que sur le site en production à l'adresse https://easywod.angogg.com/
